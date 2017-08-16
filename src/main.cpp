@@ -1,6 +1,7 @@
 // First C++ project: interface LibInt2's calculations to matrices in eigen3
 
 #include <libint2.hpp>
+#include <Eigen/Dense>      // Eigen/Eigen includes Eigen/Dense and Eigen/Sparse, so we might as well just include Eigen/Dense
 
 
 /**
@@ -12,8 +13,18 @@
  */
 void compute_1body_integrals(const libint2::Operator &opertype, const libint2::BasisSet &obs, const std::vector<libint2::Atom> &atoms) {
 
-    const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
     const auto nsh = obs.size();    // nsh: number of shells in the obs
+    const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
+                                    // it's const, but used in eigen's matrix constructor
+
+
+
+    // libint2 stores integrals in row major form, so we will write to the matrix in row major form, and then make it column major
+
+    Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::StorageOptions::RowMajor> M_result (nbf, nbf);
+
+
+
 
     libint2::Engine engine (opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
 
@@ -27,32 +38,38 @@ void compute_1body_integrals(const libint2::Operator &opertype, const libint2::B
     const auto& buffer = engine.results();  // vector that holds pointers to computed shell sets
                                             // the values will change after every compute() call
 
-    // One-body integrals are between two basis functions
-    //  However, LibInt calculates integrals between shell sets, we will loop over the shells in the obs
-    for(auto s1=0; s1!=nsh; ++s1) {
-        for(auto s2=0; s2!=nsh; ++s2) {
 
-            engine.compute(obs[s1], obs[s2]);
-            auto ints_shellset = buffer[0];     // buffer is a vector that holds pointers to computed shell sets
-                                                // if the zeroth element is nullptr, then the whole shell set has been exhausted
-            if (ints_shellset == nullptr)
+    // One-body integrals are between two basis functions
+    // However, LibInt calculates integrals between shell sets, we will loop over the shells (sh) in the obs
+    for(auto sh1=0; sh1!=nsh; ++sh1) {  // sh1: shell 1
+        auto bf1 = shell2bf[sh1];       // (index of) first bf in sh1
+        auto nbf_sh1 = obs[sh1].size(); // number of basis functions in first shell
+
+        for(auto sh2=0; sh2!=nsh; ++sh2) {  // sh2: shell2
+            auto bf2 = shell2bf[sh2];          // (index of) first bf in sh2
+            auto nbf_shell2 = obs[sh2].size(); // number of basis functions in second shell
+
+            // Calculate integrals between the two shells (obs is a decorated std::vector<libint2::Shell>)
+            engine.compute(obs[sh1], obs[sh2]);
+            auto calculated_integrals = buffer[0];  // buffer is a vector that holds pointers to computed shell sets
+                                                    // if the zeroth element is nullptr, then the whole shell set has been exhausted
+            if (calculated_integrals == nullptr)
                 continue;
 
-            auto bf1 = shell2bf[s1];  // first basis function in first shell
-            auto n1 = obs[s1].size(); // number of basis functions in first shell
-            auto bf2 = shell2bf[s2];  // first basis function in second shell
-            auto n2 = obs[s2].size(); // number of basis functions in second shell
-
-            // integrals are packed into ints_shellset in row-major (C) form
-            // this iterates over integrals in this order
-            for(auto f1=0; f1!=n1; ++f1) {
-                for(auto f2=0; f2!=n2; ++f2) {
-                    auto computed_integral = ints_shellset[f1*n2 + f2];
+            // Extract the calculated integrals from calculated_integrals.
+            // In calculated_integrals, the integrals are stored in row major form.
+            for(auto f1=0; f1!=nbf_sh1; ++f1) {  // f1: function 1
+                for(auto f2=0; f2!=nbf_shell2; ++f2) {  // f2: function 2
+                    auto computed_integral = calculated_integrals[f1*nbf_shell2 + f2];  // row major traversing
+                    M_result(bf1+f1, bf2+f2) = computed_integral;
                     std::cout << "  " << bf1+f1 << " " << bf2+f2 << " " << computed_integral << std::endl;
                 }
             }
         }
     }
+
+
+    std::cout << M_result << std::endl;
 }
 
 
@@ -79,14 +96,13 @@ int main() {
     const auto xyzfilename = "/Users/laurentlemmens/Software/LibInt_to_eigen3/docs/h2o.xyz";
     std::ifstream input_file(xyzfilename);
     auto atoms = libint2::read_dotxyz(input_file);
-    libint2::BasisSet obs ("STO-3G", atoms);  // obs: orbital basis set
+    libint2::BasisSet obs ("STO-3G", atoms);    // obs: orbital basis set
+                                                // a libint2::BasisSet is a decorated std::vector<libint2::Shell>
 
 
 
 
     // LEARNING AREA
-    print_shell_sizes(obs);
-
     compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
 
 
