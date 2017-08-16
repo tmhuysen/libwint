@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/local/include/eigen3")
 #       LIBINT_DATA_PATH    /usr/local/libint/2.2.0/include/libint2/basis
 
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES src/main.cpp)
 add_executable(libint_tutorial ${SOURCE_FILES})  # Makes an executable, based on the given source files
 
 

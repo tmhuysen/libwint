@@ -76,7 +76,7 @@ int main() {
 
 
     // 1. MOLECULE & BASIS SET SPECIFICATION
-    const auto xyzfilename = "/Users/laurentlemmens/Software/LibInt_to_eigen3/h2o.xyz";
+    const auto xyzfilename = "/Users/laurentlemmens/Software/LibInt_to_eigen3/docs/h2o.xyz";
     std::ifstream input_file(xyzfilename);
     auto atoms = libint2::read_dotxyz(input_file);
     libint2::BasisSet obs ("STO-3G", atoms);  // obs: orbital basis set
