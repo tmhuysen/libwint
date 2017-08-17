@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+
+\usepackage[onlytext]{MinionPro}
+\usepackage{microtype}
+
+\setlength{\parindent}{0in}                                                     % No indentation for every paragraph
+
+\usepackage[left=3cm, right=3cm]{geometry}		                                % Margins left and right
+\usepackage{hyperref}                                                           % Clickable table of contents in PDFs
+\usepackage{datetime}                                                           % Currenttime
+
+\usepackage{physics}
+\usepackage{listings}                                                           % Code inclusion
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\lstset{ %
+    language=C++,
+    style=mystyle
+}
+
+\title{The libint-eigen interface}
+\author{Laurent Lemmens}
+\date{\today \hspace{6pt} \currenttime}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\tableofcontents
+\newpage
+
+
+
+\section{Basis sets}
+    In the libint basis set context, an \textit{orbital} refers to a \textit{GTO} (Gaussian-type (atomic) orbital), which is just a \textit{basis function}. Orbitals/GTOs/basis functions are used to form \textit{molecular orbitals}, in which Slater determinants are expanded. Finally, the final CI wave function is written as a linear combination of Slater determinants. \\
+
+    A (Cartesian) GTO, with angular momenta $l_x$, $l_y$ and $l_z$ and centered on $\vb{R}=(X, Y, Z)$, has the following mathematical form:
+    \begin{equation}
+        \phi_{\zeta, l_x, l_y, l_z, \vb{R}}(x, y, z) = N (x - X)^{l_z} (y - Y)^{l_y} (z - Z)^{l_z} \exp(-\zeta r^2) \thinspace ,
+    \end{equation}
+    in which
+    \begin{equation}
+        r^2 = x^2 + y^2 + z^2 \thinspace .
+    \end{equation}
+
+    The sum of the angular momenta
+    \begin{equation}
+        l = l_x + l_y + l_z
+    \end{equation}
+    determines the type of AO: $l=0$ refers to an s-type orbital, $l=1$ to a p-type orbital, etc. (analogous to naming of the eigenfunctions of the hydrogen atom).
+
+
+
+\section{Are the contracted basis functions normalized?}
+
+    When constructing a \lstinline{libint2::BasisSet} object as in say
+
+\begin{lstlisting}
+libint2::BasisSet obs ("STO-3G", atoms);
+\end{lstlisting}
+
+    the corresponding file \lstinline{sto-3g.g94} is read (which is located at \lstinline{\$LIBINT_DATA_PATH}), in which LibInt2 finds the exponents and contraction coefficients for the given basis for a given element. \\
+
+    In \lstinline{libint2/basis.h}, we can see the following (edited for brevity) code:
+
+\begin{lstlisting}
+static ... read_g94_basis_library(...){
+    ...
+    ref_shells[Z].push_back(
+        libint2::Shell{...}
+        )
+    ...
+}
+\end{lstlisting}
+
+    which calls a specific constructor of \lstinline{libint2::Shell}:
+
+\begin{lstlisting}
+Shell(...) {
+    // embed normalization factors into contraction coefficients
+    renorm();
+\end{lstlisting}
+
+    that makes sure that the CGTO is normalized by including the normalization factor in the contraction coefficients. So, \textbf{yes}, LibInt2 internally works with normalized basis functions.
+
+
+
+\end{document}
