@@ -24,7 +24,7 @@
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
+    basicstyle=\ttfamily,
     breakatwhitespace=false,
     breaklines=true,
     captionpos=b,
@@ -61,24 +61,22 @@
 
 
 
-\section{Basis sets}
-    In the libint basis set context, an \textit{orbital} refers to a \textit{GTO} (Gaussian-type (atomic) orbital), which is just a \textit{basis function}. Orbitals/GTOs/basis functions are used to form \textit{molecular orbitals}, in which Slater determinants are expanded. Finally, the final CI wave function is written as a linear combination of Slater determinants. \\
-
-    A (Cartesian) GTO, with angular momenta $l_x$, $l_y$ and $l_z$ and centered on $\vb{R}=(X, Y, Z)$, has the following mathematical form:
+\section{Terminology}
+    In the LibInt2 basis set context, there is some terminology that should be cleared up. Let's start from the beginning. A \textit{primitive Gaussian} is a function of the following mathematical form:
     \begin{equation}
-        \phi_{\zeta, l_x, l_y, l_z, \vb{R}}(x, y, z) = N (x - X)^{l_z} (y - Y)^{l_y} (z - Z)^{l_z} \exp(-\zeta r^2) \thinspace ,
+        \varphi_{\zeta, l_x, l_y, l_z, \vb{R}}(x, y, z) = N (x - X)^{l_z} (y - Y)^{l_y} (z - Z)^{l_z} \exp(-\zeta r^2) \thinspace ,
     \end{equation}
     in which
     \begin{equation}
         r^2 = x^2 + y^2 + z^2 \thinspace .
     \end{equation}
-
-    The sum of the angular momenta
+    $l_x$, $l_y$ and $l_z$ are called the angular momenta of the primitive. The sum
     \begin{equation}
         l = l_x + l_y + l_z
     \end{equation}
-    determines the type of AO: $l=0$ refers to an s-type orbital, $l=1$ to a p-type orbital, etc. (analogous to naming of the eigenfunctions of the hydrogen atom).
+    of the angular momenta determines the type of primitive: $l=0$ refers to an s-type, $l=1$ to a p-type, etc. (analogously to naming of the eigenfunctions of the hydrogen atom). The position vector $\vb{R}$ specifies the center of the primitive. \\
 
+    Often, a linear combination (also known as a \textit{contraction}) of primitives is taken, leading to a \textit{contracted GTO} (cGTO). These are the functions that are used as basis functions. (Note that a single primitive can also be used as a basis function, in which case the linear combination is just one times that primitive.) \textit{Molecular orbitals} (MOs) are written as a linear combination of basis functions (cGTOs), which in turn serve as a one-electron basis to antisymmetrize into the many-electron basis of the \textit{Slater determinants} (SDs). \cite{jensen2007}
 
 
 \section{Are the contracted basis functions normalized?}
@@ -89,9 +87,9 @@
 libint2::BasisSet obs ("STO-3G", atoms);
 \end{lstlisting}
 
-    the corresponding file \lstinline{sto-3g.g94} is read (which is located at \lstinline{\$LIBINT_DATA_PATH}), in which LibInt2 finds the exponents and contraction coefficients for the given basis for a given element. \\
+    the corresponding file \lstinline{sto-3g.g94} is read (which is located at your \lstinline{LIBINT_DATA_PATH} environment variable), in which LibInt2 finds the exponents and contraction coefficients for the given basis for a given element. \\
 
-    In \lstinline{libint2/basis.h}, we can see the following (edited for brevity) code:
+    In \lstinline{libint2/basis.h}, we can see the following code (edited for brevity):
 
 \begin{lstlisting}
 static ... read_g94_basis_library(...){
@@ -109,10 +107,18 @@ static ... read_g94_basis_library(...){
 Shell(...) {
     // embed normalization factors into contraction coefficients
     renorm();
+}
 \end{lstlisting}
 
     that makes sure that the CGTO is normalized by including the normalization factor in the contraction coefficients. So, \textbf{yes}, LibInt2 internally works with normalized basis functions.
 
 
+
+% % % REFERENCES % % %
+
+\newpage
+
+\bibliographystyle{unsrt}                                                       % Bibliography in chronological order
+\bibliography{/Users/laurentlemmens/Documents/Archief/Bibliotheek/research_bib.bib}
 
 \end{document}

@@ -10,7 +10,9 @@ project(libint-eigen NONE)			# The NONE option has to be included, since we are 
 include(cmake/UseLATEX.cmake)		# I like anti-cluttering by moving the UseLATEX.cmake file into a separate directory
 
 # BUILD: Add a file to the specified project
-add_latex_document( ${TEX_NAME}.tex )
+add_latex_document( ${TEX_NAME}.tex
+                    BIBFILES ../../../../Documents/Archief/Bibliotheek/research_bib.bib
+)
 
 
 # POST-BUILD: move the created .pdf-file to the top directory (copy and delete)
