@@ -1,7 +1,7 @@
 // First C++ project: interface LibInt2's calculations to matrices in eigen3
 
 #include <libint2.hpp>
-#include <Eigen/Dense>      // Eigen/Eigen includes Eigen/Dense and Eigen/Sparse, so we might as well just include Eigen/Dense
+#include <Eigen/Dense>      // <Eigen/Eigen> includes <Eigen/Dense> and <Eigen/Sparse>, so we might as well just include <Eigen/Dense> since we won't be using <Eigen/Sparse> in this code
 
 
 /**
@@ -93,7 +93,7 @@ int main() {
 
 
     // 1. MOLECULE & BASIS SET SPECIFICATION
-    const auto xyzfilename = "/Users/laurentlemmens/Software/LibInt_to_eigen3/docs/h2o.xyz";
+    const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
     std::ifstream input_file(xyzfilename);
     auto atoms = libint2::read_dotxyz(input_file);
     libint2::BasisSet obs ("STO-3G", atoms);    // obs: orbital basis set
