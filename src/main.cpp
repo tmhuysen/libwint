@@ -15,63 +15,56 @@ void compute_1body_integrals(const libint2::Operator &opertype, const libint2::B
 
     const auto nsh = obs.size();    // nsh: number of shells in the obs
     const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
-                                    // it's const, but used in eigen's matrix constructor
 
+    // Initialize the eigen matrix:
+    //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.
+    Eigen::MatrixXf M_result(nbf, nbf);
 
-
-    // libint2 stores integrals in row major form, so we will write to the matrix in row major form, and then make it column major
-
-    Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::StorageOptions::RowMajor> M_result (nbf, nbf);
-
-
-
-
-    libint2::Engine engine (opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
-
-    // Something extra for the nuclear attraction integrals
+    // Construct the libint2 engine
+    libint2::Engine engine(opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
+    //  Something extra for the nuclear attraction integrals
     if (opertype == libint2::Operator::nuclear) {
         engine.set_params(make_point_charges(atoms));
     }
 
     const auto shell2bf = obs.shell2bf();  // maps shell index to bf index
 
-    const auto& buffer = engine.results();  // vector that holds pointers to computed shell sets
-                                            // the values will change after every compute() call
+    const auto &buffer = engine.results();  // vector that holds pointers to computed shell sets
+    // actually, buffer.size() is always 1, so buffer[0] is a pointer to
+    //      the first calculated integral of these specific shells
+    // the values that buffer[0] points to will change after every compute() call
 
-
-    // One-body integrals are between two basis functions
-    // However, LibInt calculates integrals between shell sets, we will loop over the shells (sh) in the obs
-    for(auto sh1=0; sh1!=nsh; ++sh1) {  // sh1: shell 1
-        auto bf1 = shell2bf[sh1];       // (index of) first bf in sh1
-        auto nbf_sh1 = obs[sh1].size(); // number of basis functions in first shell
-
-        for(auto sh2=0; sh2!=nsh; ++sh2) {  // sh2: shell2
-            auto bf2 = shell2bf[sh2];          // (index of) first bf in sh2
-            auto nbf_shell2 = obs[sh2].size(); // number of basis functions in second shell
-
+    // One-body integrals are between two basis functions, so we'll need two loops.
+    // However, LibInt calculates integrals between libint2::Shells, we will loop over the shells (sh) in the obs
+    for (auto sh1 = 0; sh1 != nsh; ++sh1) {  // sh1: shell 1
+        for (auto sh2 = 0; sh2 != nsh; ++sh2) {  // sh2: shell2
             // Calculate integrals between the two shells (obs is a decorated std::vector<libint2::Shell>)
             engine.compute(obs[sh1], obs[sh2]);
-            auto calculated_integrals = buffer[0];  // buffer is a vector that holds pointers to computed shell sets
-                                                    // if the zeroth element is nullptr, then the whole shell set has been exhausted
-            if (calculated_integrals == nullptr)
+
+            auto calculated_integrals = buffer[0];  // is actually a pointer: const double *
+
+            if (calculated_integrals == nullptr)    // if the zeroth element is nullptr, then the whole shell has been exhausted
                 continue;
+
 
             // Extract the calculated integrals from calculated_integrals.
             // In calculated_integrals, the integrals are stored in row major form.
-            for(auto f1=0; f1!=nbf_sh1; ++f1) {  // f1: function 1
-                for(auto f2=0; f2!=nbf_shell2; ++f2) {  // f2: function 2
-                    auto computed_integral = calculated_integrals[f1*nbf_shell2 + f2];  // row major traversing
-                    M_result(bf1+f1, bf2+f2) = computed_integral;
-                    std::cout << "  " << bf1+f1 << " " << bf2+f2 << " " << computed_integral << std::endl;
+            auto bf1 = shell2bf[sh1];  // (index of) first bf in sh1
+            auto bf2 = shell2bf[sh2];  // (index of) first bf in sh2
+
+            auto nbf_sh1 = obs[sh1].size();  // number of basis functions in first shell
+            auto nbf_sh2 = obs[sh2].size();  // number of basis functions in second shell
+
+            for (auto f1 = 0; f1 != nbf_sh1; ++f1) {     // f1: index of basis function within shell 1
+                for (auto f2 = 0; f2 != nbf_sh2; ++f2) { // f2: index of basis function within shell 2
+                    auto computed_integral = calculated_integrals[f1 * nbf_sh2 + f2];  // integrals are packed in row-major form
+                    M_result(bf1 + f1, bf2 + f2) = computed_integral;
                 }
             }
+
         }
     }
-
-
-    std::cout << M_result << std::endl;
 }
-
 
 /**
  * Prints the sizes (i.e. the number of basis functions in them) of all shells in a given basis set object.
@@ -104,10 +97,8 @@ int main() {
 
     // LEARNING AREA
     compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
-
-
-
-
+    // compute_1body_integrals(libint2::Operator::kinetic, obs, atoms);
+    // compute_1body_integrals(libint2::Operator::nuclear, obs, atoms);
 
     // Finalize libint2
     libint2::finalize();
