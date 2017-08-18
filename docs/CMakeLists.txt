@@ -12,6 +12,7 @@ include(cmake/UseLATEX.cmake)		# I like anti-cluttering by moving the UseLATEX.c
 # BUILD: Add a file to the specified project
 add_latex_document( ${TEX_NAME}.tex
                     BIBFILES ../../../../Documents/Archief/Bibliotheek/research_bib.bib
+                    IMAGE_DIRS figures
 )
 
 
