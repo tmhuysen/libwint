@@ -90,55 +90,63 @@
 
     Often, a predetermined/fixed linear combination (also known as a \textit{contraction}) of primitives is taken, leading to a \textit{contracted GTO} (CGTO):
     \begin{equation}
-        d_1 \varphi_s(\zeta_1) + d_2 \varphi_s(\zeta_2) \thinspace ,
+        c_1 \varphi_s(\zeta_1) + c_2 \varphi_s(\zeta_2) \thinspace ,
     \end{equation}
-    in which the \textit{contraction coefficients} $d$ have to be specified. CGTOs are the functions that are used as \textit{basis functions} (\textit{atomic orbitals}: AOs). Note that a single primitive can also be used as a basis function, in which case the linear combination is just one times that primitive. A graphical explanation of the different concepts of primitives, CGTOs, basis functions and shells is given in Figure \ref{fig:basis}\\
+    in which the \textit{contraction coefficients} $c$ have to be specified. CGTOs are the functions that are used as \textit{basis functions} (\textit{atomic orbitals}: AOs). Note that a single primitive can also be used as a basis function, in which case the linear combination is just one times that primitive. A graphical explanation of the different concepts of primitives, CGTOs, basis functions and shells is given in Figure \ref{fig:basis}. \\
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.65]{figures/H2O_3-21g}
+        \caption{Explanation of the concepts of primitives, CGTOs (basis functions) and shells for water @ 3-21G. $\varphi$ denotes a Gaussian primitive, its argument being the value of the exponent and its subscript specifying its angular momentum.}
+        \label{fig:basis}
+    \end{figure}
 
     \textit{Molecular orbitals} (MOs) are then written as a linear combination of AOs (which are CGTOs), which in turn serve as a one-electron basis to antisymmetrize into the many-electron basis of the \textit{Slater determinants} (SDs). \cite{jensen2007} \\
 
     Internally, LibInt2 stores (normalized) contraction coefficients and exponents in \lstinline{libint2::Shell} objects.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[scale=0.65]{figures/H2O_3-21g.pdf}
-        \caption{Explanation of the concepts of primitives, CGTOs (basis functions) and shells for water @ 3-21G. $\varphi$ denotes a Gaussian primitive, its argument being the value of the exponent and its subscript specifying its angular momentum.}
-        \label{fig:basis}
-    \end{figure}
-
-
 \section{Are the basis functions (CGTOs) normalized?}
 
     When constructing a \lstinline{libint2::BasisSet} object as in say
 
-\begin{lstlisting}
-libint2::BasisSet obs ("STO-3G", atoms);
-\end{lstlisting}
+    \begin{lstlisting}
+    libint2::BasisSet obs ("STO-3G", atoms);
+    \end{lstlisting}
 
     the corresponding file \lstinline{sto-3g.g94} is read (which is located at your \lstinline{LIBINT_DATA_PATH} environment variable), in which LibInt2 finds the exponents and contraction coefficients for the given basis for a given element. \\
 
     In \lstinline{libint2/basis.h}, we can see the following code (edited for brevity):
 
-\begin{lstlisting}
-static ... read_g94_basis_library(...){
-    ...
-    ref_shells[Z].push_back(
-        libint2::Shell{...}
-        )
-    ...
-}
-\end{lstlisting}
+    \begin{lstlisting}
+    static ... read_g94_basis_library(...){
+        ...
+        ref_shells[Z].push_back(
+            libint2::Shell{...}
+            )
+        ...
+    }
+    \end{lstlisting}
 
     which calls a specific constructor of \lstinline{libint2::Shell}:
 
-\begin{lstlisting}
-Shell(...) {
-    // embed normalization factors into contraction coefficients
-    renorm();
-}
-\end{lstlisting}
+    \begin{lstlisting}
+    Shell(...) {
+        // embed normalization factors into contraction coefficients
+        renorm();
+    }
+    \end{lstlisting}
 
     that makes sure that the CGTO is normalized by including the normalization factor in the contraction coefficients. So, \textbf{yes}, LibInt2 internally works with normalized basis functions.
 
+\section{Row major storing in \lstinline{compute_1body()}}
+    Figure \ref{fig:compute} features the explanation of the row major storage of the calculated integrals.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=1]{figures/compute1body}
+        \caption{Explanation of the function \lstinline{compute_1body()}, featuring LibInt2's row major storage of the calculated integrals.}
+        \label{fig:compute}
+    \end{figure}
 
 
 % % % REFERENCES % % %
