@@ -22,11 +22,4 @@ Eigen::MatrixXf compute_1body_integrals(const libint2::Operator& , const libint2
  */
 void print_shell_sizes(const libint2::BasisSet &);
 
-
-
-
-
-void test(int);
-
-
 #endif //LIBINT_TUTORIAL_LIBINT_WRAPPER_H

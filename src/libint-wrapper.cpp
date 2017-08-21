@@ -84,8 +84,3 @@ void print_shell_sizes(const libint2::BasisSet &obs) {
         std::cout << "Shell nr.: " << i << "\t Shell size: " << sh.size() << std::endl;
     }
 }
-
-
-void test(int a){
-    std::cout << a << std::endl;
-}
