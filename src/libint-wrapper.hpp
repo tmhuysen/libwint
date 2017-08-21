@@ -12,7 +12,7 @@
  * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
  * @param atoms:    a std::vector<Atom>
  */
-void compute_1body_integrals(const libint2::Operator& , const libint2::BasisSet& , const std::vector<libint2::Atom> &);
+Eigen::MatrixXf compute_1body_integrals(const libint2::Operator& , const libint2::BasisSet& , const std::vector<libint2::Atom> &);
 
 
 /**

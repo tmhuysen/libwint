@@ -20,10 +20,16 @@ int main() {
 
 
 
-    // LEARNING AREA
-    compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
-    // compute_1body_integrals(libint2::Operator::kinetic, obs, atoms);
-    // compute_1body_integrals(libint2::Operator::nuclear, obs, atoms);
+    // 2. CALCULATE ONE- AND TWO BODY INTEGRALS
+    auto S = compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
+    auto T = compute_1body_integrals(libint2::Operator::kinetic, obs, atoms);
+    auto V = compute_1body_integrals(libint2::Operator::nuclear, obs, atoms);
+
+    //std::cout << S << std::endl << T << std::endl << V << std::endl;
+
+
+    
+
 
     // Finalize libint2
     libint2::finalize();
