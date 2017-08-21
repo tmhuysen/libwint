@@ -2,6 +2,8 @@
 
 #include <libint2.hpp>
 #include <Eigen/Dense>      // <Eigen/Eigen> includes <Eigen/Dense> and <Eigen/Sparse>, so we might as well just include <Eigen/Dense> since we won't be using <Eigen/Sparse> in this code
+#include <unsupported/Eigen/CXX11/Tensor>
+
 #include "libint-wrapper.hpp"
 
 
@@ -18,18 +20,15 @@ int main() {
                                                 // a libint2::BasisSet is a decorated std::vector<libint2::Shell>
 
 
-
-
     // 2. CALCULATE ONE- AND TWO BODY INTEGRALS
-    auto S = compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
-    auto T = compute_1body_integrals(libint2::Operator::kinetic, obs, atoms);
-    auto V = compute_1body_integrals(libint2::Operator::nuclear, obs, atoms);
+    // auto S = compute_1body_integrals(libint2::Operator::overlap, obs, atoms);
+    // auto T = compute_1body_integrals(libint2::Operator::kinetic, obs, atoms);
+    // auto V = compute_1body_integrals(libint2::Operator::nuclear, obs, atoms);
 
     //std::cout << S << std::endl << T << std::endl << V << std::endl;
 
-
-    
-
+    auto tei = compute_2body_integrals(obs, atoms);
+    std::cout << tei << std::endl;
 
     // Finalize libint2
     libint2::finalize();
