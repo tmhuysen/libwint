@@ -5,7 +5,7 @@
 #include <libint2.hpp>
 #include <Eigen/Dense>      // <Eigen/Eigen> includes <Eigen/Dense> and <Eigen/Sparse>, so we might as well just include <Eigen/Dense> since we won't be using <Eigen/Sparse> in this code
 #include <unsupported/Eigen/CXX11/Tensor>
-#include "libint-wrapper.hpp"
+#include "../include/libint-wrapper.hpp"
 
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
