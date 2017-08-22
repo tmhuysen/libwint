@@ -29,6 +29,7 @@ target_link_libraries(libint-eigen libint-eigen-wrapper)
 # A: We have already linked our own library with it, and main.cpp doesn't specify any LibInt2 computations
 
 
-enable_testing()                # enables testing for this directory and below
-
-add_test(NAME first_test COMMAND first_test_command)
+# Set up testing
+enable_testing()
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+add_subdirectory(tests)
