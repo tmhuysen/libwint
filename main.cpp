@@ -11,16 +11,13 @@ int main() {
     libint2::initialize();
 
 
+
     // 1. MOLECULE & BASIS SET SPECIFICATION
 
     const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
     std::string basis_name = "STO-3G";
 
     Molecule water (xyzfilename);
-    for(auto atom : water.atoms) {
-        std::cout << atom.atomic_number << std::endl;
-    }
-
 
     // 2. CALCULATIONS
     Basis basis (water, basis_name);
@@ -32,6 +29,7 @@ int main() {
     auto tei = basis.compute_two_electron_integrals();
 
 
+    
     // Finalize libint2
     libint2::finalize();
     return 0;
