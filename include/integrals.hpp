@@ -5,6 +5,11 @@
 #ifndef LIBINT_TUTORIAL_LIBINT_WRAPPER_H
 #define LIBINT_TUTORIAL_LIBINT_WRAPPER_H
 
+#include <libint2.hpp>
+#include <unsupported/Eigen/CXX11/Tensor>
+#include <Eigen/Dense>
+
+
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type).
  */
