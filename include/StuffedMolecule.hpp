@@ -5,15 +5,7 @@
 #include <libint2.hpp>
 
 
-
 class StuffedMolecule {
-
-
-};
-
-
-
-class Molecule {
 public:
 
     const std::string xyz_filename;           // Path to a .xyz-file
@@ -24,7 +16,7 @@ public:
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string xyz_filename);
+    StuffedMolecule(const std::string xyz_filename);
 
     /**
      *
