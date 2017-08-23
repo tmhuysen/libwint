@@ -1,7 +1,9 @@
 # src-level CMakeLists.txt
 
 # We want to make a (static) library called "libint-eigen-wrapper", based on the given source files
-add_library(libint-eigen-wrapper libint-wrapper.cpp)
+add_library(libint-eigen-wrapper
+        libint-wrapper.cpp
+        StuffedMolecule.cpp)
 
 
 # To make this library, we have to include several headers
