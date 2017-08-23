@@ -10,8 +10,7 @@
 BOOST_AUTO_TEST_CASE( constructor ){
 
     const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
-    Molecule water (xyzfilename);
-    BOOST_CHECK_EQUAL(water.natoms(), 3);
-
+    Molecule water_filename (xyzfilename);
+    BOOST_CHECK_EQUAL(water_filename.natoms(), 3);
 
 }

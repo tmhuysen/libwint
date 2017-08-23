@@ -4,26 +4,38 @@
 #include <string>
 #include <libint2.hpp>
 
+/** Parses a file name to obtain atoms
+ *
+ * @param filename
+ * @return std::vector<libint2::Atom>
+ */
+std::vector<libint2::Atom> parse_filename(const std::string& filename);
+
+
 
 class Molecule {
 public:
 
     const std::string xyz_filename;     // Path to a .xyz-file
     std::vector<libint2::Atom> atoms;   // Output of LibInt2's read_dotxyz() function
+    const std::string basis_name;
+    libint2::BasisSet obs;              // "obs": orbital basis set
+                                        // a libint2::BasisSet is a decorated std::vector<libint2::Shell>
 
+    // Constructors
     /** Constructor from a given xyz_filename
      *
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string xyz_filename);
+    Molecule(const std::string& xyz_filename);
 
+    // Methods
     /**
      *
      * @return the number of atoms in the molecule
      */
     unsigned long natoms();
-
 };
 
 
