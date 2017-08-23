@@ -3,7 +3,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "libint-wrapper.hpp"
-#include "StuffedMolecule.hpp"
+#include "Molecule.hpp"
 
 int main() {
     // Initialize libint2
