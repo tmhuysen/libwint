@@ -19,6 +19,7 @@ int main() {
 
     Molecule water (xyzfilename);
 
+
     // 2. CALCULATIONS
     Basis basis (water, basis_name);
 
@@ -29,7 +30,6 @@ int main() {
     auto tei = basis.compute_two_electron_integrals();
 
 
-    
     // Finalize libint2
     libint2::finalize();
     return 0;

@@ -17,3 +17,24 @@ target_include_directories(Molecule_test PRIVATE ../include)
 target_link_libraries(Molecule_test PRIVATE libint-eigen-wrapper)
 
 add_test(NAME Molecule_test COMMAND Molecule_test)
+
+
+# FIXME: I'll fix duplicate statements later...
+
+add_executable(Basis_test Basis_test.cpp)
+
+# For now, I still have include everything from LibInt2 and eigen3, but in later versions I will use a more OOP-approach so that this isn't necessary.
+target_include_directories(Basis_test PRIVATE /usr/local/libint/2.2.0/include)
+target_include_directories(Basis_test PRIVATE /usr/local/libint/2.2.0/include/libint2)
+target_include_directories(Basis_test PRIVATE /opt/local/include/eigen3)
+
+# Include the Boost headers
+target_include_directories(Basis_test PRIVATE ${Boost_INCLUDE_DIRS})
+
+# Include this project's headers
+target_include_directories(Basis_test PRIVATE ../include)
+
+# Link with this project's library
+target_link_libraries(Basis_test PRIVATE libint-eigen-wrapper)
+
+add_test(NAME Basis_test COMMAND Basis_test)
