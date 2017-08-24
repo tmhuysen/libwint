@@ -133,7 +133,6 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
                             for (auto f3 = 0L; f3 != nbf_sh3; ++f3) {
                                 for (auto f4 = 0L; f4 != nbf_sh4; ++f4) {
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
-                                    std::cout << f1+bf1 << ' ' << f2+bf2 << ' ' << f3+bf3 << ' ' << f4+bf4 << ": " << computed_integral << std::endl;
                                     tei(f1+bf1, f2+bf2, f3+bf3, f4+bf4) = computed_integral;
                                 }
                             }

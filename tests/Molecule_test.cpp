@@ -14,6 +14,4 @@ BOOST_AUTO_TEST_CASE( constructor ){
 
     BOOST_CHECK_EQUAL(water.xyz_filename, "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz");
     BOOST_CHECK_EQUAL(water.natoms(), 3);
-
-
 }

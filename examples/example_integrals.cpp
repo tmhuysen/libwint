@@ -11,9 +11,7 @@ int main() {
     libint2::initialize();
 
 
-
     // 1. MOLECULE & BASIS SET SPECIFICATION
-
     const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
     std::string basis_name = "STO-3G";
 
