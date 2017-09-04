@@ -12,14 +12,19 @@ int main() {
 
 
     // 1. MOLECULE & BASIS SET SPECIFICATION
-    const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
+    // Water @ STO-3G
+    // const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
+    // std::string basis_name = "STO-3G";
+
+
+    // N @ STO-3G
+    const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/n.xyz";
     std::string basis_name = "STO-3G";
 
-    Molecule water (xyzfilename);
-
-
+    
+    Molecule particle (xyzfilename);
     // 2. CALCULATIONS
-    Basis basis (water, basis_name);
+    Basis basis (particle, basis_name);
 
     auto S = basis.compute_overlap_integrals();
     auto T = basis.compute_kinetic_integrals();
