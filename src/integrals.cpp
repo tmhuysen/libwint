@@ -11,16 +11,16 @@
  * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
  * @param atoms:    a std::vector<Atom>
 
- * @return: an Eigen::MatrixXf storing the integrals
+ * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXf compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
     const auto nsh = obs.size();    // nsh: number of shells in the obs
     const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
 
     // Initialize the eigen matrix:
     //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.
-    Eigen::MatrixXf M_result (nbf, nbf);
+    Eigen::MatrixXd M_result (nbf, nbf);
 
     // Construct the libint2 engine
     libint2::Engine engine (opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));

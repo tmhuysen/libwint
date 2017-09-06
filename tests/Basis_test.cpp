@@ -12,7 +12,7 @@
 /* Reads a
  *
  */
-void read_array_from_file(const std::string &filename, Eigen::MatrixXf& M){
+void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
     std::ifstream file (filename);
 
     if (file.is_open()) {
@@ -56,10 +56,10 @@ void read_array_from_file(const std::string &filename, Eigen::Tensor<double, 4>&
 }
 
 
-void check_equal_arrays(const Eigen::MatrixXf& M, const std::string& filename){
+void check_equal_arrays(const Eigen::MatrixXd& M, const std::string& filename){
     auto dim = M.rows();    // The given matrices are symmetric so M.rows() == M.cols() is the dimension of the matrix
                             // This is also the dimension of T, V and the rank-4 tensor tei
-    Eigen::MatrixXf M_data (dim, dim);
+    Eigen::MatrixXd M_data (dim, dim);
 
     read_array_from_file(filename, M_data);
     BOOST_CHECK(M.isApprox(M_data));
