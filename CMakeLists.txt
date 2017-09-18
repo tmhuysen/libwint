@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 
 # Default variables decision trees
-#   libint
+#   LIBINT_PREFIX
 if(NOT LIBINT_PREFIX)
     if(DEFINED ENV{LIBINT_PREFIX})
         set(LIBINT_PREFIX $ENV{LIBINT_PREFIX})
@@ -16,7 +16,7 @@ if(NOT LIBINT_PREFIX)
     endif()
 endif()
 
-#   eigen
+#   EIGEN_PREFiX
 if(NOT EIGEN_PREFIX)
     if(DEFINED ENV{EIGEN_PREFIX})
         set(EIGEN_PREFIX $ENV{EIGEN_PREFIX})
@@ -24,6 +24,11 @@ if(NOT EIGEN_PREFIX)
         message(WARNING "You did not specify -DEIGEN_PREFIX, nor is EIGEN_PREFIX set in your environment. Proceeding with default value for EIGEN_PREFIX.")
         set(EIGEN_PREFIX /opt/local/include)
     endif()
+endif()
+
+#   INSTALLATION_PREFIX
+if(NOT INSTALLATION_PREFIX)
+    set(INSTALLATION_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
 
 
@@ -38,7 +43,3 @@ add_subdirectory(examples)
 enable_testing()
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 add_subdirectory(tests)
-
-
-
-#
