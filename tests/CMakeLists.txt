@@ -1,40 +1,32 @@
 # test-level CMakeLists.txt
 
-add_executable(Molecule_test Molecule_test.cpp)
 
-# For now, I still have include everything from LibInt2 and eigen3, but in later versions I will use a more OOP-approach so that this isn't necessary.
-target_include_directories(Molecule_test PRIVATE /usr/local/libint/2.2.0/include)
-target_include_directories(Molecule_test PRIVATE /usr/local/libint/2.2.0/include/libint2)
-target_include_directories(Molecule_test PRIVATE /opt/local/include/eigen3)
+# For every *.cpp-file (every file corresponding to one set of tests) ...
+file(GLOB test_sources ./*.cpp)
 
-# Include the Boost headers
-target_include_directories(Molecule_test PRIVATE ${Boost_INCLUDE_DIRS})
+foreach(test_source ${test_sources})
+    # ... extract the filename without extension as a name for our executable ...
+    get_filename_component(test_name ${test_source} NAME_WE)
 
-# Include this project's headers
-target_include_directories(Molecule_test PRIVATE ../include)
+    # ... add an executable based on the test source ...
+    add_executable(${test_name} ${test_source})
 
-# Link with this project's library
-target_link_libraries(Molecule_test PRIVATE libint-eigen)
+    # ... add the boost headers (for testing) ...
+    target_include_directories(${test_name} PRIVATE ${Boost_INCLUDE_DIRS})
 
-add_test(NAME Molecule_test COMMAND Molecule_test)
+    # ... add this project's headers ...
+    target_include_directories(${test_name} PRIVATE ../include)
 
+    # ... add the eigen3 headers ...
+    target_include_directories(${test_name} PRIVATE /opt/local/include/eigen3)
 
-# FIXME: I'll fix duplicate statements later...
+    # ... add the libint2 headers ...
+    target_include_directories(${test_name} PRIVATE /usr/local/libint/2.2.0/include)
+    target_include_directories(${test_name} PRIVATE /usr/local/libint/2.2.0/include/libint2)
 
-add_executable(Basis_test Basis_test.cpp)
+    # ... link to this project's library ...
+    target_link_libraries(${test_name} PRIVATE libint-eigen)
 
-# For now, I still have include everything from LibInt2 and eigen3, but in later versions I will use a more OOP-approach so that this isn't necessary.
-target_include_directories(Basis_test PRIVATE /usr/local/libint/2.2.0/include)
-target_include_directories(Basis_test PRIVATE /usr/local/libint/2.2.0/include/libint2)
-target_include_directories(Basis_test PRIVATE /opt/local/include/eigen3)
-
-# Include the Boost headers
-target_include_directories(Basis_test PRIVATE ${Boost_INCLUDE_DIRS})
-
-# Include this project's headers
-target_include_directories(Basis_test PRIVATE ../include)
-
-# Link with this project's library
-target_link_libraries(Basis_test PRIVATE libint-eigen)
-
-add_test(NAME Basis_test COMMAND Basis_test)
+    # ... and finally make a test ...
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endforeach()
