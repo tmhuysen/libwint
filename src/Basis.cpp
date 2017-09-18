@@ -11,15 +11,15 @@ Basis::Basis(Molecule& molecule, std::string& basis_name) :
 }
 
 
-Eigen::MatrixXf Basis::compute_overlap_integrals() {
+Eigen::MatrixXd Basis::compute_overlap_integrals() {
     return compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
 }
 
-Eigen::MatrixXf Basis::compute_kinetic_integrals() {
+Eigen::MatrixXd Basis::compute_kinetic_integrals() {
     return compute_1body_integrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.atoms);
 }
 
-Eigen::MatrixXf Basis::compute_nuclear_integrals() {
+Eigen::MatrixXd Basis::compute_nuclear_integrals() {
     return compute_1body_integrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.atoms);
 }
 

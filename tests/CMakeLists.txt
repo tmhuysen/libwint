@@ -14,7 +14,7 @@ target_include_directories(Molecule_test PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(Molecule_test PRIVATE ../include)
 
 # Link with this project's library
-target_link_libraries(Molecule_test PRIVATE libint-eigen-wrapper)
+target_link_libraries(Molecule_test PRIVATE libint-eigen)
 
 add_test(NAME Molecule_test COMMAND Molecule_test)
 
@@ -35,6 +35,6 @@ target_include_directories(Basis_test PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories(Basis_test PRIVATE ../include)
 
 # Link with this project's library
-target_link_libraries(Basis_test PRIVATE libint-eigen-wrapper)
+target_link_libraries(Basis_test PRIVATE libint-eigen)
 
 add_test(NAME Basis_test COMMAND Basis_test)
