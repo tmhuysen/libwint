@@ -11,16 +11,16 @@
  * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
  * @param atoms:    a std::vector<Atom>
 
- * @return: an Eigen::MatrixXf storing the integrals
+ * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXf compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
     const auto nsh = obs.size();    // nsh: number of shells in the obs
     const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
 
     // Initialize the eigen matrix:
     //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.
-    Eigen::MatrixXf M_result (nbf, nbf);
+    Eigen::MatrixXd M_result (nbf, nbf);
 
     // Construct the libint2 engine
     libint2::Engine engine (opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
@@ -133,7 +133,6 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
                             for (auto f3 = 0L; f3 != nbf_sh3; ++f3) {
                                 for (auto f4 = 0L; f4 != nbf_sh4; ++f4) {
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
-                                    std::cout << f1+bf1 << ' ' << f2+bf2 << ' ' << f3+bf3 << ' ' << f4+bf4 << ": " << computed_integral << std::endl;
                                     tei(f1+bf1, f2+bf2, f3+bf3, f4+bf4) = computed_integral;
                                 }
                             }

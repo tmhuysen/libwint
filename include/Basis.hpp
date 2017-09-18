@@ -27,9 +27,9 @@ public:
     Basis(Molecule& molecule, std::string& basis_name);
 
     // Methods
-    Eigen::MatrixXf compute_overlap_integrals();
-    Eigen::MatrixXf compute_nuclear_integrals();
-    Eigen::MatrixXf compute_kinetic_integrals();
+    Eigen::MatrixXd compute_overlap_integrals();
+    Eigen::MatrixXd compute_nuclear_integrals();
+    Eigen::MatrixXd compute_kinetic_integrals();
 
     Eigen::Tensor<double, 4> compute_two_electron_integrals();
 };
