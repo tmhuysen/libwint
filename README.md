@@ -9,13 +9,16 @@ A C++ library that stores LibInt2 calculated integrals in eigen3 matrices
 
 ## installation
 
-To install this library, clone this repository
+To install this library,
+1. clone this repository
 
-    git clone git@github.com:lelemmen/libint-eigen.git
+        git clone git@github.com:lelemmen/libint-eigen.git
 
-and perform an out-of-source build:
+2. perform an out-of-source build:
 
-    mkdir build && cd build
-    cmake -DLIBINT_PREFIX=your_libint_prefix -DEIGEN_PREFIX=your_eigen_prefix ..
+        mkdir build && cd build
+        cmake -DLIBINT_PREFIX=your_libint_prefix -DEIGEN_PREFIX=your_eigen_prefix ..
 
-where your_libint_prefix is the prefix to your libint2 installation folder, and your_eigen_prefix is the prefix to your eigen3 headers.
+    where `your_libint_prefix` is the prefix to your libint2 installation folder, and `your_eigen_prefix` is the prefix to your eigen3 headers.
+
+3. 

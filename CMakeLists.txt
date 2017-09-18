@@ -5,6 +5,11 @@ project(libint-eigen LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)  # LibInt2 needs C++ 11
 
 
+# Default variables
+set(LIBINT_PREFIX /usr/local/libint2/)
+set(EIGEN_PREFIX /opt/local/include/)
+
+
 # source files for the library
 add_subdirectory(src)
 
