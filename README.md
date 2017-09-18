@@ -21,4 +21,4 @@ To install this library,
 
     where `your_libint_prefix` is the prefix to your libint2 installation folder, and `your_eigen_prefix` is the prefix to your eigen3 headers.
 
-3. 
+3.

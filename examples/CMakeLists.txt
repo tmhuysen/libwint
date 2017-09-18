@@ -8,11 +8,11 @@ add_executable(example_integrals example_integrals.cpp)
 target_include_directories(example_integrals PRIVATE ../include)
 
 # Include the eigen3 headers
-target_include_directories(example_integrals PRIVATE /opt/local/include/eigen3)
+target_include_directories(example_integrals PRIVATE ${EIGEN_PREFIX}/eigen3)
 
 # Include the libint2 headers
-target_include_directories(example_integrals PRIVATE /usr/local/libint/2.2.0/include)
-target_include_directories(example_integrals PRIVATE /usr/local/libint/2.2.0/include/libint2)
+target_include_directories(example_integrals PRIVATE ${LIBINT_PREFIX}/include)
+target_include_directories(example_integrals PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
 
 # Link with our own library

@@ -18,11 +18,11 @@ foreach(test_source ${test_sources})
     target_include_directories(${test_name} PRIVATE ../include)
 
     # ... add the eigen3 headers ...
-    target_include_directories(${test_name} PRIVATE /opt/local/include/eigen3)
+    target_include_directories(${test_name} PRIVATE ${EIGEN_PREFIX}/eigen3)
 
     # ... add the libint2 headers ...
-    target_include_directories(${test_name} PRIVATE /usr/local/libint/2.2.0/include)
-    target_include_directories(${test_name} PRIVATE /usr/local/libint/2.2.0/include/libint2)
+    target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include)
+    target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
     # ... link to this project's library ...
     target_link_libraries(${test_name} PRIVATE libint-eigen)

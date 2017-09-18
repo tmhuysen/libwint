@@ -19,4 +19,4 @@ target_include_directories(libint-eigen PRIVATE ${EIGEN_PREFIX}/eigen3)
 
 
 # Link against the libint2 library
-target_link_libraries(libint-eigen PRIVATE /usr/local/libint/2.2.0/lib/libint2.a)
+target_link_libraries(libint-eigen PRIVATE ${LIBINT_PREFIX}/lib/libint2.a)
