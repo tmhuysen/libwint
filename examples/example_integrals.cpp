@@ -2,8 +2,7 @@
 #include <Eigen/Dense>      // <Eigen/Eigen> includes <Eigen/Dense> and <Eigen/Sparse>, so we might as well just include <Eigen/Dense> since we won't be using <Eigen/Sparse> in this code
 #include <unsupported/Eigen/CXX11/Tensor>
 
-#include "Molecule.hpp"
-#include "Basis.hpp"
+#include "libint-eigen.hpp"
 
 
 int main() {

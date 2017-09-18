@@ -4,9 +4,9 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise clang++ will complain
-#include "Molecule.hpp"
-#include "Basis.hpp"
 #include <libint2.hpp>
+#include <unsupported/Eigen/CXX11/Tensor>
+#include "libint-eigen.hpp"
 
 
 /* Reads a
