@@ -30,15 +30,25 @@ install:
   - make
   - sudo make install
 
-  # Install LibInt2
+  # Install LibInt2 (https://github.com/evaleev/libint/wiki)
+  #   Configuring the LibInt compiler
   - cd
   - mkdir build_libint && cd build_libint
   - curl -OL "https://github.com/evaleev/libint/archive/v2.2.0.tar.gz"
-  - tar -xzf v2.2.0.tar.gz
+  - tar -xvzf v2.2.0.tar.gz
   - cd libint-2.2.0
   - ./autogen.sh
   - mkdir build_configure && cd build_configure
   - ../configure
+  #   Generating the LibInt library
+  - make export
+  #   Compiling the LibInt library
+  - tar -xvzf libint-2.2.0-stable.tgz
+  - cd libint-2.2.0-stable.tgz
+  - ./configure
+  - make
+  - make install
+
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
