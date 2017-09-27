@@ -34,7 +34,8 @@ install:
   - cd
   - mkdir build_libint && cd build_libint
   - curl "https://github.com/evaleev/libint/archive/v2.2.0.tar.gz"
-  - tar -xzf v2.2.0.tar.gz
+  - ls
+  - tar -xzf libint-v2.2.0.tar.gz
   - cd libint-2.2.0
   - ./autogen.sh
   - mkdir build_configure && cd build_configure
