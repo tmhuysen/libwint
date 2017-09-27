@@ -18,6 +18,7 @@ before_install:
 addons:
   apt:
     packages:
+    - libint2-2
     - libint2-dev
 
 install:
