@@ -73,14 +73,14 @@ Eigen::MatrixXd compute_1body_integrals(const libint2::Operator &opertype, const
 
 /**
  * Calculates the two-electron integrals, given an orbital basis and atoms.
+ * The integrals are stored in a rank-4 tensor, which should be accessed using PHYSICIST'S NOTATION <12|12>.
 
  * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
  * @param atoms:    a std::vector<Atom>
 
  * @return: an Eigen::Tensor<double, 4> storing the integrals
  */
-Eigen::Tensor<double, 4>
-compute_2body_integrals(const libint2::BasisSet &obs, const std::vector<libint2::Atom> &atoms) {
+Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet &obs, const std::vector<libint2::Atom> &atoms) {
     // We have to static_cast to LONG, as clang++ else gives the following errors:
     //  error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'value_type' (aka 'long') in initializer list
     //  note: insert an explicit cast to silence this issue
@@ -134,6 +134,8 @@ compute_2body_integrals(const libint2::BasisSet &obs, const std::vector<libint2:
                             for (auto f3 = 0L; f3 != nbf_sh3; ++f3) {
                                 for (auto f4 = 0L; f4 != nbf_sh4; ++f4) {
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
+
+                                    // The two-electron integrals are given in PHYSICIST'S NOTATION: <12|12>
                                     tei(f1 + bf1, f2 + bf2, f3 + bf3, f4 + bf4) = computed_integral;
                                 }
                             }
@@ -150,8 +152,6 @@ compute_2body_integrals(const libint2::BasisSet &obs, const std::vector<libint2:
 
 /**
  * Prints the sizes (i.e. the number of basis functions in them) of all shells in a given basis set object.
- *
- * @param obs:  the given basis set object
  */
 void print_shell_sizes(const libint2::BasisSet &obs) {
     auto size = obs.size();

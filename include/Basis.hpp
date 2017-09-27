@@ -31,6 +31,8 @@ public:
 
 
     // Methods
+    size_t nbf();
+
     Eigen::MatrixXd compute_overlap_integrals();
     Eigen::MatrixXd compute_nuclear_integrals();
     Eigen::MatrixXd compute_kinetic_integrals();

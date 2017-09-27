@@ -17,6 +17,10 @@ Basis::Basis(Molecule &molecule, std::string &basis_name) :
     this->libint_basis = libint_basis;
 }
 
+size_t Basis::nbf() {
+    return this->libint_basis.nbf();
+}
+
 Eigen::MatrixXd Basis::compute_overlap_integrals() {
     return compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
 }

@@ -7,8 +7,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise the compiler will complain
 
-
-void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
+/** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
+*/
+void read_array_from_file(const std::string& filename, Eigen::MatrixXd& M){
     std::ifstream file (filename);
 
     if (file.is_open()) {
@@ -18,7 +19,7 @@ void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
 
             int i;
             int j;
-            float value;
+            double value;
 
             is >> i >> j >> value;
             M(i, j) = value;
@@ -28,7 +29,9 @@ void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
     }
 }
 
-void read_array_from_file(const std::string &filename, Eigen::Tensor<double, 4>& M){
+/** Read an array from a given filename line by line, and add the elements to a given tensor (rank-4 tensor)
+*/
+void read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M){
     std::ifstream file (filename);
 
     if (file.is_open()) {
@@ -50,35 +53,24 @@ void read_array_from_file(const std::string &filename, Eigen::Tensor<double, 4>&
     }
 }
 
-void check_equal_arrays(const Eigen::MatrixXd& M, const std::string& filename){
-    auto dim = M.rows();    // The given matrices are symmetric so M.rows() == M.cols() is the dimension of the matrix
-                            // This is also the dimension of T, V and the rank-4 tensor tei
-    Eigen::MatrixXd M_data (dim, dim);
-
-    read_array_from_file(filename, M_data);
-    BOOST_CHECK(M.isApprox(M_data));
-}
-
-void check_equal_arrays(Eigen::Tensor<double, 4>& M, const std::string& filename){
-    auto dim = M.NumIndices;    // The given matrices are symmetric so M.rows() == M.cols() is the dimension of the matrix
-                                // This is also the dimension of T, V and the rank-4 tensor tei
-    Eigen::Tensor<double, 4> M_data (dim, dim, dim, dim);
-
-    auto tolerance = 1.0e-08;
+/** Return if two rank-4 tensors are approximately equal
+ */
+bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance){
+    auto dim = M.NumIndices;
 
     // Since Eigen::Tensor doesn't have an isApprox yet, we will check every pair of values manually
-    read_array_from_file(filename, M_data);
     for (int i = 0; i < dim ; i++) {
         for (int j = 0; j < dim; j++) {
             for (int k = 0; k < dim; k++) {
                 for (int l = 0; l < dim; l++) {
-                    // FIXME: add documentation for chemist vs physicist integrals
-
-                    BOOST_CHECK_LT(M_data(i,j,k,l) - M(i,j,k,l), tolerance);
+                    if (std::abs(M(i,j,k,l) - T(i,j,k,l)) > tolerance) {
+                        return false;
+                    }
                 }
             }
         }
-    }
+    } // rank-4 tensor traversing
+    return true;
 }
 
 
@@ -92,6 +84,7 @@ BOOST_AUTO_TEST_CASE( constructor ){
     Wrapper::Basis basis (water, basis_name);
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
+    BOOST_CHECK_EQUAL(basis.nbf(), 7);
 
     // Finalize libint2
     libint2::finalize();
@@ -105,25 +98,28 @@ BOOST_AUTO_TEST_CASE( integrals ){
     const auto xyzfilename = "../../docs/h2o.xyz";
     std::string basis_name = "STO-3G";
     Wrapper::Molecule water (xyzfilename);
-
     Wrapper::Basis basis (water, basis_name);
+    auto nbf = basis.nbf();
 
-    auto S = basis.compute_overlap_integrals();
-    auto T = basis.compute_kinetic_integrals();
-    auto V = basis.compute_nuclear_integrals();
+    Eigen::MatrixXd S = basis.compute_overlap_integrals();
+    Eigen::MatrixXd T = basis.compute_kinetic_integrals();
+    Eigen::MatrixXd V = basis.compute_nuclear_integrals();
+    Eigen::Tensor<double, 4> tei = basis.compute_two_electron_integrals();
 
-    auto tei = basis.compute_two_electron_integrals();
+    Eigen::MatrixXd S_test (nbf, nbf);
+    Eigen::MatrixXd T_test (nbf, nbf);
+    Eigen::MatrixXd V_test (nbf, nbf);
+    Eigen::Tensor<double, 4> tei_test (nbf, nbf, nbf, nbf);
 
+    read_array_from_file("../../tests/ref_data/overlap.data", S_test);
+    read_array_from_file("../../tests/ref_data/kinetic.data", T_test);
+    read_array_from_file("../../tests/ref_data/nuclear.data", V_test);
+    read_array_from_file("../../tests/ref_data/two_electron.data", tei_test);
 
-    const auto overlap_data = "../../tests/ref_data/overlap.data";
-    const auto kinetic_data = "../../ref_data/kinetic.data";
-    const auto nuclear_data = "../../ref_data/nuclear.data";
-    const auto two_electron_data = "../../ref_data/two_electron.data";
-
-    check_equal_arrays(S, overlap_data);
-    check_equal_arrays(T, kinetic_data);
-    check_equal_arrays(V, nuclear_data);
-    // check_equal_arrays(tei, two_electron_data);
+    BOOST_CHECK(S.isApprox(S_test, 1.0e-8));
+    BOOST_CHECK(T.isApprox(T_test, 1.0e-8));
+    BOOST_CHECK(V.isApprox(V_test, 1.0e-8));
+    BOOST_CHECK(are_equal(tei, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();
