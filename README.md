@@ -1,10 +1,10 @@
 # libint-eigen
 
-A C++ library that stores LibInt2 calculated integrals in eigen3 matrices
+A C++ library that stores LibInt2 calculated integrals in Eigen3 matrices
 
 ## dependencies
-[![LibInt2 Dependency](https://img.shields.io/badge/libint-2.2.0+-blue.svg)](https://github.com/evaleev/libint)
-[![Eigen3 Dependency](https://img.shields.io/badge/eigen-3+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+[![LibInt2 Dependency](https://img.shields.io/badge/LibInt-2.2.0+-blue.svg)](https://github.com/evaleev/libint)
+[![Eigen3 Dependency](https://img.shields.io/badge/Eigen-3+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
 
 
 ## installation
