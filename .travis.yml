@@ -53,7 +53,7 @@ install:
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
   - mkdir build && cd build
-  - cmake ..
+  - cmake .. -DLIBINT_PREFIX="/usr/local"
   - make
   - make test
   - sudo make install
