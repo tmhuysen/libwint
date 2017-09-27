@@ -45,7 +45,7 @@ install:
   - ls -a
   #   Compiling the LibInt library
   - tar -xvzf libint-2.2.0.tgz
-  - cd libint-2.2.0.tgz
+  - cd libint-2.2.0
   - ./configure
   - make
   - make install
