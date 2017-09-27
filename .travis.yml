@@ -18,8 +18,9 @@ before_install:
 addons:
   apt:
     packages:
-    - libint2-2
-    - libint2-dev
+    # LibInt2 dependencies
+    - libboost-dev
+    - libgmp-dev
 
 install:
   # Install Eigen3
@@ -28,6 +29,16 @@ install:
   - cmake . /tmp/eigen -DCMAKE_INSTALL_PREFIX=/opt/local
   - make
   - sudo make install
+
+  # Install LibInt2
+  - cd
+  - mkdir build_libint && cd build_libint
+  - curl "https://github.com/evaleev/libint/archive/v2.2.0.tar.gz"
+  - tar -xzf v2.2.0.tar.gz
+  - cd libint-2.2.0
+  - ./autogen.sh
+  - mkdir build_configure && cd build_configure
+  - ../configure
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
