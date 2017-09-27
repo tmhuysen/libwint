@@ -42,6 +42,7 @@ install:
   - ../configure
   #   Generating the LibInt library
   - make export
+  - ls -a
   #   Compiling the LibInt library
   - tar -xvzf libint-2.2.0-stable.tgz
   - cd libint-2.2.0-stable.tgz
