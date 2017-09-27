@@ -58,5 +58,6 @@ script:
   - mkdir build && cd build
   - cmake ..
   - make
-  - make test
+  - tests/Basis_test
+  # - make test
   - sudo make install
