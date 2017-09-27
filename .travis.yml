@@ -18,9 +18,15 @@ before_install:
 addons:
   apt:
     packages:
+    - libint2-dev
 
 install:
-
+  # Install Eigen3
+  - hg clone https://bitbucket.org/eigen/eigen#3.2 /tmp/eigen
+  - mkdir /tmp/eigen-build && cd /tmp/eigen-build
+  - cmake . /tmp/eigen -DCMAKE_INSTALL_PREFIX=/opt/local
+  - make
+  - sudo make install
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
