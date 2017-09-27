@@ -18,6 +18,9 @@ before_install:
 addons:
   apt:
     packages:
+    # My dependencies
+    - libboost-test-dev
+
     # LibInt2 dependencies
     - libboost-dev
     - libgmp-dev
@@ -49,7 +52,6 @@ install:
   - ./configure
   - make
   - sudo make install
-
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
