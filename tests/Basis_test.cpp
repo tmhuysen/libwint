@@ -116,6 +116,23 @@ BOOST_AUTO_TEST_CASE( integrals ){
     read_array_from_file("../../tests/ref_data/nuclear.data", V_test);
     read_array_from_file("../../tests/ref_data/two_electron.data", tei_test);
 
+    std::cout << "S" << std::endl << S << std::endl << std::endl;
+    std::cout << "T" << std::endl << T << std::endl << std::endl;
+    std::cout << "V" << std::endl << V << std::endl << std::endl;
+
+    std::cout << "two-electron integrals" << std::endl;
+    for (int i = 0; i < nbf; ++i) {
+        for (int j = 0; j < nbf; ++j) {
+            for (int k = 0; k < nbf; ++k) {
+                for (int l = 0; l < nbf; ++l) {
+                    std::cout << i << "\t" << j << "\t" << k << "\t" << l << "\t";
+                    std::cout << tei(i,j,k,l) << std::endl;
+                }
+            }
+        }
+
+    }
+
     BOOST_CHECK(S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(T.isApprox(T_test, 1.0e-8));
     BOOST_CHECK(V.isApprox(V_test, 1.0e-8));
