@@ -35,9 +35,6 @@ endif()
 # source files for the library
 add_subdirectory(src)
 
-# source files for the examples
-add_subdirectory(examples)
-
 
 # Set up testing
 enable_testing()
