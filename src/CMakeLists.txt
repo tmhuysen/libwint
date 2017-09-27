@@ -14,15 +14,11 @@ target_include_directories(libint-eigen PRIVATE ../include)
 target_include_directories(libint-eigen PRIVATE ${LIBINT_PREFIX}/include)
 target_include_directories(libint-eigen PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
-# LibInt2 specifically asks to include eigen3 headers
-# target_include_directories(libint-eigen PRIVATE ${EIGEN_PREFIX}/eigen3)
-
-
 # Link against the libint2 library
 target_link_libraries(libint-eigen PUBLIC ${LIBINT_PREFIX}/lib/libint2.a)
 
+# Include the Eigen3 headers
 target_link_libraries(libint-eigen PUBLIC Eigen3::Eigen)
-
 
 
 # Installation of the target library and its associated header files

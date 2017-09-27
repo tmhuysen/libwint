@@ -1,6 +1,9 @@
 # libint-eigen
 
+[![Build Status](https://travis-ci.org/lelemmen/libint-wrapper.svg?branch=master)](https://travis-ci.org/lelemmen/libint-wrapper)
+
 A C++ library that stores LibInt2 calculated integrals in Eigen3 matrices
+
 
 ## dependencies
 [![LibInt2 Dependency](https://img.shields.io/badge/LibInt-2.2.0+-blue.svg)](https://github.com/evaleev/libint)
