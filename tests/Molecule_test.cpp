@@ -10,9 +10,9 @@
 
 BOOST_AUTO_TEST_CASE( constructor ){
 
-    const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
+    constexpr auto xyzfilename = "../../docs/h2o.xyz"; // Anticipate an out-of source build, so we need one level higher in directories
     Wrapper::Molecule water (xyzfilename);
 
-    BOOST_CHECK_EQUAL(water.xyz_filename, "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz");
+    BOOST_CHECK_EQUAL(water.xyz_filename, "../../docs/h2o.xyz");
     BOOST_CHECK_EQUAL(water.natoms(), 3);
 }

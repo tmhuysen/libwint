@@ -18,7 +18,7 @@ foreach(test_source ${test_sources})
     target_include_directories(${test_name} PRIVATE ../include)
 
     # ... add the eigen3 headers ...
-    target_include_directories(${test_name} PRIVATE ${EIGEN_PREFIX}/eigen3)
+    target_link_libraries(${test_name} PUBLIC Eigen3::Eigen)
 
     # ... add the libint2 headers ...
     target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include)

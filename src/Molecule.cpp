@@ -3,12 +3,21 @@
 
 namespace Wrapper {
 
+/** Parses a file name to obtain atoms
+ *
+ * @param filename
+ * @return std::vector<libint2::Atom>
+ */
 std::vector<libint2::Atom> parse_filename(const std::string& filename) {
     std::ifstream input_file (filename);
     return libint2::read_dotxyz (input_file);
 }
 
-
+/** Constructor from a given xyz_filename
+ *
+ * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
+ *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
+ */
 Molecule::Molecule(const std::string& xyz_filename) :
         xyz_filename(xyz_filename)
 {
