@@ -1,8 +1,7 @@
-//
-// Created by Laurent Lemmens on 22/08/17.
-//
-
 #include "Molecule.hpp"
+
+
+namespace Wrapper {
 
 std::vector<libint2::Atom> parse_filename(const std::string& filename) {
     std::ifstream input_file (filename);
@@ -20,3 +19,5 @@ Molecule::Molecule(const std::string& xyz_filename) :
 unsigned long Molecule::natoms() {
     return this->atoms.size();  // atoms is a std::vector
 }
+
+} // namespace Wrapper

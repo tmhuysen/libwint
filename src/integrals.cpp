@@ -1,8 +1,7 @@
-//
-// Created by Laurent Lemmens on 21/08/17.
-//
-
 #include "integrals.hpp"
+
+
+namespace Wrapper {
 
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
@@ -13,17 +12,18 @@
 
  * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::MatrixXd compute_1body_integrals(const libint2::Operator &opertype, const libint2::BasisSet &obs,
+                                        const std::vector<libint2::Atom> &atoms) {
 
     const auto nsh = obs.size();    // nsh: number of shells in the obs
     const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
 
     // Initialize the eigen matrix:
     //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.
-    Eigen::MatrixXd M_result (nbf, nbf);
+    Eigen::MatrixXd M_result(nbf, nbf);
 
     // Construct the libint2 engine
-    libint2::Engine engine (opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
+    libint2::Engine engine(opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
     //  Something extra for the nuclear attraction integrals
     if (opertype == libint2::Operator::nuclear) {
         engine.set_params(make_point_charges(atoms));
@@ -79,7 +79,8 @@ Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const
 
  * @return: an Eigen::Tensor<double, 4> storing the integrals
  */
-Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms){
+Eigen::Tensor<double, 4>
+compute_2body_integrals(const libint2::BasisSet &obs, const std::vector<libint2::Atom> &atoms) {
     // We have to static_cast to LONG, as clang++ else gives the following errors:
     //  error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'value_type' (aka 'long') in initializer list
     //  note: insert an explicit cast to silence this issue
@@ -88,11 +89,11 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
     const auto nbf = obs.nbf();
 
     // Initialize the two-electron integrals tensor
-    Eigen::Tensor<double, 4> tei (nbf, nbf, nbf, nbf);       // Create a rank 4 tensor with dimensions nbf
+    Eigen::Tensor<double, 4> tei(nbf, nbf, nbf, nbf);       // Create a rank 4 tensor with dimensions nbf
 
 
     // Construct the libint2 engine
-    libint2::Engine engine (libint2::Operator::coulomb, obs.max_nprim(), static_cast<int>(obs.max_l()));
+    libint2::Engine engine(libint2::Operator::coulomb, obs.max_nprim(), static_cast<int>(obs.max_l()));
 
     const auto shell2bf = obs.shell2bf();  // maps shell index to bf index
 
@@ -105,8 +106,8 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
     // However, LibInt calculates integrals between libint2::Shells, we will loop over the shells (sh) in the obs
     for (auto sh1 = 0; sh1 != nsh; ++sh1) {  // sh1: shell 1
         for (auto sh2 = 0; sh2 != nsh; ++sh2) {  // sh2: shell 2
-            for (auto sh3=0; sh3 != nsh; ++sh3) {  // sh3: shell 3
-                for (auto sh4=0; sh4 != nsh; ++sh4) {  //sh4: shell 4
+            for (auto sh3 = 0; sh3 != nsh; ++sh3) {  // sh3: shell 3
+                for (auto sh4 = 0; sh4 != nsh; ++sh4) {  //sh4: shell 4
                     // Calculate integrals between the two shells (obs is a decorated std::vector<libint2::Shell>)
                     engine.compute(obs[sh1], obs[sh2], obs[sh3], obs[sh4]);
 
@@ -133,18 +134,17 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
                             for (auto f3 = 0L; f3 != nbf_sh3; ++f3) {
                                 for (auto f4 = 0L; f4 != nbf_sh4; ++f4) {
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
-                                    tei(f1+bf1, f2+bf2, f3+bf3, f4+bf4) = computed_integral;
+                                    tei(f1 + bf1, f2 + bf2, f3 + bf3, f4 + bf4) = computed_integral;
                                 }
                             }
                         }
-                    }
+                    } // data access loop
 
 
                 }
             }
         }
-    }
-
+    } // shell loop
     return tei;
 };
 
@@ -156,7 +156,9 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
 void print_shell_sizes(const libint2::BasisSet &obs) {
     auto size = obs.size();
     for (auto i = 0; i < size; i++) {
-        auto sh = obs[i];               // i traverses the shell
+        auto sh = obs[i]; // i traverses the shell
         std::cout << "Shell nr.: " << i << "\t Shell size: " << sh.size() << std::endl;
     }
 }
+
+} // namespace Wrapper

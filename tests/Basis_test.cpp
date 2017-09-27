@@ -1,17 +1,13 @@
 #define BOOST_ALL_DYN_LINK
 
-#define BOOST_TEST_MODULE "Molecule class"
+#define BOOST_TEST_MODULE "Basis"
+
+#include "Basis.hpp"
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise clang++ will complain
-#include <libint2.hpp>
-#include <unsupported/Eigen/CXX11/Tensor>
-#include "libint-eigen.hpp"
+#include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise the compiler will complain
 
 
-/* Reads a
- *
- */
 void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
     std::ifstream file (filename);
 
@@ -31,7 +27,6 @@ void read_array_from_file(const std::string &filename, Eigen::MatrixXd& M){
         file.close();
     }
 }
-
 
 void read_array_from_file(const std::string &filename, Eigen::Tensor<double, 4>& M){
     std::ifstream file (filename);
@@ -55,7 +50,6 @@ void read_array_from_file(const std::string &filename, Eigen::Tensor<double, 4>&
     }
 }
 
-
 void check_equal_arrays(const Eigen::MatrixXd& M, const std::string& filename){
     auto dim = M.rows();    // The given matrices are symmetric so M.rows() == M.cols() is the dimension of the matrix
                             // This is also the dimension of T, V and the rank-4 tensor tei
@@ -70,7 +64,7 @@ void check_equal_arrays(Eigen::Tensor<double, 4>& M, const std::string& filename
                                 // This is also the dimension of T, V and the rank-4 tensor tei
     Eigen::Tensor<double, 4> M_data (dim, dim, dim, dim);
 
-    auto tolerance = 0.00000001;    // Hard-coded tolerance of 1e-08
+    auto tolerance = 1.0e-08;
 
     // Since Eigen::Tensor doesn't have an isApprox yet, we will check every pair of values manually
     read_array_from_file(filename, M_data);
@@ -95,9 +89,9 @@ BOOST_AUTO_TEST_CASE( constructor ){
 
     const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
     std::string basis_name = "STO-3G";
-    Molecule water (xyzfilename);
+    Wrapper::Molecule water (xyzfilename);
 
-    Basis basis (water, basis_name);
+    Wrapper::Basis basis (water, basis_name);
 
 
     BOOST_CHECK_EQUAL(basis.molecule.natoms(), 3);
@@ -113,9 +107,9 @@ BOOST_AUTO_TEST_CASE( integrals ){
 
     const auto xyzfilename = "/Users/laurentlemmens/Software/libint-eigen/docs/h2o.xyz";
     std::string basis_name = "STO-3G";
-    Molecule water (xyzfilename);
+    Wrapper::Molecule water (xyzfilename);
 
-    Basis basis (water, basis_name);
+    Wrapper::Basis basis (water, basis_name);
 
     auto S = basis.compute_overlap_integrals();
     auto T = basis.compute_kinetic_integrals();
@@ -133,7 +127,6 @@ BOOST_AUTO_TEST_CASE( integrals ){
     check_equal_arrays(T, kinetic_data);
     check_equal_arrays(V, nuclear_data);
     check_equal_arrays(tei, two_electron_data);
-
 
     // Finalize libint2
     libint2::finalize();
