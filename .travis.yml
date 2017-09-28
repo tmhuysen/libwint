@@ -17,13 +17,18 @@ before_install:
 
 addons:
   apt:
+    sources:
+      # Needed to install g++ 4.9
+      - ubuntu-toolchain-r-test
     packages:
-    # My dependencies
-    - libboost-test-dev
+      # Install g++ 4.9
+      - g++-4.9
+      # My dependencies
+      - libboost-test-dev
 
-    # LibInt2 dependencies
-    - libboost-dev
-    - libgmp-dev
+      # LibInt2 dependencies
+      - libboost-dev
+      - libgmp-dev
 
 env:
   - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis # If you install LibInt2 in the usual way, this is where the basis files are found
