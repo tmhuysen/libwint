@@ -76,12 +76,23 @@ bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>
 
 BOOST_AUTO_TEST_CASE( constructor ){
     // Initialize libint2
+    std::cout << "Initializing libint2" << std::endl;
     libint2::initialize();
+    std::cout << "done" << std::endl;
 
+    std::cout << "setting xyzfilename" << std::endl;
     const auto xyzfilename = "../../docs/h2o.xyz";
+    std::cout << "done" << std::endl;
+    std::cout << "setting basis_name" << std::endl;
     std::string basis_name = "STO-3G";
+    std::cout << "done" << std::endl;
+
+    std::cout << "making Molecule object" << std::endl;
     Wrapper::Molecule water (xyzfilename);
+    std::cout << "done" << std::endl;
+    std::cout << "making basis object" << std::endl;
     Wrapper::Basis basis (water, basis_name);
+    std::cout << "done" << std::endl;
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
     BOOST_CHECK_EQUAL(basis.nbf(), 7);

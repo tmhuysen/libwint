@@ -25,6 +25,9 @@ addons:
     - libboost-dev
     - libgmp-dev
 
+env:
+  - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis # If you install LibInt2 in the usual way, this is where the basis files are found
+
 install:
   # Install Eigen3
   - hg clone https://bitbucket.org/eigen/eigen /tmp/eigen
