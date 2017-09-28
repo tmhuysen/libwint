@@ -9,7 +9,11 @@ namespace Wrapper {
  * @return std::vector<libint2::Atom>
  */
 std::vector<libint2::Atom> parse_filename(const std::string& filename) {
+    std::cout << "In parse_filename" << std::endl;
+    std::cout << "initializing input_file" << std::endl;
     std::ifstream input_file (filename);
+    std::cout << "done" << std::endl;
+    std::cout << "read_dotxyz" << std::endl;
     return libint2::read_dotxyz (input_file);
 }
 
@@ -21,7 +25,9 @@ std::vector<libint2::Atom> parse_filename(const std::string& filename) {
 Molecule::Molecule(const std::string& xyz_filename) :
         xyz_filename(xyz_filename)
 {
+    std::cout << "In Molecule::Molecule" << std::endl;
     this->atoms = parse_filename(this->xyz_filename);
+    std::cout << "done parsing filename" << std::endl;
 }
 
 
