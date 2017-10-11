@@ -17,12 +17,7 @@ before_install:
 
 addons:
   apt:
-    sources:
-      # Needed to install g++ 4.9
-      - ubuntu-toolchain-r-test
     packages:
-      # Install g++ 4.9
-      - g++-4.9
       # My dependencies
       - libboost-test-dev
 
@@ -31,7 +26,8 @@ addons:
       - libgmp-dev
 
 env:
-  - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis # If you install LibInt2 in the usual way, this is where the basis files are found
+  # If installing LibInt2 in the default, this is where the basis files are found
+  # - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis
 
 install:
   # Install Eigen3
@@ -53,13 +49,12 @@ install:
   - ../configure
   #   Generating the LibInt library
   - make export
-  - ls -a
   #   Compiling the LibInt library
   - tar -xvzf libint-2.2.0.tgz
   - cd libint-2.2.0
-  - ./configure
-  - make
-  - sudo make install
+  # - ./configure
+  # - make
+  # - sudo make install
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper

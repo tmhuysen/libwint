@@ -32,5 +32,5 @@ add_subdirectory(src)
 
 # Set up testing
 enable_testing()
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost REQUIRED)
 add_subdirectory(tests)
