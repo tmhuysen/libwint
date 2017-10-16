@@ -16,4 +16,13 @@ BOOST_AUTO_TEST_CASE( constructor ){
 
     BOOST_CHECK_EQUAL(water.nucleic_charge(), 10);
     BOOST_CHECK_EQUAL(water.nelec, 10);
+
+
+    Wrapper::Molecule water_anion (xyzfilename, -1);
+    Wrapper::Molecule water_neutral (xyzfilename, 0);
+    Wrapper::Molecule water_cation (xyzfilename, +1);
+
+    BOOST_CHECK_EQUAL(water_anion.nelec, 11);
+    BOOST_CHECK_EQUAL(water_neutral.nelec, 10);
+    BOOST_CHECK_EQUAL(water_cation.nelec, 9);
 }

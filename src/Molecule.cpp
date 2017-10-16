@@ -29,6 +29,27 @@ Molecule::Molecule(const std::string& xyz_filename) :
 }
 
 
+/** Constructor from a given xyz_filename and a molecular charge
+     *      The constructed molecule instance corresponds to an ion:
+     *          charge = +1 -> cation (one electron less than the neutral molecule)
+     *          charge = 0  -> neutral molecule
+     *          charge = -1 -> anion (one electron more than the neutral molecule)
+     *
+     * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
+     *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
+     */
+Molecule::Molecule(const std::string &xyz_filename, int molecular_charge) :
+    xyz_filename(xyz_filename)
+{
+    this->atoms = parse_filename(this->xyz_filename);
+
+    // We're creating an ion here. Since removing an electron increases the charge:
+    //  nelec = nucleic_charges - charge
+    this->nelec = this->nucleic_charge() - molecular_charge;
+}
+
+
+
 /** @return the number of atoms in the molecule
  */
 unsigned long Molecule::natoms() {
