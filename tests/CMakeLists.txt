@@ -25,7 +25,7 @@ foreach(test_source ${test_sources})
     target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
     # ... link to this project's library ...
-    target_link_libraries(${test_name} PRIVATE libint-eigen)
+    target_link_libraries(${test_name} PRIVATE libint-wrapper)
 
     # ... and finally make a test ...
     add_test(NAME ${test_name} COMMAND ${test_name})

@@ -1,7 +1,7 @@
 # top-level CMakeLists
 
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-project(libint-eigen LANGUAGES CXX)
+project(libint-wrapper LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 
