@@ -1,5 +1,3 @@
-#define BOOST_ALL_DYN_LINK
-
 #define BOOST_TEST_MODULE "Molecule"
 
 #include "Molecule.hpp"
