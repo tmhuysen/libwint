@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/lelemmen/libint-wrapper.svg?branch=master)](https://travis-ci.org/lelemmen/libint-wrapper)
 
-A C++ library that stores LibInt2 calculated integrals in Eigen3 matrices
+A C++ library that stores LibInt2 calculated overlap, kinetic, nuclear and Coulomb repulsion integrals in Eigen3 matrices. For the Coulomb repulsion integrals, the corresponding matrix should be accessed using **chemist's notation**.
 
 
 ## dependencies

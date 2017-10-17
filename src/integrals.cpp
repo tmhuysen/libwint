@@ -73,7 +73,7 @@ Eigen::MatrixXd compute_1body_integrals(const libint2::Operator &opertype, const
 
 /**
  * Calculates the two-electron integrals, given an orbital basis and atoms.
- * The integrals are stored in a rank-4 tensor, which should be accessed using PHYSICIST'S NOTATION <12|12>.
+ * The integrals are stored in a rank-4 tensor, which should be accessed using CHEMIST'S NOTATION (11|22).
 
  * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
  * @param atoms:    a std::vector<Atom>
