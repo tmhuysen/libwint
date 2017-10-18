@@ -77,8 +77,8 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     // Initialize libint2
     libint2::initialize();
 
-    const auto xyzfilename = "../../docs/h2o.xyz";
-    const auto basis_name = "STO-3G";
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
+    const std::string basis_name = "STO-3G";
 
     Wrapper::Molecule water (xyzfilename);
     Wrapper::Basis basis (water, basis_name);
@@ -89,14 +89,14 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     // Finalize libint2
     libint2::finalize();
 }
-/*
+
 
 BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     // Initialize libint2
     libint2::initialize();
 
-    std::string xyzfilename = "../../docs/h2o.xyz";
-    std::string basis_name = "STO-3G";
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
+    const std::string basis_name = "STO-3G";
     Wrapper::Molecule water (xyzfilename);
     Wrapper::Basis basis (water, basis_name);
     auto nbf = basis.nbf();
@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     Eigen::MatrixXd V_test (nbf, nbf);
     Eigen::Tensor<double, 4> tei_test (nbf, nbf, nbf, nbf);
 
-    read_array_from_file("../../tests/ref_data/overlap.data", S_test);
-    read_array_from_file("../../tests/ref_data/kinetic.data", T_test);
-    read_array_from_file("../../tests/ref_data/nuclear.data", V_test);
-    read_array_from_file("../../tests/ref_data/two_electron.data", tei_test);
+    read_array_from_file("../tests/ref_data/overlap.data", S_test);
+    read_array_from_file("../tests/ref_data/kinetic.data", T_test);
+    read_array_from_file("../tests/ref_data/nuclear.data", V_test);
+    read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
 
     BOOST_CHECK(S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(T.isApprox(T_test, 1.0e-8));
@@ -131,8 +131,8 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     libint2::initialize();
 
     // Specify the data
-    std::string xyzfilename = "../../docs/h2.xyz";
-    std::string basis_name = "STO-3G";
+    const std::string xyzfilename = "../tests/ref_data/h2.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
+    const std::string basis_name = "STO-3G";
 
     // Create a Molecule and a Basis
     Wrapper::Molecule h2 (xyzfilename);

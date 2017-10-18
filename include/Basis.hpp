@@ -15,7 +15,7 @@ private:
 
 public:
     Molecule molecule;
-    std::string name;
+    const std::string name;
 
 
     // Constructors
@@ -24,7 +24,7 @@ public:
      * @param molecule      Molecule object
      * @param basis_name    string
      */
-    Basis(Molecule& molecule, std::string& basis_name);
+    Basis(Molecule& molecule, const std::string& basis_name);
 
 
     // Methods

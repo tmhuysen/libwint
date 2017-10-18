@@ -9,14 +9,13 @@
 BOOST_AUTO_TEST_CASE( constructor ) {
 
     // Create the molecules
-    constexpr auto xyzfilename = "../../docs/h2o.xyz"; // Anticipate an out-of source build, so we need one level higher in directories
+    //      !!! Apparently, when working with an out-of-source build, the 'working directory' for executables is the 'build' directory.
+    //      !!! To make sure that no errors occur when building with CLion, specify the 'build' directory as 'working directory' in Edit Configurations.
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     Wrapper::Molecule water (xyzfilename);
     Wrapper::Molecule water_anion (xyzfilename, -1);
     Wrapper::Molecule water_neutral (xyzfilename, 0);
     Wrapper::Molecule water_cation (xyzfilename, +1);
-
-    // Test the constructor
-    BOOST_CHECK_EQUAL(water.xyz_filename, "../../docs/h2o.xyz");
 
     // Test the number of electrons created by the constructor
     BOOST_CHECK_EQUAL(water.nelec, 10);
@@ -29,7 +28,7 @@ BOOST_AUTO_TEST_CASE( constructor ) {
 BOOST_AUTO_TEST_CASE ( methods_water ) {
 
     // Create the water molecule
-    constexpr auto xyzfilename = "../../docs/h2o.xyz"; // Anticipate an out-of source build, so we need one level higher in directories
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     Wrapper::Molecule water (xyzfilename);
 
     // Test the basic methods
@@ -44,7 +43,7 @@ BOOST_AUTO_TEST_CASE ( methods_water ) {
 BOOST_AUTO_TEST_CASE ( methods_h2 ) {
 
     // Create the water molecule
-    constexpr auto xyzfilename = "../../docs/h2.xyz"; // Anticipate an out-of source build, so we need one level higher in directories
+    const std::string xyzfilename = "../tests/ref_data/h2.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     Wrapper::Molecule h2 (xyzfilename);
 
     // Test the basic methods
