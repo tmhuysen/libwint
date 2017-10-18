@@ -21,13 +21,9 @@ addons:
       # My dependencies
       - libboost-test-dev
 
-      # LibInt2 dependencies
+      # libint2 dependencies
       - libboost-dev
       - libgmp-dev
-
-env:
-  # If installing LibInt2 in the default, this is where the basis files are found
-  # - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis
 
 install:
   # Install Eigen3
@@ -37,30 +33,27 @@ install:
   - make
   - sudo make install
 
-  # Install LibInt2 (https://github.com/evaleev/libint/wiki)
-  #   Configuring the LibInt compiler
+  # Install libint2 (https://github.com/evaleev/libint/wiki)
+  #   Configuring the libint compiler
   - cd
   - mkdir build_libint && cd build_libint
-  - curl -OL "https://github.com/evaleev/libint/archive/v2.2.0.tar.gz"
-  - tar -xvzf v2.2.0.tar.gz
-  - cd libint-2.2.0
+  - curl -OL "https://github.com/evaleev/libint/archive/v2.3.1.tar.gz"
+  - tar -xvzf v2.3.1.tar.gz
+  - cd libint-2.3.1
   - ./autogen.sh
   - mkdir build_configure && cd build_configure
   - ../configure
-  #   Generating the LibInt library
+  #   Generating the libint library
   - make export
-  #   Compiling the LibInt library
-  - tar -xvzf libint-2.2.0.tgz
-  - cd libint-2.2.0
-  # - ./configure
-  # - make
-  # - sudo make install
+  #   Compiling the libint library
+  - tar -xvzf libint-2.3.1.tgz
+  - cd libint-2.3.1
+  - ./configure
+  - make
+  - sudo make install
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
   - mkdir build && cd build
   - cmake ..
-  - make
-  - tests/Basis_test
-  # - make test
-  - sudo make install
+  - make && make test && sudo make install
