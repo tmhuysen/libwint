@@ -1,13 +1,10 @@
 #ifndef LIBINT_EIGEN_BASIS_HPP
 #define LIBINT_EIGEN_BASIS_HPP
 
+#include "Molecule.hpp"
+
 #include <Eigen/Dense>
 #include <unsupported/Eigen/CXX11/Tensor>
-#include <string>
-
-#include "libint2.hpp"
-
-#include "Molecule.hpp"
 
 
 namespace Wrapper {

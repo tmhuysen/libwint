@@ -12,7 +12,7 @@ if(NOT LIBINT_PREFIX)
         set(LIBINT_PREFIX $ENV{LIBINT_PREFIX})
     else()
         message(WARNING "You did not specify -DLIBINT_PREFIX, nor is LIBINT_PREFIX set in your environment. Proceeding with default value for LIBINT_PREFIX.")
-        set(LIBINT_PREFIX /usr/local/libint/2.2.0)  # This is the
+        set(LIBINT_PREFIX /usr/local/libint/2.3.1)
     endif()
 endif()
 
@@ -21,7 +21,7 @@ if(NOT INSTALLATION_PREFIX)
     set(INSTALLATION_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
 
-
+message(WARNING ${LIBINT_PREFIX})
 # Find the Eigen3 package (http://eigen.tuxfamily.org/dox/TopicCMakeGuide.html)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
