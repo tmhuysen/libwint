@@ -26,7 +26,7 @@ To install this library:
 
     where
     * `your_wanted_installation_prefix` is the installation prefix you want the library (installed at `your_wanted_installation_prefix/lib`) and its headers (`your_wanted_installation_prefix/include`) to be installed. `your_wanted_installation_prefix` defaults to `/usr/local`;
-    * `your_libint_prefix` is the prefix to your libint2 installation folder, which defaults to `${LIBINT_PREFIX}` if available in `env`, and if not available, defaults to `/usr/local/libint/2.2.0`;
+    * `your_libint_prefix` is the prefix to your libint2 installation folder, which defaults to `${LIBINT_PREFIX}` if available in `env`, and if not available, defaults to `/usr/local/libint/2.3.1`;
     * `your_eigen_prefix` is the prefix to your eigen3 headers, which defaults to `${EIGEN_PREFIX}` if available in `env`, and if not available, defaults to `/opt/local/include`.
 
 
