@@ -31,9 +31,9 @@ install:
 
   # Install boost
   - cd
-  - curl -OL "https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.bz2"
+  - curl -OL "https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2"
   - cd /usr/local/
-  - sudo tar --bzip2 -xf ~/boost_1_61_0.tar.bz2
+  - sudo tar --bzip2 -xf ~/boost_1_65_1.tar.bz2
 
   # Install libint2 (https://github.com/evaleev/libint/wiki)
   #   Configuring the libint compiler
@@ -50,7 +50,7 @@ install:
   #   Compiling the libint library
   - tar -xvzf libint-2.3.1.tgz
   - cd libint-2.3.1
-  - ./configure
+  - ./configure CXXFLAGS=-I/usr/local/boost_1_65_1
   - make
   - sudo make install
 
