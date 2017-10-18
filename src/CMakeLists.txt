@@ -2,9 +2,10 @@
 
 # We want to make a (static) library called "libint-wrapper", based on the given source files
 add_library(libint-wrapper
+        Basis.cpp
+        geometry.cpp
         integrals.cpp
-        Molecule.cpp
-        Basis.cpp)
+        Molecule.cpp)
 
 
 # Include this project's headers

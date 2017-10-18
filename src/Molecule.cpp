@@ -13,6 +13,7 @@ std::vector<libint2::Atom> parse_filename(const std::string& filename) {
     return libint2::read_dotxyz (input_file);
 }
 
+
 /** Constructor from a given xyz_filename
  *      The constructed molecule instance corresponds to a neutral atom (i.e. nelec = sum of nucleus charges)
  *
@@ -49,12 +50,12 @@ Molecule::Molecule(const std::string &xyz_filename, int molecular_charge) :
 }
 
 
-
 /** @return the number of atoms in the molecule
  */
 unsigned long Molecule::natoms() {
     return this->atoms.size();  // atoms is a std::vector
 }
+
 
 /** @return the sum of the charges of the nuclei
  */
@@ -66,6 +67,19 @@ unsigned Molecule::nucleic_charge() {
     }
 
     return nucleic_charge;
+}
+
+
+/** @return the internuclear repulsion energy due to the nuclear framework
+ *
+ */
+double Molecule::internuclear_repulsion() {
+    for (const auto& atom1 : this->atoms) {
+        for (const auto& atom2 : this->atoms) {
+
+        }
+
+    }
 }
 
 } // namespace Wrapper

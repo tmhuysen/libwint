@@ -4,6 +4,8 @@
 
 // This file acts as a collective include header
 #include "Basis.hpp"
+#include "geometry.hpp"
+#include "integrals"
 #include "Molecule.hpp"
 
 

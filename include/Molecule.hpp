@@ -51,6 +51,11 @@ public:
     /** @return the sum of the charges of the nuclei
      */
     unsigned nucleic_charge();
+
+    /** @return the internuclear repulsion energy due to the nuclear framework
+     *
+     */
+    double internuclear_repulsion();
 };
 
 } // namespace Wrapper
