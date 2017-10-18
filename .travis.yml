@@ -18,16 +18,11 @@ before_install:
 addons:
   apt:
     packages:
-      # My dependencies
-      - libboost-test-dev
-
-      # LibInt2 dependencies
-      - libboost-dev
+      # libint2 dependencies
       - libgmp-dev
 
 env:
-  # If installing LibInt2 in the default, this is where the basis files are found
-  # - LIBINT_DATA_PATH=/usr/local/libint/2.2.0/include/libint2/basis
+ - LIBINT_DATA_PATH=/usr/local/libint/2.3.1/share/libint/2.3.1/basis
 
 install:
   # Install Eigen3
@@ -37,30 +32,34 @@ install:
   - make
   - sudo make install
 
-  # Install LibInt2 (https://github.com/evaleev/libint/wiki)
-  #   Configuring the LibInt compiler
+  # Install boost
+  - cd
+  - curl -OL "https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2"
+  - cd /usr/local/
+  - sudo tar --bzip2 -xf ~/boost_1_65_1.tar.bz2
+
+  # Install libint2 (https://github.com/evaleev/libint/wiki)
+  #   Configuring the libint compiler
   - cd
   - mkdir build_libint && cd build_libint
-  - curl -OL "https://github.com/evaleev/libint/archive/v2.2.0.tar.gz"
-  - tar -xvzf v2.2.0.tar.gz
-  - cd libint-2.2.0
+  - curl -OL "https://github.com/evaleev/libint/archive/v2.3.1.tar.gz"
+  - tar -xvzf v2.3.1.tar.gz
+  - cd libint-2.3.1
   - ./autogen.sh
   - mkdir build_configure && cd build_configure
-  - ../configure
-  #   Generating the LibInt library
+  - ../configure CXXFLAGS=-I/usr/local/boost_1_65_1
+  #   Generating the libint library
   - make export
-  #   Compiling the LibInt library
-  - tar -xvzf libint-2.2.0.tgz
-  - cd libint-2.2.0
-  # - ./configure
-  # - make
-  # - sudo make install
+  #   Compiling the libint library
+  - tar -xvzf libint-2.3.1.tgz
+  - cd libint-2.3.1
+  - ./configure CXXFLAGS=-I/usr/local/boost_1_65_1
+  - make
+  - sudo make install
 
 script:
   - cd /home/travis/build/lelemmen/libint-wrapper
   - mkdir build && cd build
-  - cmake ..
+  - cmake .. -DBOOST_ROOT=/usr/local/boost_1_65_1
   - make
-  - tests/Basis_test
-  # - make test
-  - sudo make install
+  - make test && sudo make install
