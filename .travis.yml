@@ -21,6 +21,9 @@ addons:
       # libint2 dependencies
       - libgmp-dev
 
+env:
+ - LIBINT_DATA_PATH=/usr/local/libint/2.3.1/share/libint/2.3.1/basis
+
 install:
   # Install Eigen3
   - hg clone https://bitbucket.org/eigen/eigen /tmp/eigen
@@ -59,7 +62,4 @@ script:
   - mkdir build && cd build
   - cmake .. -DBOOST_ROOT=/usr/local/boost_1_65_1
   - make
-  - tests/Basis_test
-  - tests/Molecule_test
-  - tests/geometry_test
   - make test && sudo make install
