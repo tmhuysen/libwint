@@ -28,5 +28,5 @@ foreach(test_source ${test_sources})
     target_link_libraries(${test_name} PRIVATE libint-wrapper)
 
     # ... and finally make a test ...
-    add_test(NAME ${test_name} COMMAND ${test_name})
+    add_test(NAME ${test_name} COMMAND ${test_name} WORKING_DIRECTORY ../build)
 endforeach()
