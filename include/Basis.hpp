@@ -24,7 +24,7 @@ public:
      * @param molecule      Molecule object
      * @param basis_name    string
      */
-    Basis(Molecule &molecule, std::string &basis_name);
+    Basis(Molecule& molecule, std::string& basis_name);
 
 
     // Methods

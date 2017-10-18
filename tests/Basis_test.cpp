@@ -73,12 +73,12 @@ bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>
 }
 
 
-BOOST_AUTO_TEST_CASE( constructor ){
+BOOST_AUTO_TEST_CASE( constructor ) {
     // Initialize libint2
     libint2::initialize();
 
     const auto xyzfilename = "../../docs/h2o.xyz";
-    std::string basis_name = "STO-3G";
+    const auto basis_name = "STO-3G";
 
     Wrapper::Molecule water (xyzfilename);
     Wrapper::Basis basis (water, basis_name);
@@ -89,13 +89,13 @@ BOOST_AUTO_TEST_CASE( constructor ){
     // Finalize libint2
     libint2::finalize();
 }
+/*
 
-
-BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ){
+BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     // Initialize libint2
     libint2::initialize();
 
-    const auto xyzfilename = "../../docs/h2o.xyz";
+    std::string xyzfilename = "../../docs/h2o.xyz";
     std::string basis_name = "STO-3G";
     Wrapper::Molecule water (xyzfilename);
     Wrapper::Basis basis (water, basis_name);
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     libint2::initialize();
 
     // Specify the data
-    const auto xyzfilename = "../../docs/h2.xyz";
+    std::string xyzfilename = "../../docs/h2.xyz";
     std::string basis_name = "STO-3G";
 
     // Create a Molecule and a Basis

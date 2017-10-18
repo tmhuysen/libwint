@@ -11,12 +11,12 @@ namespace Wrapper {
  * @param filename
  * @return std::vector<libint2::Atom>
  */
-std::vector<libint2::Atom> parse_filename(const std::string &filename);
+std::vector<libint2::Atom> parse_filename(std::string& filename);
 
 
 class Molecule {
 public:
-    const std::string xyz_filename;     // Path to a .xyz-file
+    std::string xyz_filename;           // Path to a .xyz-file
     std::vector<libint2::Atom> atoms;   // A std::vector of libint2::Atoms
                                             // a libint2::Atom is just a struct with data fields charge, x, y ,z.
     unsigned nelec;                     // The number of electrons in the molecule
@@ -29,7 +29,7 @@ public:
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string &xyz_filename);
+    Molecule(std::string& xyz_filename);
 
     /** Constructor from a given xyz_filename and a molecular charge
      *      The constructed molecule instance corresponds to an ion:
@@ -40,7 +40,7 @@ public:
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string &xyz_filename, int molecular_charge);
+    Molecule(std::string& xyz_filename, int molecular_charge);
 
 
     // Methods

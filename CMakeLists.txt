@@ -21,7 +21,6 @@ if(NOT INSTALLATION_PREFIX)
     set(INSTALLATION_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
 
-message(WARNING ${LIBINT_PREFIX})
 # Find the Eigen3 package (http://eigen.tuxfamily.org/dox/TopicCMakeGuide.html)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 

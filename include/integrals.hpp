@@ -18,8 +18,7 @@ namespace Wrapper {
 
  * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXd
-compute_1body_integrals(const libint2::Operator &, const libint2::BasisSet &, const std::vector<libint2::Atom> &);
+Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms);
 
 /**
  * Calculates the two-electron integrals, given an orbital basis and atoms.
@@ -30,12 +29,12 @@ compute_1body_integrals(const libint2::Operator &, const libint2::BasisSet &, co
 
  * @return: an Eigen::Tensor<double, 4> storing the integrals
  */
-Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet &, const std::vector<libint2::Atom> &);
+Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms);
 
 /**
  * Prints the sizes (i.e. the number of basis functions in them) of all shells in a given basis set object.
  */
-void print_shell_sizes(const libint2::BasisSet &);
+void print_shell_sizes(const libint2::BasisSet& obs);
 
 } // namespace Wrapper
 

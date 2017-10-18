@@ -10,7 +10,7 @@ namespace Wrapper {
  * @param molecule      Molecule object
  * @param basis_name    string
  */
-Basis::Basis(Molecule &molecule, std::string &basis_name) :
+Basis::Basis(Molecule &molecule, std::string& basis_name) :
         molecule(molecule), name(basis_name) {
     // Constructing the basis also constructs the associated libint2::BasisSet object
     libint2::BasisSet libint_basis(this->name, this->molecule.atoms);
@@ -18,7 +18,7 @@ Basis::Basis(Molecule &molecule, std::string &basis_name) :
 }
 
 size_t Basis::nbf() {
-    return this->libint_basis.nbf();
+    return static_cast<size_t>(this->libint_basis.nbf());
 }
 
 Eigen::MatrixXd Basis::compute_overlap_integrals() {

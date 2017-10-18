@@ -10,7 +10,7 @@ namespace Wrapper {
  * @param filename
  * @return std::vector<libint2::Atom>
  */
-std::vector<libint2::Atom> parse_filename(const std::string& filename) {
+std::vector<libint2::Atom> parse_filename(std::string& filename) {
     std::ifstream input_file (filename);
     return libint2::read_dotxyz (input_file);
 }
@@ -22,7 +22,7 @@ std::vector<libint2::Atom> parse_filename(const std::string& filename) {
  * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
  *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
  */
-Molecule::Molecule(const std::string& xyz_filename) :
+Molecule::Molecule(std::string& xyz_filename) :
         xyz_filename(xyz_filename)
 {
     this->atoms = parse_filename(this->xyz_filename);
@@ -41,7 +41,7 @@ Molecule::Molecule(const std::string& xyz_filename) :
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-Molecule::Molecule(const std::string &xyz_filename, int molecular_charge) :
+Molecule::Molecule(std::string& xyz_filename, int molecular_charge) :
     xyz_filename(xyz_filename)
 {
     this->atoms = parse_filename(this->xyz_filename);
