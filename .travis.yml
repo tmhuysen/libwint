@@ -18,11 +18,7 @@ before_install:
 addons:
   apt:
     packages:
-      # My dependencies
-      - libboost-test-dev
-
       # libint2 dependencies
-      - libboost-dev
       - libgmp-dev
 
 install:
@@ -32,6 +28,12 @@ install:
   - cmake . /tmp/eigen -DCMAKE_INSTALL_PREFIX=/opt/local
   - make
   - sudo make install
+
+  # Install boost
+  - cd
+  - curl -OL "https://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.bz2"
+  - cd /usr/local/
+  - sudo tar --bzip2 -xf ~/boost_1_61_0.tar.bz2
 
   # Install libint2 (https://github.com/evaleev/libint/wiki)
   #   Configuring the libint compiler
