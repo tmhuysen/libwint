@@ -58,4 +58,8 @@ script:
   - cd /home/travis/build/lelemmen/libint-wrapper
   - mkdir build && cd build
   - cmake .. -DBOOST_ROOT=/usr/local/boost_1_65_1
-  - make && make test && sudo make install
+  - make
+  - tests/Basis_test
+  - tests/Molecule_test
+  - tests/geometry_test
+  - make test && sudo make install
