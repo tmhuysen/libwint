@@ -46,7 +46,7 @@ public:
     // Methods
     /** @return the number of atoms in the molecule
      */
-    unsigned long natoms();
+    size_t natoms();
 
     /** @return the sum of the charges of the nuclei
      */

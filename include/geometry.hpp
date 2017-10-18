@@ -8,10 +8,10 @@ namespace Wrapper{
 
 /** @return the distance between two libint2::Atoms
  */
-double distance(libint2::Atom& atom1, libint2::Atom& atom2);
+double distance(const libint2::Atom& atom1, const libint2::Atom& atom2);
 
 
-}
+} // namespace Wrapper
 
 
 #endif // LIBINT_WRAPPER_GEOMETRY_HPP

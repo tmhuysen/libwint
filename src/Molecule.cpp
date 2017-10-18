@@ -1,5 +1,7 @@
 #include "Molecule.hpp"
 
+#include "geometry.hpp"
+
 
 namespace Wrapper {
 
@@ -52,7 +54,7 @@ Molecule::Molecule(const std::string &xyz_filename, int molecular_charge) :
 
 /** @return the number of atoms in the molecule
  */
-unsigned long Molecule::natoms() {
+size_t Molecule::natoms() {
     return this->atoms.size();  // atoms is a std::vector
 }
 
@@ -74,12 +76,21 @@ unsigned Molecule::nucleic_charge() {
  *
  */
 double Molecule::internuclear_repulsion() {
-    for (const auto& atom1 : this->atoms) {
-        for (const auto& atom2 : this->atoms) {
+    double internuclear_repulsion_energy = 0.0;
 
+    auto natoms = this->natoms();
+    // Sum over every unique nucleus pair
+    for (size_t i = 0; i < natoms; i++) {
+        for (size_t j = i + 1; j < natoms; j++ ) {
+            const auto atom1 = this->atoms[i];
+            const auto atom2 = this->atoms[j];
+
+            // The internuclear repulsion energy (Coulomb) for every nucleus pair is Z1 * Z2 / |R1 - R2|
+            internuclear_repulsion_energy += atom1.atomic_number * atom2.atomic_number / Wrapper::distance(atom1, atom2);
         }
-
     }
+
+    return internuclear_repulsion_energy;
 }
 
 } // namespace Wrapper
