@@ -11,6 +11,3 @@ include(${CMAKE_SOURCE_DIR}/cmake/ConfigureLibrary.cmake)
 
 # Install the library
 include(${CMAKE_SOURCE_DIR}/cmake/InstallLibrary.cmake)
-
-message(WARNING ${PROJECT_NAME_UPPERCASE})
-message(WARNING ${PROJECT_VERSION_MAJOR})
