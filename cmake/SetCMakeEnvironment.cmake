@@ -11,11 +11,12 @@ set(LIBRARY_TYPE STATIC)
 
 
 
-# Find the source (.cpp) files
-file(GLOB PROJECT_SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
+# Find the source folder
+set(PROJECT_SOURCE_FOLDER ${CMAKE_SOURCE_DIR}/src)
+file(GLOB PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FOLDER}/*.cpp)
 
-# Find the header files
-file(GLOB PROJECT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+# Find the header folder
+set(PROJECT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 
 

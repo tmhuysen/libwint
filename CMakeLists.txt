@@ -10,19 +10,20 @@ project(libint-wrapper
 set(CMAKE_CXX_STANDARD 11)
 
 
+
 # Set CMake variables
 include(${CMAKE_SOURCE_DIR}/cmake/SetCMakeEnvironment.cmake)
-
 
 # Find all required packages
 include(${CMAKE_SOURCE_DIR}/cmake/FindPackages.cmake)
 
 
-# source files for the library
+
+# Add the sources for the library
 add_subdirectory(src)
+
 
 
 # Set up testing
 enable_testing()
-find_package(Boost REQUIRED)
 add_subdirectory(tests)
