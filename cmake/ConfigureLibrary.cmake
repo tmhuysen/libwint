@@ -2,14 +2,14 @@
 
 
 # Include this project's headers
-target_include_directories(libint-wrapper PRIVATE ${PROJECT_INCLUDE_FOLDER})
+target_include_directories(${LIBRARY_NAME} PRIVATE ${PROJECT_INCLUDE_FOLDER})
 
 # Include the libint2 headers
-target_include_directories(libint-wrapper PRIVATE ${LIBINT_PREFIX}/include)
-target_include_directories(libint-wrapper PRIVATE ${LIBINT_PREFIX}/include/libint2)
+target_include_directories(${LIBRARY_NAME} PRIVATE ${LIBINT_PREFIX}/include)
+target_include_directories(${LIBRARY_NAME} PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
 # Link against the libint2 library
-target_link_libraries(libint-wrapper PUBLIC ${LIBINT_PREFIX}/lib/libint2.a)
+target_link_libraries(${LIBRARY_NAME} PUBLIC ${LIBINT_PREFIX}/lib/libint2.a)
 
 # Include the Eigen3 headers
-target_link_libraries(libint-wrapper PUBLIC Eigen3::Eigen)
+target_link_libraries(${LIBRARY_NAME} PUBLIC Eigen3::Eigen)

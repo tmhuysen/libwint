@@ -1,7 +1,7 @@
 # In this CMake file, we will provide the necessary commands to install the library
 
 
-# The target of this project is a library called libint-wrapper (${PROJECT_NAME}).
+# The target of this project is a library called "libwrp" (${PROJECT_NAME}).
 # To specify that this target should also be exported, we add the EXPORT option. This is used in conjuction with the install(EXPORT) command below
 install(TARGETS ${LIBRARY_NAME}
         EXPORT ${LIBRARY_NAME} ${EXPORT_TYPE}

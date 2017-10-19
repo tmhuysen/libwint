@@ -1,6 +1,6 @@
-# libint-wrapper
+# libwrp
 
-[![Build Status](https://travis-ci.org/lelemmen/libint-wrapper.svg?branch=master)](https://travis-ci.org/lelemmen/libint-wrapper)
+[![Build Status](https://travis-ci.org/lelemmen/libwrp.svg?branch=master)](https://travis-ci.org/lelemmen/libwrp)
 
 A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulomb repulsion integrals in Eigen3 matrices. For the Coulomb repulsion integrals, the corresponding tensor should be accessed using **chemist's notation**.
 
@@ -15,7 +15,7 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 To install this library:
 1. clone this repository
 
-        git clone git@github.com:lelemmen/libint-wrapper.git
+        git clone git@github.com:lelemmen/libwrp.git
 
 
 2. perform an out-of-source build:

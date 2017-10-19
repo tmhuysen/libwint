@@ -1,5 +1,5 @@
-#ifndef LIBINT_EIGEN_BASIS_HPP
-#define LIBINT_EIGEN_BASIS_HPP
+#ifndef LIBWRP_BASIS_HPP
+#define LIBWRP_BASIS_HPP
 
 #include "Molecule.hpp"
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace Wrapper
 
-#endif // LIBINT_EIGEN_BASIS_HPP
+#endif // LIBWRP_BASIS_HPP

@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 # Specify the project, its version and the used language
-project(libint-wrapper
+project(libwrp
         VERSION 1.0.0
         LANGUAGES CXX)
 
