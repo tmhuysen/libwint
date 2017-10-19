@@ -75,7 +75,7 @@ install:
 
 # Run the build script
 script:
-  - cd /home/travis/build/lelemmen/libint-wrapper
+  - cd /home/travis/build/lelemmen/libwrp
   - mkdir build && cd build
   - cmake .. -DBOOST_ROOT=${BOOST_ROOT}
   - make && make test && sudo make install
