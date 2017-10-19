@@ -9,5 +9,8 @@ add_library(${LIBRARY_NAME} ${LIBRARY_TYPE} ${PROJECT_SOURCE_FILES})
 include(${CMAKE_SOURCE_DIR}/cmake/ConfigureLibrary.cmake)
 
 
-# Install the library:
+# Install the library
 include(${CMAKE_SOURCE_DIR}/cmake/InstallLibrary.cmake)
+
+message(WARNING ${PROJECT_NAME_UPPERCASE})
+message(WARNING ${PROJECT_VERSION_MAJOR})

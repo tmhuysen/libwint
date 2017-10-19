@@ -1,4 +1,5 @@
 # top-level CMakeLists
+#   CMakeLists.txt files modified from (https://github.com/pablospe/cmake-example-library)
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 # Specify the project, its version and the used language

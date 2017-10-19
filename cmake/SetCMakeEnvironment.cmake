@@ -1,6 +1,12 @@
 # In this CMake file, all CMake variables will be set
 
 
+# Parse the project name into uppercase and lowercase.
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPERCASE)  # Uppercase is needed in version.hpp.in
+string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWERCASE)
+
+
+
 # The name of the library should be equal to the project name
 if(NOT LIBRARY_NAME)
     set(LIBRARY_NAME ${PROJECT_NAME})
@@ -8,6 +14,7 @@ endif()
 
 # We want to make a static library
 set(LIBRARY_TYPE STATIC)
+set(EXPORT_TYPE ARCHIVE)
 
 
 
