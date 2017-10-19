@@ -2,17 +2,20 @@
 dist: trusty
 sudo: true
 
+
 # Specify the project language and the compiler to test to
 language: cpp
 compiler: gcc
+
 
 # Enable Slack notifications, disable e-mail
 notifications:
     slack: gqcg:13JQ7AAK5DMZPeAInhCMX6YJ
     email: false
 
+
+# Before installing, we need a never version of CMake.
 before_install:
-  # Before installing, we need a never version of CMake.
   #   Travis CI's CMake version is only 3.2.2.
   #   This is a workaround that upgrades to a newer version of CMake.
   #   Credits to (https://github.com/travis-ci/travis-ci/issues/7437)
@@ -22,11 +25,13 @@ before_install:
   - chmod +x cmake-3.9.1-Linux-x86_64.sh
   - ./cmake-3.9.1-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license
 
+
 # Install packages through APT
 addons:
   apt:
     packages:
       - libgmp-dev # libint2 dependency
+
 
 # Install dependencies
 install:
