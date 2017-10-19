@@ -5,11 +5,10 @@
 target_include_directories(${LIBRARY_NAME} PRIVATE ${PROJECT_INCLUDE_FOLDER})
 
 # Include the libint2 headers
-target_include_directories(${LIBRARY_NAME} PRIVATE ${LIBINT_PREFIX}/include)
-target_include_directories(${LIBRARY_NAME} PRIVATE ${LIBINT_PREFIX}/include/libint2)
+target_include_directories(${LIBRARY_NAME} PRIVATE ${libint2_INCLUDE_DIRS})
 
 # Link against the libint2 library
-target_link_libraries(${LIBRARY_NAME} PUBLIC ${LIBINT_PREFIX}/lib/libint2.a)
+target_link_libraries(${LIBRARY_NAME} PUBLIC ${libint2})
 
 # Include the Eigen3 headers
 target_link_libraries(${LIBRARY_NAME} PUBLIC Eigen3::Eigen)
