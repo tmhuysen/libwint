@@ -7,6 +7,7 @@
 #include "geometry.hpp"
 #include "integrals.hpp"
 #include "Molecule.hpp"
+#include "version.hpp"
 
 
 #endif // LIBINT_WRAPPER_LIBINT_WRAPPER_HPP_HPP
