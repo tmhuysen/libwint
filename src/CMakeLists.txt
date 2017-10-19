@@ -1,27 +1,13 @@
 # src-level CMakeLists.txt
 
-# We want to make a (static) library called "libint-wrapper", based on the given source files
-add_library(libint-wrapper
-        Basis.cpp
-        geometry.cpp
-        integrals.cpp
-        Molecule.cpp)
+
+# We want to make a static library target called "libint-wrapper", based on the project source files
+add_library(${LIBRARY_NAME} ${LIBRARY_TYPE} ${PROJECT_SOURCE_FILES})
 
 
-# Include this project's headers
-target_include_directories(libint-wrapper PRIVATE ../include)
-
-# Include the libint2 headers
-target_include_directories(libint-wrapper PRIVATE ${LIBINT_PREFIX}/include)
-target_include_directories(libint-wrapper PRIVATE ${LIBINT_PREFIX}/include/libint2)
-
-# Link against the libint2 library
-target_link_libraries(libint-wrapper PUBLIC ${LIBINT_PREFIX}/lib/libint2.a)
-
-# Include the Eigen3 headers
-target_link_libraries(libint-wrapper PUBLIC Eigen3::Eigen)
+# Configure the library: include headers and link to libraries
+include(${CMAKE_SOURCE_DIR}/cmake/ConfigureLibrary.cmake)
 
 
-# Installation of the target library and its associated header files
-install(TARGETS libint-wrapper DESTINATION ${INSTALLATION_PREFIX}/lib)
-install(DIRECTORY ../include/ DESTINATION ${INSTALLATION_PREFIX}/include/libint-wrapper)
+# Install the library:
+include(${CMAKE_SOURCE_DIR}/cmake/InstallLibrary.cmake)
