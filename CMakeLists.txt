@@ -20,10 +20,10 @@ include(${CMAKE_SOURCE_DIR}/cmake/FindPackages.cmake)
 
 
 # Add the sources for the library
-add_subdirectory(src)
+add_subdirectory(${PROJECT_SOURCE_FOLDER})
 
 
 
 # Set up testing
 enable_testing()
-add_subdirectory(tests)
+add_subdirectory(${PROJECT_TESTS_FOLDER})

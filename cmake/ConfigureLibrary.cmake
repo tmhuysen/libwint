@@ -2,7 +2,7 @@
 
 
 # Include this project's headers
-target_include_directories(libint-wrapper PRIVATE ${PROJECT_INCLUDE_DIR})
+target_include_directories(libint-wrapper PRIVATE ${PROJECT_INCLUDE_FOLDER})
 
 # Include the libint2 headers
 target_include_directories(libint-wrapper PRIVATE ${LIBINT_PREFIX}/include)

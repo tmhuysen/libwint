@@ -1,32 +1,29 @@
 # test-level CMakeLists.txt
 
-
 # For every *.cpp-file (every file corresponding to one set of tests) ...
-file(GLOB test_sources ./*.cpp)
-
-foreach(test_source ${test_sources})
-    # ... extract the filename without extension as a name for our executable ...
-    get_filename_component(test_name ${test_source} NAME_WE)
+foreach(TEST_SOURCE ${PROJECT_TEST_SOURCE_FILES})
+    # ... extract the filename without extension (NAME_WE) as a name for our executable ...
+    get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
     # ... add an executable based on the test source ...
-    add_executable(${test_name} ${test_source})
+    add_executable(${TEST_NAME} ${TEST_SOURCE})
 
     # ... add the boost headers (for testing) ...
-    target_include_directories(${test_name} PRIVATE ${Boost_INCLUDE_DIRS})
+    target_include_directories(${TEST_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
 
     # ... add this project's headers ...
-    target_include_directories(${test_name} PRIVATE ../include)
+    target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_INCLUDE_FOLDER})
 
-    # ... add the eigen3 headers ...
-    target_link_libraries(${test_name} PUBLIC Eigen3::Eigen)
+    # ... add the Eigen3 headers ...
+    target_link_libraries(${TEST_NAME} PUBLIC Eigen3::Eigen)
 
     # ... add the libint2 headers ...
-    target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include)
-    target_include_directories(${test_name} PRIVATE ${LIBINT_PREFIX}/include/libint2)
+    target_include_directories(${TEST_NAME} PRIVATE ${LIBINT_PREFIX}/include)
+    target_include_directories(${TEST_NAME} PRIVATE ${LIBINT_PREFIX}/include/libint2)
 
     # ... link to this project's library ...
-    target_link_libraries(${test_name} PRIVATE libint-wrapper)
+    target_link_libraries(${TEST_NAME} PRIVATE ${LIBRARY_NAME})
 
     # ... and finally make a test ...
-    add_test(NAME ${test_name} COMMAND ${test_name} WORKING_DIRECTORY ../build)
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})  # the working directory will be the build directory
 endforeach()
