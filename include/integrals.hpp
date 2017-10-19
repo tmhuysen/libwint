@@ -1,5 +1,5 @@
-#ifndef LIBINT_EIGEN_INTEGRALS_HPP
-#define LIBINT_EIGEN_INTEGRALS_HPP
+#ifndef LIBWRP_INTEGRALS_HPP
+#define LIBWRP_INTEGRALS_HPP
 
 #include <Eigen/Dense>
 #include <unsupported/Eigen/CXX11/Tensor>
@@ -38,4 +38,4 @@ void print_shell_sizes(const libint2::BasisSet& obs);
 
 } // namespace Wrapper
 
-#endif // LIBINT_EIGEN_INTEGRALS_HPP
+#endif // LIBWRP_INTEGRALS_HPP

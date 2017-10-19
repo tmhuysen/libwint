@@ -1,5 +1,5 @@
-#ifndef LIBINT_WRAPPER_LIBINT_WRAPPER_HPP_HPP
-#define LIBINT_WRAPPER_LIBINT_WRAPPER_HPP_HPP
+#ifndef LIBWRP_LIBWRP_HPP_HPP
+#define LIBWRP_LIBWRP_HPP_HPP
 
 
 // This file acts as a collective include header
@@ -10,4 +10,4 @@
 #include "version.hpp"
 
 
-#endif // LIBINT_WRAPPER_LIBINT_WRAPPER_HPP_HPP
+#endif // LIBWRP_LIBWRP_HPP_HPP

@@ -1,5 +1,5 @@
-#ifndef LIBINT_WRAPPER_MOLECULE_HPP
-#define LIBINT_WRAPPER_MOLECULE_HPP
+#ifndef LIBWRP_MOLECULE_HPP
+#define LIBWRP_MOLECULE_HPP
 
 #include <libint2.hpp>
 #include <string>
@@ -60,4 +60,4 @@ public:
 
 } // namespace Wrapper
 
-#endif // LIBINT_WRAPPER_MOLECULE_HPP
+#endif // LIBWRP_MOLECULE_HPP

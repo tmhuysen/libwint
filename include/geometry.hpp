@@ -1,5 +1,5 @@
-#ifndef LIBINT_WRAPPER_GEOMETRY_HPP
-#define LIBINT_WRAPPER_GEOMETRY_HPP
+#ifndef LIBWRP_GEOMETRY_HPP
+#define LIBWRP_GEOMETRY_HPP
 
 #include <libint2.hpp>
 
@@ -14,4 +14,4 @@ double distance(const libint2::Atom& atom1, const libint2::Atom& atom2);
 } // namespace Wrapper
 
 
-#endif // LIBINT_WRAPPER_GEOMETRY_HPP
+#endif // LIBWRP_GEOMETRY_HPP
