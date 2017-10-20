@@ -27,6 +27,9 @@ file(GLOB PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FOLDER}/*.cpp)
 # Find the header folder
 set(PROJECT_INCLUDE_FOLDER ${CMAKE_SOURCE_DIR}/include)
 
+# Find the header files (not including version.hpp.in)
+file(GLOB PROJECT_INCLUDE_FILES ${PROJECT_INCLUDE_FOLDER}/*.hpp)
+
 # Find the tests folder
 set(PROJECT_TESTS_FOLDER ${CMAKE_SOURCE_DIR}/tests)
 
@@ -34,10 +37,11 @@ set(PROJECT_TESTS_FOLDER ${CMAKE_SOURCE_DIR}/tests)
 file(GLOB PROJECT_TEST_SOURCE_FILES ${PROJECT_TESTS_FOLDER}/*.cpp)
 
 
+
 # Give the user the option to specify an installation prefix. If not given as -DINSTALLATION_PREFIX, defaults to /usr/local.
 if(NOT INSTALLATION_PREFIX)
     set(INSTALLATION_PREFIX ${CMAKE_INSTALL_PREFIX})
 endif()
-set(INCLUDE_INSTALL_DIR ${INSTALLATION_PREFIX}/include/${PROJECT_NAME_LOWERCASE})
+set(INCLUDE_INSTALL_DIR ${INSTALLATION_PREFIX}/include/${PROJECT_NAME_LOWERCASE}/include)
 set(LIBRARY_INSTALL_DIR ${INSTALLATION_PREFIX}/lib)
 set(CMAKE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/cmake)

@@ -1,4 +1,4 @@
-# In this CMake file, we will provide the necessary commands to install the library
+# In this CMake file, we will provide the necessary commands to make the install target for this library
 
 
 # The target of this project is a library called "libwrp" (${PROJECT_NAME}).
@@ -12,19 +12,20 @@ install(TARGETS ${LIBRARY_NAME}
 configure_file(${PROJECT_INCLUDE_FOLDER}/version.hpp.in ${PROJECT_INCLUDE_FOLDER}/version.hpp @ONLY)
 
 
-# Install the header files
-install(DIRECTORY ${PROJECT_INCLUDE_FOLDER} DESTINATION ${INCLUDE_INSTALL_DIR})
+# Install the header files (not including version.hpp.in)
+install(FILES ${PROJECT_INCLUDE_FILES} DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
-# Export the target library into a ${PROJECT_NAME}Targets.cmake file, to be able to use it in other CMake-based projects.
+# Export the target library into a ${PROJECT_NAME}Targets.cmake file.
+# The file libwrpConfig.cmake includes this file, to be able to use this library with a find_package(libwrp X.Y.Z) call
 install(EXPORT ${LIBRARY_NAME} DESTINATION ${CMAKE_INSTALL_DIR} FILE ${PROJECT_NAME}Targets.cmake)
 
 
-# Parse ${PROJECT_NAME}Config.cmake.in
+# Parse Config.cmake.in
 configure_file(${CMAKE_SOURCE_DIR}/cmake/Config.cmake.in ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake @ONLY)
 
 
-# Parse ${PROJECT_NAME}ConfigVersion.cmake.in
+# Parse ConfigVersion.cmake.in
 configure_file(${CMAKE_SOURCE_DIR}/cmake/ConfigVersion.cmake.in ${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake @ONLY)
 
 
