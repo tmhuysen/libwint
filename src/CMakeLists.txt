@@ -10,5 +10,5 @@ set_target_properties(${LIBRARY_NAME} PROPERTIES PREFIX "")     # the final libr
 include(${CMAKE_SOURCE_DIR}/cmake/ConfigureLibrary.cmake)
 
 
-# Install the library
+# Make the install target for this library
 include(${CMAKE_SOURCE_DIR}/cmake/InstallLibrary.cmake)
