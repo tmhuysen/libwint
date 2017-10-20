@@ -9,6 +9,5 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Boost REQUIRED)
 
 
-# There is no find_package(libint2) available, so we'll work with an intermediary solution.
-set(libint2_INCLUDE_DIRS ${LIBINT_PREFIX}/include ${LIBINT_PREFIX}/include/libint2)
-find_library(libint2 libint2.a HINTS ${LIBINT_PREFIX}/lib)
+# libint2 doesn't include a way to use find_package(libint2). Until then, we will use our custom Findlibint2.cmake-file, so that we can use find_package(libint2)
+find_package(libint2)

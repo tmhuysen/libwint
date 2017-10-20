@@ -34,20 +34,6 @@ set(PROJECT_TESTS_FOLDER ${CMAKE_SOURCE_DIR}/tests)
 file(GLOB PROJECT_TEST_SOURCE_FILES ${PROJECT_TESTS_FOLDER}/*.cpp)
 
 
-
-#   LIBINT_PREFIX
-# FIXME: this should be changed into find_package(libint)
-if(NOT LIBINT_PREFIX)
-    if(DEFINED ENV{LIBINT_PREFIX})
-        set(LIBINT_PREFIX $ENV{LIBINT_PREFIX})
-    else()
-        message(WARNING "You did not specify -DLIBINT_PREFIX, nor is LIBINT_PREFIX set in your environment. Proceeding with default value for LIBINT_PREFIX.")
-        set(LIBINT_PREFIX /usr/local/libint/2.3.1)
-    endif()
-endif()
-
-
-
 # Give the user the option to specify an installation prefix. If not given as -DINSTALLATION_PREFIX, defaults to /usr/local.
 if(NOT INSTALLATION_PREFIX)
     set(INSTALLATION_PREFIX ${CMAKE_INSTALL_PREFIX})
