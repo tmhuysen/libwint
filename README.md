@@ -27,8 +27,8 @@ To install this library:
 
     where
     * `prefix` is the installation prefix (defaulted to `/usr/local`) you want the library to be installed at:
-        * the library `libwrp.a` will be installed in `prefix/lib`
-        * the header files (and cmake files, see Usage) will be installed in `prefix/include/libwrp/include`
+        * the library `libwrp.a` will be installed in `prefix/libwrp/lib`
+        * the header files (and cmake files, see Usage) will be installed in `prefix/libwrp/include`
 
 
 ## Usage

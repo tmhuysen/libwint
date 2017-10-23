@@ -77,5 +77,5 @@ install:
 script:
   - cd /home/travis/build/lelemmen/libwrp
   - mkdir build && cd build
-  - cmake .. -DBOOST_ROOT=${BOOST_ROOT}
+  - cmake ..
   - make && make test && sudo make install
