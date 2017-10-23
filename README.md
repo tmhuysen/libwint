@@ -12,29 +12,27 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 
 ## Installation
 To install this library:
-1. clone this repository
+1. download and untar the latest release
 
-        git clone git@github.com:lelemmen/libwrp.git
+        curl -OL "https://github.com/lelemmen/libwrp/releases/tag/v1.0.0"
+        tar -xvzf libwrp-1.0.0.tar.gz
+        cd libwrp-1.0.0
 
-
-2. perform an out-of-source build:
+2. perform an out-of-source cmake build:
 
         mkdir build && cd build
-        cmake -DINSTALLATION_PREFIX=your_wanted_installation_prefix -DLIBINT_PREFIX=your_libint_prefix ..
-        make && make test
+        cmake -DINSTALLATION_PREFIX=prefix ..
+        make && make test && sudo make install
+
 
     where
-    * `your_wanted_installation_prefix` is the installation prefix you want the library (installed at `your_wanted_installation_prefix/lib`) and its headers (`your_wanted_installation_prefix/include`) to be installed. `your_wanted_installation_prefix` defaults to `/usr/local`;
-    * `your_libint_prefix` is the prefix to your libint2 installation folder, which defaults to `${LIBINT_PREFIX}` if available in `env`, and if not available, defaults to `/usr/local/libint/2.3.1`;
-
-
-3. finally, install (possibly with admin privileges via `sudo`)
-
-        make install
+    * `prefix` is the installation prefix (defaulted to `/usr/local`) you want the library to be installed at:
+        * the library `libwrp.a` will be installed in `prefix/lib`
+        * the header files (and cmake files, see Usage) will be installed in `prefix/include/libwrp/include`
 
 
 ## Usage
-Basic use of this library can be found in the `tests` directory. If you use CMake in other projects, you can add the following CMake command to the CMakeLists.txt-file
+Basic usage of this library can be found in the `tests` directory. If you use CMake in other projects, you can add the following CMake command to the CMakeLists.txt-file:
 
     find_package(libwrp x.y.z)
 
