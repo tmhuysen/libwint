@@ -14,8 +14,8 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 To install this library:
 1. download and untar the latest release
 
-        curl -OL "https://github.com/lelemmen/libwrp/releases/tag/v1.0.1"
-        tar -xvzf libwrp-1.0.1.tar.gz
+        curl -OL "https://github.com/lelemmen/libwrp/archive/v1.0.1.tar.gz"
+        tar -xvzf v1.0.1.tar.gz
         cd libwrp-1.0.1
 
 2. perform an out-of-source cmake build:
@@ -23,7 +23,6 @@ To install this library:
         mkdir build && cd build
         cmake -DINSTALLATION_PREFIX=prefix ..
         make && make test && sudo make install
-
 
     where
     * `prefix` is the installation prefix (defaulted to `/usr/local`) you want the library to be installed at:
