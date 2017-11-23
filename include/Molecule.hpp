@@ -18,7 +18,9 @@ class Molecule {
 public:
     const std::string xyz_filename;     // Path to a .xyz-file
     std::vector<libint2::Atom> atoms;   // A std::vector of libint2::Atoms
-                                            // a libint2::Atom is just a struct with data fields charge, x, y ,z.
+                                        //      A libint2::Atom is just a struct with data fields charge, x, y ,z
+                                        //      Note that x, y, and z are all in Bohr, but the .xyz-file should specify them in Angstrom
+
     unsigned nelec;                     // The number of electrons in the molecule
 
 
