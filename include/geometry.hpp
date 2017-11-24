@@ -4,14 +4,14 @@
 #include <libint2.hpp>
 
 
-namespace Wrapper{
+namespace libwrp {
 
 /** @return the distance between two libint2::Atoms, in Bohr
  */
 double distance(const libint2::Atom& atom1, const libint2::Atom& atom2);
 
 
-} // namespace Wrapper
+} // namespace libwrp
 
 
 #endif // LIBWRP_GEOMETRY_HPP
