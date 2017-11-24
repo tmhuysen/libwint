@@ -80,8 +80,8 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
 
-    Wrapper::Molecule water (xyzfilename);
-    Wrapper::Basis basis (water, basis_name);
+    libwrp::Molecule water (xyzfilename);
+    libwrp::Basis basis (water, basis_name);
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
     BOOST_CHECK_EQUAL(basis.nbf(), 7);
@@ -97,8 +97,8 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
 
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
-    Wrapper::Molecule water (xyzfilename);
-    Wrapper::Basis basis (water, basis_name);
+    libwrp::Molecule water (xyzfilename);
+    libwrp::Basis basis (water, basis_name);
     auto nbf = basis.nbf();
 
     basis.compute_overlap_integrals();
@@ -135,9 +135,9 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     const std::string basis_name = "STO-3G";
 
     // Create a Molecule and a Basis
-    Wrapper::Molecule h2 (xyzfilename);
+    libwrp::Molecule h2 (xyzfilename);
     BOOST_CHECK(std::abs(h2.atoms[1].z - 1.4) < 1.0e-6);    // Check if the conversion from Angstrom to a.u. is correct
-    Wrapper::Basis basis (h2, basis_name);
+    libwrp::Basis basis (h2, basis_name);
     BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     BOOST_CHECK(H_core.isApprox(H_core_ref, 1.0e-4));
 
 
-    // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this wrapper gives them in chemist's notation as well.
+    // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this libwrp gives them in chemist's notation as well.
     basis.compute_two_electron_integrals();
 
     BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - 0.7746) < 1.0e-4);

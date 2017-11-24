@@ -7,7 +7,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace Wrapper {
+namespace libwrp {
 
 class Basis {
 private:
@@ -53,6 +53,6 @@ public:
     void compute_two_electron_integrals();
 };
 
-} // namespace Wrapper
+} // namespace libwrp
 
 #endif // LIBWRP_BASIS_HPP
