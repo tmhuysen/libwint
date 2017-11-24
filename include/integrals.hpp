@@ -7,7 +7,7 @@
 #include <libint2.hpp>
 
 
-namespace Wrapper {
+namespace libwrp {
 
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
@@ -36,6 +36,6 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
  */
 void print_shell_sizes(const libint2::BasisSet& obs);
 
-} // namespace Wrapper
+} // namespace libwrp
 
 #endif // LIBWRP_INTEGRALS_HPP

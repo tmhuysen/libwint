@@ -5,7 +5,7 @@
 #include <string>
 
 
-namespace Wrapper {
+namespace libwrp {
 /** Parses a file name to obtain atoms
  *
  * @param filename
@@ -60,6 +60,6 @@ public:
     double internuclear_repulsion();
 };
 
-} // namespace Wrapper
+} // namespace libwrp
 
 #endif // LIBWRP_MOLECULE_HPP

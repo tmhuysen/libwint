@@ -1,8 +1,6 @@
 #include "integrals.hpp"
 
 
-namespace Wrapper {
-
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
 
@@ -12,7 +10,7 @@ namespace Wrapper {
 
  * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::MatrixXd libwrp::compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
     const auto nsh = obs.size();    // nsh: number of shells in the obs
     const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
@@ -79,7 +77,7 @@ Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const
 
  * @return: an Eigen::Tensor<double, 4> storing the integrals
  */
-Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::Tensor<double, 4> libwrp::compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
     // We have to static_cast to LONG, as clang++ else gives the following errors:
     //  error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'value_type' (aka 'long') in initializer list
     //  note: insert an explicit cast to silence this issue
@@ -152,12 +150,10 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
 /**
  * Prints the sizes (i.e. the number of basis functions in them) of all shells in a given basis set object.
  */
-void print_shell_sizes(const libint2::BasisSet& obs) {
+void libwrp::print_shell_sizes(const libint2::BasisSet& obs) {
     auto size = obs.size();
     for (auto i = 0; i < size; i++) {
         auto sh = obs[i]; // i traverses the shell
         std::cout << "Shell nr.: " << i << "\t Shell size: " << sh.size() << std::endl;
     }
 }
-
-} // namespace Wrapper

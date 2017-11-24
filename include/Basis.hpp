@@ -7,7 +7,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace Wrapper {
+namespace libwrp {
 
 class Basis {
 private:
@@ -16,6 +16,11 @@ private:
 public:
     Molecule molecule;
     const std::string name;
+
+    Eigen::MatrixXd S;  // The overlap integrals matrix for the given basis and molecule
+    Eigen::MatrixXd V;  // The nuclear integrals matrix for the given basis and molecule
+    Eigen::MatrixXd T;  // The kinetic integrals matrix for the given basis and molecule
+    Eigen::Tensor<double, 4> tei;  // The two-electron repulsion integrals tensor for the given basis and molecule
 
 
     // Constructors
@@ -27,15 +32,27 @@ public:
     Basis(Molecule& molecule, const std::string& basis_name);
 
 
-    // Methods
+    /** Calculate and return the number of basis functions in the basis
+     */
     size_t nbf();
 
-    Eigen::MatrixXd compute_overlap_integrals();
-    Eigen::MatrixXd compute_nuclear_integrals();
-    Eigen::MatrixXd compute_kinetic_integrals();
-    Eigen::Tensor<double, 4> compute_two_electron_integrals();
+    /** Calculate and set the overlap integrals
+     */
+    void compute_overlap_integrals();
+
+    /** Calculate and set the kinetic integrals
+    */
+    void compute_kinetic_integrals();
+
+    /** Calculate and set the nuclear integrals
+    */
+    void compute_nuclear_integrals();
+
+    /** Calculate and set the kinetic integrals
+    */
+    void compute_two_electron_integrals();
 };
 
-} // namespace Wrapper
+} // namespace libwrp
 
 #endif // LIBWRP_BASIS_HPP
