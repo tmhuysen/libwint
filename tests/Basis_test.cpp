@@ -101,10 +101,10 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     Wrapper::Basis basis (water, basis_name);
     auto nbf = basis.nbf();
 
-    Eigen::MatrixXd S = basis.compute_overlap_integrals();
-    Eigen::MatrixXd T = basis.compute_kinetic_integrals();
-    Eigen::MatrixXd V = basis.compute_nuclear_integrals();
-    Eigen::Tensor<double, 4> tei = basis.compute_two_electron_integrals();
+    basis.compute_overlap_integrals();
+    basis.compute_kinetic_integrals();
+    basis.compute_nuclear_integrals();
+    basis.compute_two_electron_integrals();
 
     Eigen::MatrixXd S_test (nbf, nbf);
     Eigen::MatrixXd T_test (nbf, nbf);
@@ -116,10 +116,10 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     read_array_from_file("../tests/ref_data/nuclear.data", V_test);
     read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
 
-    BOOST_CHECK(S.isApprox(S_test, 1.0e-8));
-    BOOST_CHECK(T.isApprox(T_test, 1.0e-8));
-    BOOST_CHECK(V.isApprox(V_test, 1.0e-8));
-    BOOST_CHECK(are_equal(tei, tei_test, 1.0e-6));
+    BOOST_CHECK(basis.S.isApprox(S_test, 1.0e-8));
+    BOOST_CHECK(basis.T.isApprox(T_test, 1.0e-8));
+    BOOST_CHECK(basis.V.isApprox(V_test, 1.0e-8));
+    BOOST_CHECK(are_equal(basis.tei, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();
@@ -141,10 +141,10 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
-    Eigen::MatrixXd S = basis.compute_overlap_integrals();
-    Eigen::MatrixXd T = basis.compute_kinetic_integrals();
-    Eigen::MatrixXd V = basis.compute_nuclear_integrals();
-    Eigen::MatrixXd H_core = T + V;
+    basis.compute_overlap_integrals();
+    basis.compute_kinetic_integrals();
+    basis.compute_nuclear_integrals();
+    Eigen::MatrixXd H_core = basis.T + basis.V;
 
     // Fill in the reference values from Szabo
     Eigen::MatrixXd S_ref (2, 2);
@@ -159,24 +159,23 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     H_core_ref << -1.1204, -0.9584,
                   -0.9584, -1.1204;
 
-    BOOST_CHECK(S.isApprox(S_ref, 1.0e-4));
-    BOOST_CHECK(T.isApprox(T_ref, 1.0e-4));
+    BOOST_CHECK(basis.S.isApprox(S_ref, 1.0e-4));
+    BOOST_CHECK(basis.T.isApprox(T_ref, 1.0e-4));
     BOOST_CHECK(H_core.isApprox(H_core_ref, 1.0e-4));
 
 
     // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this wrapper gives them in chemist's notation as well.
-    Eigen::Tensor<double, 4> tei = basis.compute_two_electron_integrals();
+    basis.compute_two_electron_integrals();
 
-    BOOST_CHECK(std::abs(tei(0,0,0,0) - 0.7746) < 1.0e-4);
-    BOOST_CHECK(std::abs(tei(0,0,0,0) - tei(1,1,1,1)) < 1.0e-12);
+    BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - 0.7746) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - basis.tei(1,1,1,1)) < 1.0e-12);
 
-    BOOST_CHECK(std::abs(tei(0,0,1,1) - 0.5697) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.tei(0,0,1,1) - 0.5697) < 1.0e-4);
 
-    BOOST_CHECK(std::abs(tei(1,0,0,0) - 0.4441) < 1.0e-4);
-    BOOST_CHECK(std::abs(tei(1,0,0,0) - tei(1,1,1,0)) < 1.0e-12);
+    BOOST_CHECK(std::abs(basis.tei(1,0,0,0) - 0.4441) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.tei(1,0,0,0) - basis.tei(1,1,1,0)) < 1.0e-12);
 
-    BOOST_CHECK(std::abs(tei(1,0,1,0) - 0.2970) < 1.0e-4);
-
+    BOOST_CHECK(std::abs(basis.tei(1,0,1,0) - 0.2970) < 1.0e-4);
 
     libint2::finalize();
 }
