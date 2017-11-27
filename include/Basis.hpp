@@ -19,7 +19,7 @@ private:
     bool are_computed_tei = false;
 
 public:
-    Molecule molecule;
+    Molecule& molecule;         // Make a reference to a Molecule object
     const std::string name;
 
     Eigen::MatrixXd S;  // The overlap integrals matrix for the given basis and molecule

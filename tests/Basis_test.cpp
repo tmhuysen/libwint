@@ -86,6 +86,9 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
     BOOST_CHECK_EQUAL(basis.nbf(), 7);
 
+    // Test if a reference to the Molecule object is actually made
+    BOOST_CHECK_EQUAL(&basis.molecule, &water);
+
     // Finalize libint2
     libint2::finalize();
 }
