@@ -51,6 +51,10 @@ public:
     /** Calculate and set the kinetic integrals
     */
     void compute_two_electron_integrals();
+
+    /** Calculate and set all the integrals
+     */
+    void compute_integrals();
 };
 
 } // namespace libwrp

@@ -49,3 +49,13 @@ void libwrp::Basis::compute_nuclear_integrals() {
 void libwrp::Basis::compute_two_electron_integrals() {
     this -> tei = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
 };
+
+
+/** Calculate and set all the integrals
+ */
+void libwrp::Basis::compute_integrals() {
+    compute_overlap_integrals();
+    compute_kinetic_integrals();
+    compute_nuclear_integrals();
+    compute_two_electron_integrals();
+}

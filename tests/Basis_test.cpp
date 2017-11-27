@@ -101,10 +101,7 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     libwrp::Basis basis (water, basis_name);
     auto nbf = basis.nbf();
 
-    basis.compute_overlap_integrals();
-    basis.compute_kinetic_integrals();
-    basis.compute_nuclear_integrals();
-    basis.compute_two_electron_integrals();
+    basis.compute_integrals();
 
     Eigen::MatrixXd S_test (nbf, nbf);
     Eigen::MatrixXd T_test (nbf, nbf);
@@ -141,9 +138,7 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
-    basis.compute_overlap_integrals();
-    basis.compute_kinetic_integrals();
-    basis.compute_nuclear_integrals();
+    basis.compute_integrals();
     Eigen::MatrixXd H_core = basis.T + basis.V;
 
     // Fill in the reference values from Szabo
@@ -165,8 +160,6 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
 
 
     // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this libwrp gives them in chemist's notation as well.
-    basis.compute_two_electron_integrals();
-
     BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - 0.7746) < 1.0e-4);
     BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - basis.tei(1,1,1,1)) < 1.0e-12);
 
