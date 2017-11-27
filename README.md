@@ -6,7 +6,7 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 
 
 ## Dependencies
-[![libint2 Dependency](https://img.shields.io/badge/LibInt-2.3.1+-blue.svg)](https://github.com/evaleev/libint)
+[![libint2 Dependency](https://img.shields.io/badge/libint-2.3.1+-blue.svg)](https://github.com/evaleev/libint)
 [![Eigen3 Dependency](https://img.shields.io/badge/Eigen-3+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
 
 
@@ -14,9 +14,9 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 To install this library:
 1. download and untar the latest release
 
-        curl -OL "https://github.com/lelemmen/libwrp/archive/v2.0.0.tar.gz"
-        tar -xvzf v2.0.0.tar.gz
-        cd libwrp-2.0.0
+        curl -OL "https://github.com/lelemmen/libwrp/archive/v2.1.0.tar.gz"
+        tar -xvzf v2.1.0.tar.gz
+        cd libwrp-2.1.0
 
 2. perform an out-of-source cmake build:
 
