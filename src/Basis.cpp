@@ -24,30 +24,64 @@ size_t libwrp::Basis::nbf() {
 
 
 /** Calculate and set the overlap integrals
+ *
+ *      If the overlap integrals have already been calculated, print an error message
  */
 void libwrp::Basis::compute_overlap_integrals() {
-    this->S = compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
+
+    if (!this->are_computed_overlap_integrals) {
+        this->S = compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
+
+        this->are_computed_overlap_integrals = true;
+    } else {
+        std::cout << "The overlap integrals have already been calculated in this basis ..." << std::endl;
+    }
+
 }
 
 
 /** Calculate and set the kinetic integrals
 */
 void libwrp::Basis::compute_kinetic_integrals() {
-    this -> T = compute_1body_integrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.atoms);
+
+    if (!this->are_computed_kinetic_integrals) {
+        this -> T = compute_1body_integrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.atoms);
+
+        this->are_computed_kinetic_integrals = true;
+    } else {
+        std::cout << "The kinetic integrals have already been calculated in this basis ..." << std::endl;
+    }
+
 }
 
 
 /** Calculate and set the nuclear integrals
 */
 void libwrp::Basis::compute_nuclear_integrals() {
-    this-> V = compute_1body_integrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.atoms);
+
+    if (!this->are_computed_nuclear_integrals) {
+        this-> V = compute_1body_integrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.atoms);
+
+        this->are_computed_nuclear_integrals = true;
+    } else {
+        std::cout << "The nuclear integrals have already been calculated in this basis ..." << std::endl;
+    }
+
 }
 
 
 /** Calculate and set the kinetic integrals
 */
 void libwrp::Basis::compute_two_electron_integrals() {
-    this -> tei = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
+
+    if (!this->are_computed_tei) {
+        this -> tei = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
+
+        this->are_computed_tei = true;
+    } else {
+        std::cout << "The two-electron integrals have already been calculated in this basis ..." << std::endl;
+    }
+
 };
 
 

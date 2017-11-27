@@ -13,6 +13,11 @@ class Basis {
 private:
     libint2::BasisSet libint_basis;
 
+    bool are_computed_overlap_integrals = false;
+    bool are_computed_nuclear_integrals = false;
+    bool are_computed_kinetic_integrals = false;
+    bool are_computed_tei = false;
+
 public:
     Molecule molecule;
     const std::string name;
