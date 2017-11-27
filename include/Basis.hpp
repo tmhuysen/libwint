@@ -13,8 +13,13 @@ class Basis {
 private:
     libint2::BasisSet libint_basis;
 
+    bool are_computed_overlap_integrals = false;
+    bool are_computed_nuclear_integrals = false;
+    bool are_computed_kinetic_integrals = false;
+    bool are_computed_tei = false;
+
 public:
-    Molecule molecule;
+    Molecule& molecule;         // Make a reference to a Molecule object
     const std::string name;
 
     Eigen::MatrixXd S;  // The overlap integrals matrix for the given basis and molecule
@@ -51,6 +56,10 @@ public:
     /** Calculate and set the kinetic integrals
     */
     void compute_two_electron_integrals();
+
+    /** Calculate and set all the integrals
+     */
+    void compute_integrals();
 };
 
 } // namespace libwrp

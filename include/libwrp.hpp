@@ -7,6 +7,7 @@
 #include "geometry.hpp"
 #include "integrals.hpp"
 #include "Molecule.hpp"
+#include "transformations.hpp"
 #include "version.hpp"
 
 
