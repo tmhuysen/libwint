@@ -132,7 +132,7 @@ Eigen::Tensor<double, 4> libwrp::compute_2body_integrals(const libint2::BasisSet
                                 for (auto f4 = 0L; f4 != nbf_sh4; ++f4) {
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
 
-                                    // The two-electron integrals are given in PHYSICIST'S NOTATION: <12|12>
+                                    // The two-electron integrals are given in CHEMIST'S: (11|22)
                                     tei(f1 + bf1, f2 + bf2, f3 + bf3, f4 + bf4) = computed_integral;
                                 }
                             }
