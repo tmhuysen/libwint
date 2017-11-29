@@ -6,7 +6,8 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace libwrp::utility {
+namespace libwrp {
+namespace utility {
 
 /** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
 */
@@ -27,7 +28,8 @@ bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>
  */
 void print(const Eigen::Tensor<double, 4>& T);
 
-}  // namespace libwrp::utility
+}  // namespace utility
+}  // namespace libwrp
 
 
 #endif // LIBWRP_UTILITY_HPP
