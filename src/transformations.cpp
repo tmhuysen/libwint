@@ -76,8 +76,5 @@ Eigen::Tensor<double, 4> libwrp::transform_AO_integrals_to_SO(Eigen::Tensor<doub
         }
     }  // pqrs
 
-    std::cout << g_SO << std::endl;
-
-
     return g_SO;
 };

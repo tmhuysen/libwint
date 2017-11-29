@@ -45,15 +45,15 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     Eigen::MatrixXd V_test (nbf, nbf);
     Eigen::Tensor<double, 4> tei_test (nbf, nbf, nbf, nbf);
 
-    read_array_from_file("../tests/ref_data/overlap.data", S_test);
-    read_array_from_file("../tests/ref_data/kinetic.data", T_test);
-    read_array_from_file("../tests/ref_data/nuclear.data", V_test);
-    read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/overlap.data", S_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/kinetic.data", T_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/nuclear.data", V_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
 
     BOOST_CHECK(basis.S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(basis.T.isApprox(T_test, 1.0e-8));
     BOOST_CHECK(basis.V.isApprox(V_test, 1.0e-8));
-    BOOST_CHECK(are_equal(basis.tei, tei_test, 1.0e-6));
+    BOOST_CHECK(libwrp::utility::are_equal(basis.tei, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();
