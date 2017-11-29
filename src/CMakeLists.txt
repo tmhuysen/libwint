@@ -2,7 +2,7 @@
 
 
 # We want to make a static library target called "libwrp", based on the project source files
-add_library(${LIBRARY_NAME} ${LIBRARY_TYPE} ${PROJECT_SOURCE_FILES})
+add_library(${LIBRARY_NAME} ${LIBRARY_TYPE} ${PROJECT_SOURCE_FILES} ${PROJECT_INCLUDE_FILES})
 set_target_properties(${LIBRARY_NAME} PROPERTIES PREFIX "")     # the final library name should be libwrp.a, and not liblibwrp.a
 
 
