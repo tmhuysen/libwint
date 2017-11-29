@@ -1,76 +1,10 @@
 #define BOOST_TEST_MODULE "Basis"
 
 #include "Basis.hpp"
+#include "utility.hpp"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise the compiler will complain
-
-
-/** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
-*/
-void read_array_from_file(const std::string& filename, Eigen::MatrixXd& M){
-    std::ifstream file (filename);
-
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline (file, line)) {
-            std::istringstream is (line);
-
-            int i;
-            int j;
-            double value;
-
-            is >> i >> j >> value;
-            M(i, j) = value;
-        }
-
-        file.close();
-    }
-}
-
-/** Read an array from a given filename line by line, and add the elements to a given tensor (rank-4 tensor)
-*/
-void read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M){
-    std::ifstream file (filename);
-
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline (file, line)) {
-            std::istringstream is (line);
-
-            int i;
-            int j;
-            int k;
-            int l;
-            float value;
-
-            is >> i >> j >> k >> l >> value;
-            M(i, j, k, l) = value;
-        }
-
-        file.close();
-    }
-}
-
-/** Return if two rank-4 tensors are approximately equal
- */
-bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance){
-    auto dim = M.NumIndices;
-
-    // Since Eigen::Tensor doesn't have an isApprox yet, we will check every pair of values manually
-    for (int i = 0; i < dim ; i++) {
-        for (int j = 0; j < dim; j++) {
-            for (int k = 0; k < dim; k++) {
-                for (int l = 0; l < dim; l++) {
-                    if (std::abs(M(i,j,k,l) - T(i,j,k,l)) > tolerance) {
-                        return false;
-                    }
-                }
-            }
-        }
-    } // rank-4 tensor traversing
-    return true;
-}
 
 
 BOOST_AUTO_TEST_CASE( constructor ) {
