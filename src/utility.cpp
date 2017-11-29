@@ -1,5 +1,8 @@
 #include "utility.hpp"
 
+#include <iostream>
+#include <fstream>
+
 
 /** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
 */

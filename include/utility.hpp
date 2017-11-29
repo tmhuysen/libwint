@@ -1,6 +1,10 @@
 #ifndef LIBWRP_UTILITY_HPP
 #define LIBWRP_UTILITY_HPP
 
+#include <Eigen/Dense>
+#include <string>
+#include <unsupported/Eigen/CXX11/Tensor>
+
 
 namespace libwrp::utility {
 
