@@ -45,7 +45,6 @@ void libwrp::utility::read_array_from_file(const std::string& filename, Eigen::T
 
             is >> i >> j >> k >> l >> value;
             M(i, j, k, l) = value;
-            std::cout << i << ' ' << j << ' ' << k << ' ' << l << "  " << M(i, j, k, l) << std::endl;
         }
 
         file.close();
@@ -64,7 +63,6 @@ bool libwrp::utility::are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::
             for (int k = 0; k < dim; k++) {
                 for (int l = 0; l < dim; l++) {
                     if (std::abs(M(i,j,k,l) - T(i,j,k,l)) > tolerance) {
-                        std::cout << M(i,j,k,l) << ' ' << T(i,j,k,l) << std::endl;
                         return false;
                     }
                 }
