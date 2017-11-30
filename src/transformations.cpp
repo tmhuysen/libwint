@@ -2,13 +2,24 @@
 
 
 /** Given:
- *      - a matrix of one-electron integrals in an AO basis
- *      - an SO coefficient matrix (every column represents a spatial orbital)
+ *      - a matrix representation in an AO basis (f_AO)
+ *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
  *
- *  transform and return the one-electron integrals in the SO basis
+ *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd libwrp::transform_AO_to_SO(Eigen::MatrixXd& M_AO, Eigen::MatrixXd& C) {
-    return C.adjoint() * M_AO * C;
+Eigen::MatrixXd libwrp::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
+    return C.adjoint() * f_AO * C;
+}
+
+
+/** Given:
+ *      - a matrix representation in an SO basis (f_SO)
+ *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
+ *
+ *  transform and return the matrix in the AO basis
+ */
+Eigen::MatrixXd libwrp::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
+    return C.inverse().adjoint() * f_SO * C.inverse();
 }
 
 
