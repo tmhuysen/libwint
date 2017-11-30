@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE ( one_electron_trivial ) {
     Eigen::MatrixXd C = Eigen::MatrixXd::Identity(3, 3);
     Eigen::MatrixXd h_AO = Eigen::MatrixXd::Random(3, 3);
 
-    Eigen::MatrixXd h_SO = libwrp::transform_AO_integrals_to_SO(h_AO, C);
+    Eigen::MatrixXd h_SO = libwrp::transform_AO_to_SO(h_AO, C);
 
     BOOST_CHECK(h_AO.isApprox(h_SO, 1.0e-12));
 }
@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE ( two_electron_trivial ) {
     Eigen::Tensor<double, 4> g_AO (3, 3, 3, 3);
     g_AO.setRandom();
 
-    Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_integrals_to_SO(g_AO, C);
+    Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_to_SO(g_AO, C);
 
     BOOST_CHECK(libwrp::utility::are_equal(g_AO, g_SO, 1.0e-12));
 }
@@ -54,6 +54,6 @@ BOOST_AUTO_TEST_CASE ( two_electron_olsens ) {
         }
     }
 
-    Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_integrals_to_SO(g_AO, C);
+    Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_to_SO(g_AO, C);
     BOOST_CHECK(libwrp::utility::are_equal(g_SO, rotated_tei_ref, 1.0e-06));
 }

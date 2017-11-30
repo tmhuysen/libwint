@@ -14,7 +14,7 @@ namespace libwrp {
  *
  *  transform and return the one-electron integrals in the SO basis
  */
-Eigen::MatrixXd transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electron_integrals, Eigen::MatrixXd& C);
+Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd &one_electron_integrals, Eigen::MatrixXd &C);
 
 
 /** Given:
@@ -23,7 +23,7 @@ Eigen::MatrixXd transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electron_integ
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_integrals_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4> &g_AO, Eigen::MatrixXd &C);
 
 
 }  // namespace libwrp

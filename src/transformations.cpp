@@ -10,7 +10,7 @@
  *
  *  transform and return the one-electron integrals in the SO basis
  */
-Eigen::MatrixXd libwrp::transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electron_integrals, Eigen::MatrixXd& C) {
+Eigen::MatrixXd libwrp::transform_AO_to_SO(Eigen::MatrixXd &one_electron_integrals, Eigen::MatrixXd &C) {
     return C.adjoint() * one_electron_integrals * C;
 }
 
@@ -21,7 +21,7 @@ Eigen::MatrixXd libwrp::transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electr
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> libwrp::transform_AO_integrals_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
+Eigen::Tensor<double, 4> libwrp::transform_AO_to_SO(Eigen::Tensor<double, 4> &g_AO, Eigen::MatrixXd &C) {
 
     // Since we're only getting C as a matrix, we should make the appropriate tensor to perform contractions
     Eigen::TensorMap<Eigen::Tensor<double, 2>> C_tensor (C.data(), C.rows(), C.cols());
