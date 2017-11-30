@@ -1,76 +1,10 @@
 #define BOOST_TEST_MODULE "Basis"
 
 #include "Basis.hpp"
+#include "utility.hpp"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise the compiler will complain
-
-
-/** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
-*/
-void read_array_from_file(const std::string& filename, Eigen::MatrixXd& M){
-    std::ifstream file (filename);
-
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline (file, line)) {
-            std::istringstream is (line);
-
-            int i;
-            int j;
-            double value;
-
-            is >> i >> j >> value;
-            M(i, j) = value;
-        }
-
-        file.close();
-    }
-}
-
-/** Read an array from a given filename line by line, and add the elements to a given tensor (rank-4 tensor)
-*/
-void read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M){
-    std::ifstream file (filename);
-
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline (file, line)) {
-            std::istringstream is (line);
-
-            int i;
-            int j;
-            int k;
-            int l;
-            float value;
-
-            is >> i >> j >> k >> l >> value;
-            M(i, j, k, l) = value;
-        }
-
-        file.close();
-    }
-}
-
-/** Return if two rank-4 tensors are approximately equal
- */
-bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance){
-    auto dim = M.NumIndices;
-
-    // Since Eigen::Tensor doesn't have an isApprox yet, we will check every pair of values manually
-    for (int i = 0; i < dim ; i++) {
-        for (int j = 0; j < dim; j++) {
-            for (int k = 0; k < dim; k++) {
-                for (int l = 0; l < dim; l++) {
-                    if (std::abs(M(i,j,k,l) - T(i,j,k,l)) > tolerance) {
-                        return false;
-                    }
-                }
-            }
-        }
-    } // rank-4 tensor traversing
-    return true;
-}
 
 
 BOOST_AUTO_TEST_CASE( constructor ) {
@@ -111,15 +45,15 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     Eigen::MatrixXd V_test (nbf, nbf);
     Eigen::Tensor<double, 4> tei_test (nbf, nbf, nbf, nbf);
 
-    read_array_from_file("../tests/ref_data/overlap.data", S_test);
-    read_array_from_file("../tests/ref_data/kinetic.data", T_test);
-    read_array_from_file("../tests/ref_data/nuclear.data", V_test);
-    read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/overlap.data", S_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/kinetic.data", T_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/nuclear.data", V_test);
+    libwrp::utility::read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
 
     BOOST_CHECK(basis.S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(basis.T.isApprox(T_test, 1.0e-8));
     BOOST_CHECK(basis.V.isApprox(V_test, 1.0e-8));
-    BOOST_CHECK(are_equal(basis.tei, tei_test, 1.0e-6));
+    BOOST_CHECK(libwrp::utility::are_equal(basis.tei, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();

@@ -35,10 +35,13 @@ addons:
 
 # Install dependencies
 install:
+
   # We need a recent version of Eigen3, but this is not available through APT.
-  - hg clone https://bitbucket.org/eigen/eigen /tmp/eigen
+  - mkdir /tmp/eigen && cd /tmp/eigen
+  - curl -OL "http://bitbucket.org/eigen/eigen/get/3.3.4.tar.bz2"
+  - tar --bzip2 -xf 3.3.4.tar.bz2
   - mkdir /tmp/build-eigen && cd /tmp/build-eigen
-  - cmake . /tmp/eigen
+  - cmake . /tmp/eigen/eigen-eigen-5a0156e40feb
   - make && sudo make install
 
 

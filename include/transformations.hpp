@@ -9,12 +9,22 @@ namespace libwrp {
 
 
 /** Given:
- *      - a matrix of one-electron integrals in an AO basis
- *      - an SO coefficient matrix (every column represents a spatial orbital)
+ *      - a matrix representation in an AO basis (f_AO)
+ *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
  *
- *  transform and return the one-electron integrals in the SO basis
+ *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electron_integrals, Eigen::MatrixXd& C);
+Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C);
+
+
+
+/** Given:
+ *      - a matrix representation in an SO basis (f_SO)
+ *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
+ *
+ *  transform and return the matrix in the AO basis
+ */
+Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C);
 
 
 /** Given:
@@ -23,7 +33,7 @@ Eigen::MatrixXd transform_AO_integrals_to_SO(Eigen::MatrixXd& one_electron_integ
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_integrals_to_SO(Eigen::Tensor<double, 4>& one_electron_integrals, Eigen::MatrixXd& C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C);
 
 
 }  // namespace libwrp
