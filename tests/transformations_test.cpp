@@ -20,6 +20,20 @@ BOOST_AUTO_TEST_CASE ( one_electron_trivial ) {
 }
 
 
+BOOST_AUTO_TEST_CASE ( one_electron_AO_SO_back ) {
+
+    // Let's test if, if we transform f_AO to f_SO and back to f_AO, we get the same result
+    // We'll do this with random matrices
+    Eigen::MatrixXd f_AO = Eigen::MatrixXd::Random(3, 3);
+    Eigen::MatrixXd C = Eigen::MatrixXd::Random(3, 3);  // The probability of a random matrix being singular is approximately 0
+
+    // Transform to SO basis
+    Eigen::MatrixXd f_SO = libwrp::transform_AO_to_SO(f_AO, C);
+
+    BOOST_CHECK(f_AO.isApprox(libwrp::transform_SO_to_AO(f_SO, C), 1.0e-12));
+}
+
+
 BOOST_AUTO_TEST_CASE ( two_electron_trivial ) {
 
     // Let's test a trivial transformation: i.e. with C being a unit matrix
