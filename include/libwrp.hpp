@@ -8,6 +8,7 @@
 #include "integrals.hpp"
 #include "Molecule.hpp"
 #include "transformations.hpp"
+#include "utility.hpp"
 #include "version.hpp"
 
 
