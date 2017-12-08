@@ -104,3 +104,33 @@ Eigen::MatrixXd libwrp::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixX
 Eigen::Tensor<double, 4> libwrp::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
     return transform_two_electron_integrals(g_AO, C);
 };
+
+
+/** Given a unitary matrix U that transforms a basis B into B', return the one-electron integrals in the rotated basis
+ *
+ * Note that the basis transformation is explicitly written as (B' = B U)
+ */
+Eigen::MatrixXd libwrp::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U) {
+
+    // Check if the given matrix U is unitary
+    if (!U.isUnitary()) {
+        throw std::invalid_argument("The given matrix U is not unitary.");
+    }
+
+    return transform_one_electron_integrals(h, U);
+}
+
+
+/** Given a unitary matrix U that transforms a basis B into B', return the two-electron integrals in the rotated basis
+ *
+ * Note that the basis transformation is explicitly written as (B' = B U)
+ */
+Eigen::Tensor<double, 4> libwrp::rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U) {
+
+    // Check if the given matrix U is unitary
+    if (!U.isUnitary()) {
+        throw std::invalid_argument("The given matrix U is not unitary.");
+    }
+
+    return transform_two_electron_integrals(g, U);
+};

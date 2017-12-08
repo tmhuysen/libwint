@@ -69,6 +69,19 @@ Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C);
 Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C);
 
 
+/** Given a unitary matrix U that transforms a basis B into B', return the one-electron integrals in the rotated basis
+ *
+ * Note that the basis transformation is explicitly written as (B' = B U)
+ */
+Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U);
+
+
+/** Given a unitary matrix U that transforms a basis B into B', return the two-electron integrals in the rotated basis
+ *
+ * Note that the basis transformation is explicitly written as (B' = B U)
+ */
+Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U);
+
 }  // namespace libwrp
 
 #endif // LIBWRP_TRANSFORMATIONS_HPP
