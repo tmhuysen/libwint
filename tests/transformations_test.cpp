@@ -72,3 +72,26 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_olsens ) {
     Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_to_SO(g_transformed, T);
     BOOST_CHECK(libwrp::utility::are_equal(g_SO, g_transformed_ref, 1.0e-06));
 }
+
+
+BOOST_AUTO_TEST_CASE ( rotate ) {
+
+    // Since the previous tests check the workings of the base function, we can check the workings of the wrapper function separately
+
+    // Test if the functions don't accept non-unitary matrices
+    Eigen::MatrixXd T (2, 2);
+    T << 1, 2, 3, 4;
+
+    Eigen::MatrixXd h = Eigen::MatrixXd::Random(2, 2);
+    Eigen::Tensor<double, 4> g (2, 2, 2, 2);
+    g.setRandom();
+
+    BOOST_REQUIRE_THROW(libwrp::rotate_integrals(h, T), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwrp::rotate_integrals(g, T), std::invalid_argument);
+
+    // Test if the functions accept unitary matrices
+    Eigen::MatrixXd U = Eigen::MatrixXd::Identity (2, 2);
+
+    BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(h, U));
+    BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(g, U));
+}
