@@ -93,6 +93,13 @@ Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::Ma
 Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M);
 
 
+/** I derived an analytical expression for the transformation of the one-electron integrals with a Jacobi rotation of the orbitals P and Q.
+ *
+ * In this function, I've implemented it so it can be checked to be correct.
+ */
+Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
+
+
 }  // namespace libwint
 
 #endif // LIBWINT_TRANSFORMATIONS_HPP

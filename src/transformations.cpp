@@ -1,5 +1,7 @@
 #include "transformations.hpp"
 
+#include <iostream>
+
 
 /** Given:
  *      - a matrix h, which contains one-electron integrals in some basis B
@@ -167,4 +169,68 @@ Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta
     J(Q, Q) = std::cos(theta);
 
     return J;
+}
+
+
+/** I derived an analytical expression for the transformation of the one-electron integrals with a Jacobi rotation of the orbitals P and Q.
+ *
+ * In this function, I've implemented it so it can be checked to be correct.
+ */
+Eigen::MatrixXd libwint::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+
+    // Initialize a zero matrix with the correct dimensions
+    Eigen::MatrixXd h_rotated = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+
+    // Loop over every element of the rotated matrix
+    // Give a KISS implementation of the rotated elements
+    for (size_t R = 0; R < h.rows(); R++) {
+        for (size_t S = 0; S < h.cols(); S++) {
+
+            // The zeroth order term
+            h_rotated(R,S) = h(R,S);
+
+
+            // The first-order terms
+            if (S == P) {
+                h_rotated(R,S) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
+            }
+
+            if (S == Q) {
+                h_rotated(R,S) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
+            }
+
+            if (R == P) {
+                h_rotated(R,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
+            }
+
+            if (R == Q) {
+                h_rotated(R,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
+            }
+
+
+            // The second-order term
+            if (R == P) {
+                if (S == P) {
+                    h_rotated(R,S) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
+                }
+
+                if (S == Q) {
+                    h_rotated(R,S) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+                }
+            }
+
+            if (R == Q) {
+                if (S == P) {
+                    h_rotated(R,S) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+                }
+
+                if (S == Q) {
+                    h_rotated(R,S) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
+                }
+            }
+
+        }
+    }  // matrix element loop
+
+    return h_rotated;
 }

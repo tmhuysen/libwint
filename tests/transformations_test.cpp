@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE "transformations"
 
+#include "Basis.hpp"
 #include "transformations.hpp"
 #include "utility.hpp"
 
@@ -116,4 +117,45 @@ BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
     BOOST_CHECK(std::abs(J(0,1) - 1) < 1.0e-12);
     BOOST_CHECK(std::abs(J(1,0) - (-1)) < 1.0e-12);
     BOOST_CHECK(std::abs(J(0,0) - 0) < 1.0e-12);
+}
+
+
+BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_toy ) {
+
+    // Set a toy one-electron matrix (which should be self-adjoint)
+    Eigen::MatrixXd h (2, 2);
+    h << 1, 2, 2, 4;
+
+    // Set the test Jacobi parameters and test with the analytical formula
+    size_t P = 0;
+    size_t Q = 1;
+    double theta = boost::math::constants::half_pi<double>();
+    Eigen::MatrixXd U = libwint::jacobi_rotation_matrix(P, Q, theta, 2);
+    BOOST_CHECK(libwint::rotate_integrals(h, U).isApprox(libwint::rotate_one_electron_integrals_jacobi(h, P, Q, theta)));
+
+    // Test with another angle theta
+    theta = 7.09214;
+    U = libwint::jacobi_rotation_matrix(P, Q, theta, 2);
+    BOOST_CHECK(libwint::rotate_integrals(h, U).isApprox(libwint::rotate_one_electron_integrals_jacobi(h, P, Q, theta)));
+}
+
+
+BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_h2o ) {
+
+    // Calculate the kinetic energy integrals for H2O@STO-3G
+    libint2::initialize();
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
+    const std::string basis_name = "STO-3G";
+    libwint::Molecule water (xyzfilename);
+    libwint::Basis basis (water, basis_name);
+    basis.compute_kinetic_integrals();
+    Eigen::MatrixXd T = basis.T;
+    libint2::finalize();
+
+    // Set the test Jacobi parameters and test with the analytical formula
+    size_t P = 3;
+    size_t Q = 6;
+    double theta = 62.7219;
+    Eigen::MatrixXd U = libwint::jacobi_rotation_matrix(P, Q, theta, basis.nbf());
+    BOOST_CHECK(libwint::rotate_integrals(T, U).isApprox(libwint::rotate_one_electron_integrals_jacobi(T, P, Q, theta)));
 }
