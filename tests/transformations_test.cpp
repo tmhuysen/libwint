@@ -3,7 +3,7 @@
 #include "transformations.hpp"
 #include "utility.hpp"
 
-
+#include <boost/math/constants/constants.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>  // include this to get main(), otherwise clang++ will complain
 
@@ -110,4 +110,10 @@ BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
     BOOST_CHECK(libwrp::jacobi_rotation_matrix(4, 7, 6.9921, 10).isUnitary());
     BOOST_CHECK(libwrp::jacobi_rotation_matrix(1, 9, 78.00166, 22).isUnitary());
 
+    // Let's test the easiest Jacobi matrix, one with theta = pi/2 and dimension 2
+    Eigen::MatrixXd J = libwrp::jacobi_rotation_matrix(0, 1, boost::math::constants::half_pi<double>(), 2);
+    BOOST_CHECK(std::abs(J(0,0) - 0) < 1.0e-12);
+    BOOST_CHECK(std::abs(J(0,1) - 1) < 1.0e-12);
+    BOOST_CHECK(std::abs(J(1,0) - (-1)) < 1.0e-12);
+    BOOST_CHECK(std::abs(J(0,0) - 0) < 1.0e-12);
 }
