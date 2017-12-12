@@ -134,3 +134,37 @@ Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, 
 
     return transform_two_electron_integrals(g, U);
 };
+
+
+/** Give the M-dimensional Jacobi rotation matrix (with an angle theta) for the orbitals P and Q (P < Q).
+ *
+ * M is the actual dimension of the matrix that is returned
+ * P and Q represent the rows and columns, i.e. they start at 0
+ *
+ * Note that we work with the (cos, sin, -sin, cos) definition
+ */
+Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M) {
+
+    if (P >= Q) {
+        throw std::invalid_argument("P should be smaller than Q");
+    }
+
+    if ((M < P + 1) || (M < Q + 1)) {
+        throw std::invalid_argument("M should be larger than (P+1) and larger than (Q+1).");
+    }
+
+    // The union of these two conditions also excludes M < 2
+
+
+
+    // We'll start the construction with an identity matrix
+    Eigen::MatrixXd J = Eigen::MatrixXd::Identity(M, M);
+
+    // Add the Jacobi rotation terms
+    J(P, P) = std::cos(theta);
+    J(P, Q) = std::sin(theta);
+    J(Q, P) = -std::sin(theta);
+    J(Q, Q) = std::cos(theta);
+
+    return J;
+}
