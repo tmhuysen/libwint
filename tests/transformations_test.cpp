@@ -95,3 +95,19 @@ BOOST_AUTO_TEST_CASE ( rotate ) {
     BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(h, U));
     BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(g, U));
 }
+
+
+BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
+
+    // We can't create a Jacobi matrix for P > Q
+    BOOST_REQUIRE_THROW(libwrp::jacobi_rotation_matrix(3, 2, 1.0, 5), std::invalid_argument);
+
+    // P+1 and Q+1 should both be smaller than M
+    BOOST_REQUIRE_THROW(libwrp::jacobi_rotation_matrix(1, 5, 1.0, 4), std::invalid_argument);
+    BOOST_REQUIRE_NO_THROW(libwrp::jacobi_rotation_matrix(2, 3, 1.0, 4));
+
+    // A random Jacobi matrix is unitary
+    BOOST_CHECK(libwrp::jacobi_rotation_matrix(4, 7, 6.9921, 10).isUnitary());
+    BOOST_CHECK(libwrp::jacobi_rotation_matrix(1, 9, 78.00166, 22).isUnitary());
+
+}

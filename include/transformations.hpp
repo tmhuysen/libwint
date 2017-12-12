@@ -82,6 +82,14 @@ Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U);
  */
 Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U);
 
+
+/** Give the M-dimensional Jacobi rotation matrix (with an angle theta) for the orbitals P and Q
+ *
+ * Note that we work with the (cos, sin, -sin, cos) definition
+ */
+Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M);
+
+
 }  // namespace libwrp
 
 #endif // LIBWRP_TRANSFORMATIONS_HPP
