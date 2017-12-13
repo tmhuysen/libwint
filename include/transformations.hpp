@@ -93,9 +93,9 @@ Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::Ma
 Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M);
 
 
-/** I derived an analytical expression for the transformation of the one-electron integrals with a Jacobi rotation of the orbitals P and Q.
+/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
  *
- * In this function, I've implemented it so it can be checked to be correct.
+ *  In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
  */
 Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
 
