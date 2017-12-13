@@ -172,65 +172,36 @@ Eigen::MatrixXd libwrp::jacobi_rotation_matrix(size_t P, size_t Q, double theta,
 }
 
 
-/** I derived an analytical expression for the transformation of the one-electron integrals with a Jacobi rotation of the orbitals P and Q.
+/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
  *
- * In this function, I've implemented it so it can be checked to be correct.
- */
+ *  In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
+ *  */
 Eigen::MatrixXd libwrp::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
 
-    // Initialize a zero matrix with the correct dimensions
-    Eigen::MatrixXd h_rotated = Eigen::MatrixXd::Zero(h.rows(), h.cols());
+    // Assert the assumption of a symmetric matrix
+    assert(h.isApprox(h.transpose()));
 
-    // Loop over every element of the rotated matrix
-    // Give a KISS implementation of the rotated elements
+    // Initialize the rotated matrix by making a copy of the original matrix
+    Eigen::MatrixXd h_rotated = h;
+
+    // Since we have a Jacobi rotation, we can directly fill in rows and columns P and Q
+    // Update the P-th and Q-th row
+    for (size_t S = 0; S < h.cols(); S++) {
+        h_rotated(P,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
+        h_rotated(Q,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
+    }
+
+    // Update the P-th and Q-th column
     for (size_t R = 0; R < h.rows(); R++) {
-        for (size_t S = 0; S < h.cols(); S++) {
+        h_rotated(R,P) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
+        h_rotated(R,Q) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
+    }
 
-            // The zeroth order term
-            h_rotated(R,S) = h(R,S);
-
-
-            // The first-order terms
-            if (S == P) {
-                h_rotated(R,S) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
-            }
-
-            if (S == Q) {
-                h_rotated(R,S) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
-            }
-
-            if (R == P) {
-                h_rotated(R,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
-            }
-
-            if (R == Q) {
-                h_rotated(R,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
-            }
-
-
-            // The second-order term
-            if (R == P) {
-                if (S == P) {
-                    h_rotated(R,S) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
-                }
-
-                if (S == Q) {
-                    h_rotated(R,S) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-                }
-            }
-
-            if (R == Q) {
-                if (S == P) {
-                    h_rotated(R,S) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-                }
-
-                if (S == Q) {
-                    h_rotated(R,S) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
-                }
-            }
-
-        }
-    }  // matrix element loop
+    // Update the four intersections (P,P) (P,Q) (Q,P) (Q,Q)
+    h_rotated(P,P) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(P,Q) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(Q,P) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(Q,Q) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
 
     return h_rotated;
 }
