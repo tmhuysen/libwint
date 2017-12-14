@@ -60,8 +60,8 @@ size_t libwrp::Molecule::natoms() {
 
 /** @return the sum of the charges of the nuclei
  */
-unsigned libwrp::Molecule::nucleic_charge() {
-    unsigned nucleic_charge = 0;
+size_t libwrp::Molecule::nucleic_charge() {
+    size_t nucleic_charge = 0;
 
     for (const auto& atom : this->atoms) {
         nucleic_charge += atom.atomic_number;

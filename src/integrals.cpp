@@ -12,15 +12,15 @@
  */
 Eigen::MatrixXd libwrp::compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
-    const auto nsh = obs.size();    // nsh: number of shells in the obs
-    const auto nbf = obs.nbf();     // nbf: number of basis functions in the obs
+    const auto nsh = static_cast<size_t>(obs.size());    // nsh: number of shells in the obs
+    const auto nbf = static_cast<size_t>(obs.nbf());     // nbf: number of basis functions in the obs
 
     // Initialize the eigen matrix:
     //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.
     Eigen::MatrixXd M_result(nbf, nbf);
 
     // Construct the libint2 engine
-    libint2::Engine engine(opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));
+    libint2::Engine engine(opertype, obs.max_nprim(), static_cast<int>(obs.max_l()));  // libint2 requires an int
     //  Something extra for the nuclear attraction integrals
     if (opertype == libint2::Operator::nuclear) {
         engine.set_params(make_point_charges(atoms));
@@ -82,15 +82,15 @@ Eigen::Tensor<double, 4> libwrp::compute_2body_integrals(const libint2::BasisSet
     //  error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'value_type' (aka 'long') in initializer list
     //  note: insert an explicit cast to silence this issue
 
-    const auto nsh = static_cast<long>(obs.size());
-    const auto nbf = obs.nbf();
+    const auto nsh = static_cast<size_t>(obs.size());
+    const auto nbf = static_cast<size_t>(obs.nbf());
 
     // Initialize the two-electron integrals tensor
     Eigen::Tensor<double, 4> tei(nbf, nbf, nbf, nbf);       // Create a rank 4 tensor with dimensions nbf
 
 
     // Construct the libint2 engine
-    libint2::Engine engine(libint2::Operator::coulomb, obs.max_nprim(), static_cast<int>(obs.max_l()));
+    libint2::Engine engine(libint2::Operator::coulomb, obs.max_nprim(), static_cast<int>(obs.max_l()));  // libint2 requires an int
 
     const auto shell2bf = obs.shell2bf();  // maps shell index to bf index
 

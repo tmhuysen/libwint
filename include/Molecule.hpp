@@ -21,7 +21,7 @@ public:
                                         //      A libint2::Atom is just a struct with data fields charge, x, y ,z
                                         //      Note that x, y, and z are all in Bohr, but the .xyz-file should specify them in Angstrom
 
-    unsigned nelec;                     // The number of electrons in the molecule
+    size_t nelec;                       // The number of electrons in the molecule
 
 
     // Constructors
@@ -52,7 +52,7 @@ public:
 
     /** @return the sum of the charges of the nuclei
      */
-    unsigned nucleic_charge();
+    size_t nucleic_charge();
 
     /** @return the internuclear repulsion energy due to the nuclear framework
      *
