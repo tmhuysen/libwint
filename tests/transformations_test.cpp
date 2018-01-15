@@ -120,6 +120,46 @@ BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
 }
 
 
+BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
+
+    // Using a Jacobi matrix as a transformation matrix, check the transformed integrals with the results from olsens
+
+    // Get the initial one- and two-electron integrals from olsens
+    Eigen::MatrixXd h_SO (6, 6);
+    Eigen::Tensor<double, 4> g_SO (6, 6, 6, 6);
+
+    libwrp::utility::read_array_from_file("../tests/ref_data/lih_hf_sto6g_oneint.data", h_SO);
+    libwrp::utility::read_array_from_file("../tests/ref_data/lih_hf_sto6g_twoint.data", g_SO);
+
+
+
+    // Specify some Jacobi parameters to test a Jacobi rotation
+    size_t P = 2;
+    size_t Q = 4;
+    double theta = 56.71;
+    Eigen::MatrixXd U = libwrp::jacobi_rotation_matrix(P, Q, theta, 6);
+
+
+
+    // Are the rotated one-electron integrals the same?
+    Eigen::MatrixXd h_SO_rotated = libwrp::transform_one_electron_integrals(h_SO, U);
+
+    Eigen::MatrixXd h_SO_rotated_olsens (6, 6);
+    libwrp::utility::read_array_from_file("../tests/ref_data/lih_hf_sto6g_oneint_rotated.data", h_SO_rotated_olsens);
+
+    BOOST_CHECK(h_SO_rotated.isApprox(h_SO_rotated_olsens, 1.0e-6));
+
+
+    // Are the rotated two-electron integrals the same?
+    Eigen::Tensor<double, 4> g_SO_rotated = libwrp::transform_two_electron_integrals(g_SO, U);
+
+    Eigen::Tensor<double, 4> g_SO_rotated_olsens (6, 6, 6, 6);
+    libwrp::utility::read_array_from_file("../tests/ref_data/lih_hf_sto6g_twoints_rotated.data", g_SO_rotated_olsens);
+
+    BOOST_CHECK(libwrp::utility::are_equal(g_SO_rotated, g_SO_rotated_olsens, 1.0e-06));
+}
+
+
 BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_toy ) {
 
     // Set a toy one-electron matrix (which should be self-adjoint)
