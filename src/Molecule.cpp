@@ -8,7 +8,7 @@
  * @param filename
  * @return std::vector<libint2::Atom>
  */
-std::vector<libint2::Atom> libwrp::parse_filename(const std::string& filename) {
+std::vector<libint2::Atom> libwint::parse_filename(const std::string& filename) {
     std::ifstream input_file_stream (filename);
     assert(input_file_stream.good());   // If this assertion fails, we know for sure that we specified a wrong relative path
     return libint2::read_dotxyz (input_file_stream);
@@ -21,7 +21,7 @@ std::vector<libint2::Atom> libwrp::parse_filename(const std::string& filename) {
  * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
  *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
  */
-libwrp::Molecule::Molecule(const std::string& xyz_filename) :
+libwint::Molecule::Molecule(const std::string& xyz_filename) :
         xyz_filename(xyz_filename)
 {
     this->atoms = parse_filename(this->xyz_filename);
@@ -40,7 +40,7 @@ libwrp::Molecule::Molecule(const std::string& xyz_filename) :
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-libwrp::Molecule::Molecule(const std::string& xyz_filename, int molecular_charge) :
+libwint::Molecule::Molecule(const std::string& xyz_filename, int molecular_charge) :
     xyz_filename(xyz_filename)
 {
     this->atoms = parse_filename(this->xyz_filename);
@@ -53,14 +53,14 @@ libwrp::Molecule::Molecule(const std::string& xyz_filename, int molecular_charge
 
 /** @return the number of atoms in the molecule
  */
-size_t libwrp::Molecule::natoms() {
+size_t libwint::Molecule::natoms() {
     return this->atoms.size();  // atoms is a std::vector
 }
 
 
 /** @return the sum of the charges of the nuclei
  */
-size_t libwrp::Molecule::nucleic_charge() {
+size_t libwint::Molecule::nucleic_charge() {
     size_t nucleic_charge = 0;
 
     for (const auto& atom : this->atoms) {
@@ -74,7 +74,7 @@ size_t libwrp::Molecule::nucleic_charge() {
 /** @return the internuclear repulsion energy due to the nuclear framework
  *
  */
-double libwrp::Molecule::internuclear_repulsion() {
+double libwint::Molecule::internuclear_repulsion() {
     double internuclear_repulsion_energy = 0.0;
 
     auto natoms = this->natoms();
@@ -85,7 +85,7 @@ double libwrp::Molecule::internuclear_repulsion() {
             const auto atom2 = this->atoms[j];
 
             // The internuclear repulsion energy (Coulomb) for every nucleus pair is Z1 * Z2 / |R1 - R2|
-            internuclear_repulsion_energy += atom1.atomic_number * atom2.atomic_number / libwrp::distance(atom1, atom2);
+            internuclear_repulsion_energy += atom1.atomic_number * atom2.atomic_number / libwint::distance(atom1, atom2);
         }
     }
 

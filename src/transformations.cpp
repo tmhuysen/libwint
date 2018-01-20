@@ -16,7 +16,7 @@
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::MatrixXd libwrp::transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
+Eigen::MatrixXd libwint::transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
     return T.adjoint() * h * T;
 }
 
@@ -36,7 +36,7 @@ Eigen::MatrixXd libwrp::transform_one_electron_integrals(Eigen::MatrixXd& h, Eig
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::Tensor<double, 4> libwrp::transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
+Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
 
     // Since we're only getting T as a matrix, we should make the appropriate tensor to perform contractions
     Eigen::TensorMap<Eigen::Tensor<double, 2>> T_tensor (T.data(), T.rows(), T.cols());
@@ -78,7 +78,7 @@ Eigen::Tensor<double, 4> libwrp::transform_two_electron_integrals(Eigen::Tensor<
  *
  *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd libwrp::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
+Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
     return transform_one_electron_integrals(f_AO, C);
 }
 
@@ -89,7 +89,7 @@ Eigen::MatrixXd libwrp::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixX
  *
  *  transform and return the matrix in the AO basis
  */
-Eigen::MatrixXd libwrp::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
+Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
     Eigen::MatrixXd C_inverse = C.inverse();
     return transform_one_electron_integrals(f_SO, C_inverse);
 }
@@ -101,7 +101,7 @@ Eigen::MatrixXd libwrp::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixX
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> libwrp::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
+Eigen::Tensor<double, 4> libwint::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
     return transform_two_electron_integrals(g_AO, C);
 };
 
@@ -110,7 +110,7 @@ Eigen::Tensor<double, 4> libwrp::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::MatrixXd libwrp::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U) {
+Eigen::MatrixXd libwint::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U) {
 
     // Check if the given matrix U is unitary
     if (!U.isUnitary()) {
@@ -125,7 +125,7 @@ Eigen::MatrixXd libwrp::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U)
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::Tensor<double, 4> libwrp::rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U) {
+Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U) {
 
     // Check if the given matrix U is unitary
     if (!U.isUnitary()) {

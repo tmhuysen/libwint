@@ -1,11 +1,11 @@
-#ifndef LIBWRP_TRANSFORMATIONS_HPP
-#define LIBWRP_TRANSFORMATIONS_HPP
+#ifndef LIBWINT_TRANSFORMATIONS_HPP
+#define LIBWINT_TRANSFORMATIONS_HPP
 
 #include <Eigen/Dense>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace libwrp {
+namespace libwint {
 
 
 /** Given:
@@ -82,6 +82,6 @@ Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U);
  */
 Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U);
 
-}  // namespace libwrp
+}  // namespace libwint
 
-#endif // LIBWRP_TRANSFORMATIONS_HPP
+#endif // LIBWINT_TRANSFORMATIONS_HPP

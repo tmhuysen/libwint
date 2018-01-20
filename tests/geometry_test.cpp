@@ -16,14 +16,14 @@ BOOST_AUTO_TEST_CASE ( distance ) {
     libint2::Atom D {0, 0, 0, 5};
 
     // Check their distances
-    BOOST_CHECK(std::abs(libwrp::distance(A, B) - 5) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(A, C) - std::sqrt(18.0)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(A, B) - libwrp::distance(B, C)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(B, C) - 5) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(B, D) - 1) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(A, B) - 5) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(A, C) - std::sqrt(18.0)) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(A, B) - libwint::distance(B, C)) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(B, C) - 5) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(B, D) - 1) < 1.0e-8);
 
     // Check that the distances are symmetric
-    BOOST_CHECK(std::abs(libwrp::distance(A, B) - libwrp::distance(B, A)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(A, C) - libwrp::distance(C, A)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwrp::distance(B, C) - libwrp::distance(C, B)) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(A, B) - libwint::distance(B, A)) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(A, C) - libwint::distance(C, A)) < 1.0e-8);
+    BOOST_CHECK(std::abs(libwint::distance(B, C) - libwint::distance(C, B)) < 1.0e-8);
 }

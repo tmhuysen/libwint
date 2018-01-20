@@ -6,7 +6,7 @@
 
 /** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
 */
-void libwrp::utility::read_array_from_file(const std::string& filename, Eigen::MatrixXd& M){
+void libwint::utility::read_array_from_file(const std::string& filename, Eigen::MatrixXd& M){
     std::ifstream file (filename);
 
     if (file.is_open()) {
@@ -29,7 +29,7 @@ void libwrp::utility::read_array_from_file(const std::string& filename, Eigen::M
 
 /** Read an array from a given filename line by line, and add the elements to a given tensor (rank-4 tensor)
 */
-void libwrp::utility::read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M){
+void libwint::utility::read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M){
     std::ifstream file (filename);
 
     if (file.is_open()) {
@@ -54,7 +54,7 @@ void libwrp::utility::read_array_from_file(const std::string& filename, Eigen::T
 
 /** Return if two rank-4 tensors are approximately equal
  */
-bool libwrp::utility::are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance){
+bool libwint::utility::are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance){
     auto dim = M.dimension(0);
 
     // Since Eigen::Tensor doesn't have an isApprox yet, we will check every pair of values manually
@@ -75,7 +75,7 @@ bool libwrp::utility::are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::
 
 /** Print the contents of a rank-four tensor in a fashionable way
  */
-void libwrp::utility::print(const Eigen::Tensor<double, 4>& T) {
+void libwint::utility::print(const Eigen::Tensor<double, 4>& T) {
     auto dim = T.dimension(0);
 
     for (size_t i = 0; i < dim; i++) {

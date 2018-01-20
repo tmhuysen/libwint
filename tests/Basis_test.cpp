@@ -14,8 +14,8 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
 
-    libwrp::Molecule water (xyzfilename);
-    libwrp::Basis basis (water, basis_name);
+    libwint::Molecule water (xyzfilename);
+    libwint::Basis basis (water, basis_name);
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
     BOOST_CHECK_EQUAL(basis.nbf(), 7);
@@ -34,8 +34,8 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
 
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
-    libwrp::Molecule water (xyzfilename);
-    libwrp::Basis basis (water, basis_name);
+    libwint::Molecule water (xyzfilename);
+    libwint::Basis basis (water, basis_name);
     auto nbf = basis.nbf();
 
     basis.compute_integrals();
@@ -45,15 +45,15 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     Eigen::MatrixXd V_test (nbf, nbf);
     Eigen::Tensor<double, 4> tei_test (nbf, nbf, nbf, nbf);
 
-    libwrp::utility::read_array_from_file("../tests/ref_data/overlap.data", S_test);
-    libwrp::utility::read_array_from_file("../tests/ref_data/kinetic.data", T_test);
-    libwrp::utility::read_array_from_file("../tests/ref_data/nuclear.data", V_test);
-    libwrp::utility::read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
+    libwint::utility::read_array_from_file("../tests/ref_data/overlap.data", S_test);
+    libwint::utility::read_array_from_file("../tests/ref_data/kinetic.data", T_test);
+    libwint::utility::read_array_from_file("../tests/ref_data/nuclear.data", V_test);
+    libwint::utility::read_array_from_file("../tests/ref_data/two_electron.data", tei_test);
 
     BOOST_CHECK(basis.S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(basis.T.isApprox(T_test, 1.0e-8));
     BOOST_CHECK(basis.V.isApprox(V_test, 1.0e-8));
-    BOOST_CHECK(libwrp::utility::are_equal(basis.tei, tei_test, 1.0e-6));
+    BOOST_CHECK(libwint::utility::are_equal(basis.tei, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();
@@ -69,9 +69,9 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     const std::string basis_name = "STO-3G";
 
     // Create a Molecule and a Basis
-    libwrp::Molecule h2 (xyzfilename);
+    libwint::Molecule h2 (xyzfilename);
     BOOST_CHECK(std::abs(h2.atoms[1].z - 1.4) < 1.0e-6);    // Check if the conversion from Angstrom to a.u. is correct
-    libwrp::Basis basis (h2, basis_name);
+    libwint::Basis basis (h2, basis_name);
     BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     BOOST_CHECK(H_core.isApprox(H_core_ref, 1.0e-4));
 
 
-    // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this libwrp gives them in chemist's notation as well.
+    // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this libwint gives them in chemist's notation as well.
     BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - 0.7746) < 1.0e-4);
     BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - basis.tei(1,1,1,1)) < 1.0e-12);
 

@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE ( transform_one_electron_trivial ) {
     Eigen::MatrixXd T = Eigen::MatrixXd::Identity(3, 3);
     Eigen::MatrixXd h = Eigen::MatrixXd::Random(3, 3);
 
-    Eigen::MatrixXd h_transformed = libwrp::transform_one_electron_integrals(h, T);
+    Eigen::MatrixXd h_transformed = libwint::transform_one_electron_integrals(h, T);
 
     BOOST_CHECK(h_transformed.isApprox(h, 1.0e-12));
 }
@@ -29,9 +29,9 @@ BOOST_AUTO_TEST_CASE ( transform_one_electron_and_back ) {
     Eigen::MatrixXd T_inverse = T.inverse();
 
     // Transform to SO basis
-    Eigen::MatrixXd h_transformed = libwrp::transform_one_electron_integrals(h, T);
+    Eigen::MatrixXd h_transformed = libwint::transform_one_electron_integrals(h, T);
 
-    BOOST_CHECK(h.isApprox(libwrp::transform_one_electron_integrals(h_transformed, T_inverse), 1.0e-12));
+    BOOST_CHECK(h.isApprox(libwint::transform_one_electron_integrals(h_transformed, T_inverse), 1.0e-12));
 }
 
 
@@ -42,9 +42,9 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_trivial ) {
     Eigen::Tensor<double, 4> g (3, 3, 3, 3);
     g.setRandom();
 
-    Eigen::Tensor<double, 4> g_transformed = libwrp::transform_AO_to_SO(g, T);
+    Eigen::Tensor<double, 4> g_transformed = libwint::transform_AO_to_SO(g, T);
 
-    BOOST_CHECK(libwrp::utility::are_equal(g, g_transformed, 1.0e-12));
+    BOOST_CHECK(libwint::utility::are_equal(g, g_transformed, 1.0e-12));
 }
 
 
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_olsens ) {
 
     // We can find a reference algorithm in the olsens branch from Ayer's lab
     Eigen::Tensor<double, 4> g_transformed_ref (2, 2, 2, 2);
-    libwrp::utility::read_array_from_file("../tests/ref_data/rotated1.data", g_transformed_ref);
+    libwint::utility::read_array_from_file("../tests/ref_data/rotated1.data", g_transformed_ref);
 
     // Set the same matrix and tensor
     Eigen::MatrixXd T (2, 2);
@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_olsens ) {
         }
     }
 
-    Eigen::Tensor<double, 4> g_SO = libwrp::transform_AO_to_SO(g_transformed, T);
-    BOOST_CHECK(libwrp::utility::are_equal(g_SO, g_transformed_ref, 1.0e-06));
+    Eigen::Tensor<double, 4> g_SO = libwint::transform_AO_to_SO(g_transformed, T);
+    BOOST_CHECK(libwint::utility::are_equal(g_SO, g_transformed_ref, 1.0e-06));
 }
 
 
@@ -86,12 +86,12 @@ BOOST_AUTO_TEST_CASE ( rotate ) {
     Eigen::Tensor<double, 4> g (2, 2, 2, 2);
     g.setRandom();
 
-    BOOST_REQUIRE_THROW(libwrp::rotate_integrals(h, T), std::invalid_argument);
-    BOOST_REQUIRE_THROW(libwrp::rotate_integrals(g, T), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwint::rotate_integrals(h, T), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwint::rotate_integrals(g, T), std::invalid_argument);
 
     // Test if the functions accept unitary matrices
     Eigen::MatrixXd U = Eigen::MatrixXd::Identity (2, 2);
 
-    BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(h, U));
-    BOOST_REQUIRE_NO_THROW(libwrp::rotate_integrals(g, U));
+    BOOST_REQUIRE_NO_THROW(libwint::rotate_integrals(h, U));
+    BOOST_REQUIRE_NO_THROW(libwint::rotate_integrals(g, U));
 }

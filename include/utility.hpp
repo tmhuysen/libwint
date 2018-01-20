@@ -1,12 +1,12 @@
-#ifndef LIBWRP_UTILITY_HPP
-#define LIBWRP_UTILITY_HPP
+#ifndef LIBWINT_UTILITY_HPP
+#define LIBWINT_UTILITY_HPP
 
 #include <Eigen/Dense>
 #include <string>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace libwrp {
+namespace libwint {
 namespace utility {
 
 /** Read an array from a given filename line by line, and add the elements to a given matrix (rank-2 tensor)
@@ -29,7 +29,7 @@ bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>
 void print(const Eigen::Tensor<double, 4>& T);
 
 }  // namespace utility
-}  // namespace libwrp
+}  // namespace libwint
 
 
-#endif // LIBWRP_UTILITY_HPP
+#endif // LIBWINT_UTILITY_HPP
