@@ -1,6 +1,6 @@
 # libwint
 
-[![Build Status](https://travis-ci.org/lelemmen/libwint.svg?branch=master)](https://travis-ci.org/lelemmen/libwint)
+[![Build Status](https://travis-ci.org/GQCG/libwint.svg?branch=master)](https://travis-ci.org/GQCG/libwint)
 
 A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulomb repulsion integrals in Eigen3 matrices. For the Coulomb repulsion integrals, the corresponding tensor should be accessed using **chemist's notation**.
 
