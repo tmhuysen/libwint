@@ -10,7 +10,7 @@ compiler: gcc
 
 # Enable Slack notifications, disable e-mail
 notifications:
-    slack: gqcg:13JQ7AAK5DMZPeAInhCMX6YJ
+    slack: gqcg:5PZ5ibXCwNU1b5ToWbHVIqnI
     email: false
 
 
@@ -78,7 +78,7 @@ install:
 
 # Run the build script
 script:
-  - cd /home/travis/build/lelemmen/libwrp
+  - cd /home/travis/build/GQCG/libwrp
   - mkdir build && cd build
   - cmake ..
   - make && make test && sudo make install
