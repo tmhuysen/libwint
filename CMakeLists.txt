@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 
 # Specify the project, its version and the used language
 project(libwrp
-        VERSION 2.2.1
+        VERSION 2.2.2
         LANGUAGES CXX)
 
 # To enable the C++11 standard, we have to add flags like -std=gnu+11 or so. CMake can take care of this:

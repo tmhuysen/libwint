@@ -14,7 +14,7 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 To install this library:
 1. clone the master branch
 
-        git clone https://github.com/lelemmen/libwrp.git
+        git clone https://github.com/GQCG/libwrp.git
         cd libwrp
 
 2. perform an out-of-source cmake build:
