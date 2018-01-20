@@ -1,5 +1,5 @@
-#ifndef LIBWRP_LIBWRP_HPP
-#define LIBWRP_LIBWRP_HPP
+#ifndef LIBWINT_LIBWINT_HPP
+#define LIBWINT_LIBWINT_HPP
 
 
 // This file acts as a collective include header
@@ -12,4 +12,4 @@
 #include "version.hpp"
 
 
-#endif // LIBWRP_LIBWRP_HPP
+#endif // LIBWINT_LIBWINT_HPP

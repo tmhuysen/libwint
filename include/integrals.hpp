@@ -1,5 +1,5 @@
-#ifndef LIBWRP_INTEGRALS_HPP
-#define LIBWRP_INTEGRALS_HPP
+#ifndef LIBWINT_INTEGRALS_HPP
+#define LIBWINT_INTEGRALS_HPP
 
 #include <Eigen/Dense>
 #include <unsupported/Eigen/CXX11/Tensor>
@@ -7,7 +7,7 @@
 #include <libint2.hpp>
 
 
-namespace libwrp {
+namespace libwint {
 
 /**
  * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
@@ -36,6 +36,6 @@ Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, c
  */
 void print_shell_sizes(const libint2::BasisSet& obs);
 
-} // namespace libwrp
+} // namespace libwint
 
-#endif // LIBWRP_INTEGRALS_HPP
+#endif // LIBWINT_INTEGRALS_HPP

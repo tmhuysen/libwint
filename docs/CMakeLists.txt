@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.9)
 
 
 # Specify the tex file name
-set(TEX_NAME libwrp)
+set(TEX_NAME libwint)
 
 
 # Define a LaTeX project, and specify where to find the UseLATEX commands
-project(libint-wrapper NONE)		# The NONE option has to be included, since we are not using the langue c, cxx, or Fortran
+project(libwint NONE)		# The NONE option has to be included, since we are not using the langue c, cxx, or Fortran
 include(cmake/UseLATEX.cmake)
 
 # BUILD: Add a file to the specified project

@@ -1,6 +1,6 @@
-# libwrp
+# libwint
 
-[![Build Status](https://travis-ci.org/lelemmen/libwrp.svg?branch=master)](https://travis-ci.org/lelemmen/libwrp)
+[![Build Status](https://travis-ci.org/lelemmen/libwint.svg?branch=master)](https://travis-ci.org/lelemmen/libwint)
 
 A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulomb repulsion integrals in Eigen3 matrices. For the Coulomb repulsion integrals, the corresponding tensor should be accessed using **chemist's notation**.
 
@@ -14,8 +14,8 @@ A C++ library that stores libint2 calculated overlap, kinetic, nuclear and Coulo
 To install this library:
 1. clone the master branch
 
-        git clone https://github.com/GQCG/libwrp.git
-        cd libwrp
+        git clone https://github.com/GQCG/libwint.git
+        cd libwint
 
 2. perform an out-of-source cmake build:
 
@@ -25,13 +25,13 @@ To install this library:
 
     where
     * `prefix` is the installation prefix (defaulted to `/usr/local`) you want the library to be installed at:
-        * the library `libwrp.a` will be installed in `prefix/libwrp/lib`
-        * the header files (and cmake files, see Usage) will be installed in `prefix/libwrp/include`
+        * the library `libwint.a` will be installed in `prefix/libwint/lib`
+        * the header files (and cmake files, see Usage) will be installed in `prefix/libwint/include`
 
 
 ## Usage
 Basic usage of this library can be found in the `tests` directory. If you use CMake in other projects, you can add the following CMake command to the CMakeLists.txt-file:
 
-    find_package(libwrp x.y.z)
+    find_package(libwint x.y.z)
 
-where `x.y.z` is the version number. CMake then provides the commands `libwrp_INCLUDE_DIRS` to be used in your `target_include_directories` and the library `libwrp` to be used in your `target_link_libraries`.
+where `x.y.z` is the version number. CMake then provides the commands `libwint_INCLUDE_DIRS` to be used in your `target_include_directories` and the library `libwint` to be used in your `target_link_libraries`.

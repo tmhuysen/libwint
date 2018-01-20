@@ -10,7 +10,7 @@
 
  * @return: an Eigen::MatrixXd storing the integrals
  */
-Eigen::MatrixXd libwrp::compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::MatrixXd libwint::compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
     const auto nsh = static_cast<size_t>(obs.size());    // nsh: number of shells in the obs
     const auto nbf = static_cast<size_t>(obs.nbf());     // nbf: number of basis functions in the obs
@@ -77,7 +77,7 @@ Eigen::MatrixXd libwrp::compute_1body_integrals(const libint2::Operator& opertyp
 
  * @return: an Eigen::Tensor<double, 4> storing the integrals
  */
-Eigen::Tensor<double, 4> libwrp::compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
+Eigen::Tensor<double, 4> libwint::compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
     // We have to static_cast to LONG, as clang++ else gives the following errors:
     //  error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'value_type' (aka 'long') in initializer list
     //  note: insert an explicit cast to silence this issue
@@ -150,7 +150,7 @@ Eigen::Tensor<double, 4> libwrp::compute_2body_integrals(const libint2::BasisSet
 /**
  * Prints the sizes (i.e. the number of basis functions in them) of all shells in a given basis set object.
  */
-void libwrp::print_shell_sizes(const libint2::BasisSet& obs) {
+void libwint::print_shell_sizes(const libint2::BasisSet& obs) {
     auto size = obs.size();
     for (auto i = 0; i < size; i++) {
         auto sh = obs[i]; // i traverses the shell

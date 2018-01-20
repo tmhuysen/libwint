@@ -1,11 +1,11 @@
-#ifndef LIBWRP_MOLECULE_HPP
-#define LIBWRP_MOLECULE_HPP
+#ifndef LIBWINT_MOLECULE_HPP
+#define LIBWINT_MOLECULE_HPP
 
 #include <libint2.hpp>
 #include <string>
 
 
-namespace libwrp {
+namespace libwint {
 /** Parses a file name to obtain atoms
  *
  * @param filename
@@ -60,6 +60,6 @@ public:
     double internuclear_repulsion();
 };
 
-} // namespace libwrp
+} // namespace libwint
 
-#endif // LIBWRP_MOLECULE_HPP
+#endif // LIBWINT_MOLECULE_HPP

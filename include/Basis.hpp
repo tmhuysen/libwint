@@ -1,5 +1,5 @@
-#ifndef LIBWRP_BASIS_HPP
-#define LIBWRP_BASIS_HPP
+#ifndef LIBWINT_BASIS_HPP
+#define LIBWINT_BASIS_HPP
 
 #include "Molecule.hpp"
 
@@ -7,7 +7,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace libwrp {
+namespace libwint {
 
 class Basis {
 private:
@@ -62,6 +62,6 @@ public:
     void compute_integrals();
 };
 
-} // namespace libwrp
+} // namespace libwint
 
-#endif // LIBWRP_BASIS_HPP
+#endif // LIBWINT_BASIS_HPP
