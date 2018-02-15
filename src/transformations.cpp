@@ -1,5 +1,7 @@
 #include "transformations.hpp"
 
+#include <iostream>
+
 
 /** Given:
  *      - a matrix h, which contains one-electron integrals in some basis B
@@ -134,3 +136,73 @@ Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, 
 
     return transform_two_electron_integrals(g, U);
 };
+
+
+/** Give the M-dimensional Jacobi rotation matrix (with an angle theta) for the orbitals P and Q (P < Q).
+ *
+ * M is the actual dimension of the matrix that is returned
+ * P and Q represent the rows and columns, i.e. they start at 0
+ *
+ * Note that we work with the (cos, sin, -sin, cos) definition
+ */
+Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M) {
+
+    if (P >= Q) {
+        throw std::invalid_argument("P should be smaller than Q");
+    }
+
+    if ((M < P + 1) || (M < Q + 1)) {
+        throw std::invalid_argument("M should be larger than (P+1) and larger than (Q+1).");
+    }
+
+    // The union of these two conditions also excludes M < 2
+
+
+
+    // We'll start the construction with an identity matrix
+    Eigen::MatrixXd J = Eigen::MatrixXd::Identity(M, M);
+
+    // Add the Jacobi rotation terms
+    J(P, P) = std::cos(theta);
+    J(P, Q) = std::sin(theta);
+    J(Q, P) = -std::sin(theta);
+    J(Q, Q) = std::cos(theta);
+
+    return J;
+}
+
+
+/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
+ *
+ * In this function, I've implemented it so it can be checked to be correct.
+ * In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
+ */
+Eigen::MatrixXd libwint::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+
+    // Assert the assumption of a symmetric matrix
+    assert(h.isApprox(h.transpose()));
+
+    // Initialize the rotated matrix by making a copy of the original matrix
+    Eigen::MatrixXd h_rotated = h;
+
+    // Since we have a Jacobi rotation, we can directly fill in rows and columns P and Q
+    // Update the P-th and Q-th row
+    for (size_t S = 0; S < h.cols(); S++) {
+        h_rotated(P,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
+        h_rotated(Q,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
+    }
+
+    // Update the P-th and Q-th column
+    for (size_t R = 0; R < h.rows(); R++) {
+        h_rotated(R,P) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
+        h_rotated(R,Q) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
+    }
+
+    // Update the four intersections (P,P) (P,Q) (Q,P) (Q,Q)
+    h_rotated(P,P) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(P,Q) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(Q,P) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
+    h_rotated(Q,Q) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
+
+    return h_rotated;
+}
