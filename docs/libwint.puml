@@ -1,0 +1,99 @@
+@startuml
+
+
+
+package libint #c6ffb3 {
+    namespace libint2 #ffffff {
+        class Atom
+    }
+}
+
+
+
+
+namespace libwint #ffffff {
+    class global {
+        .. Molecule ..
+        double distance(const libint2::Atom& atom1, const libint2::Atom& atom2)
+        .. geometry ..
+        std::vector<libint2::Atom> parse_filename(const std::string& filename)
+        .. integrals ..
+        Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+        Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+        void print_shell_sizes(const libint2::BasisSet& obs)
+        .. transformations ..
+        Eigen::MatrixXd transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T)
+        Eigen::Tensor<double, 4> transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T)
+
+        Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C)
+        Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C)
+        Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C)
+
+        Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U)
+        Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U)
+
+        Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M)
+        Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
+        Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M)
+        Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
+    }
+
+
+    namespace utility {
+        class global {
+            void read_array_from_file(const std::string& filename, Eigen::MatrixXd& M)
+            void read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M)
+            bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance)
+            void print(const Eigen::Tensor<double, 4>& T)
+        }
+    }
+
+    class Basis {
+        __ private data __
+        - bool are_computed_overlap_integrals
+        - bool are_computed_nuclear_integrals
+        - bool are_computed_kinetic_integrals
+        - bool are_computed_tei
+        __ public data __
+        + Molecule& molecule
+        + const std::string name
+        + Eigen::MatrixXd S
+        + Eigen::MatrixXd V
+        + Eigen::MatrixXd T
+        + Eigen::Tensor<double, 4> tei
+        == constructors ==
+        Basis(Molecule& molecule, const std::string& basis_name)
+        __ public methods __
+        + size_t nbf()
+        + void compute_overlap_integrals()
+        + void compute_kinetic_integrals()
+        + void compute_nuclear_integrals()
+        + void compute_two_electron_integrals()
+        + void compute_integrals()
+    }
+
+
+    class Molecule {
+        __ public data __
+        +const std::string xyz_filename
+        +std::vector<libint2::Atom> atoms
+        +size_t nelec
+        == constructors ==
+        Molecule(const std::string& xyz_filename)
+        Molecule(const std::string& xyz_filename, int molecular_charge)
+        __ public methods __
+        +size_t natoms()
+        +size_t nucleic_charge()
+        +double internuclear_repulsion()
+    }
+
+}
+
+
+
+libwint.Basis o--> libwint.Molecule
+libwint.Molecule *-left> "1..*" libint2.Atom
+
+
+
+@enduml
