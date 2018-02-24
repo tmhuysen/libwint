@@ -4,7 +4,32 @@
 
 package libint #c6ffb3 {
     namespace libint2 #ffffff {
-        class Atom
+        class Atom {
+            + atomic_number
+            + x
+            + y
+            + z
+        }
+
+        class Engine {
+            + const target_ptr_vec& results()
+            + const Engine::target_ptr_vec& Engine::compute()
+        }
+
+        class BasisSet {
+            + size_type size()
+            + long nbf()
+            + size_t max_nprim()
+            + long max_l()
+            + const std::vector<size_t>& shell2bf()
+        }
+
+        class Operator {
+            overlap
+            kinetic
+            nuclear
+            coulomb
+        }
     }
 }
 
@@ -14,13 +39,7 @@ package libint #c6ffb3 {
 namespace libwint #ffffff {
     class global {
         .. Molecule ..
-        double distance(const libint2::Atom& atom1, const libint2::Atom& atom2)
-        .. geometry ..
-        std::vector<libint2::Atom> parse_filename(const std::string& filename)
-        .. integrals ..
-        Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        void print_shell_sizes(const libint2::BasisSet& obs)
+            std::vector<libint2::Atom> parse_filename(const std::string& filename)
         .. transformations ..
         Eigen::MatrixXd transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T)
         Eigen::Tensor<double, 4> transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T)
@@ -38,6 +57,16 @@ namespace libwint #ffffff {
         Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
     }
 
+    class integrals {
+        Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+        Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+        void print_shell_sizes(const libint2::BasisSet& obs)
+    }
+
+    class geometry {
+        double distance(const libint2::Atom& atom1, const libint2::Atom& atom2)
+    }
+
 
     namespace utility {
         class global {
@@ -50,6 +79,7 @@ namespace libwint #ffffff {
 
     class Basis {
         __ private data __
+        - libint2::BasisSet libint_basis
         - bool are_computed_overlap_integrals
         - bool are_computed_nuclear_integrals
         - bool are_computed_kinetic_integrals
@@ -92,8 +122,15 @@ namespace libwint #ffffff {
 
 
 libwint.Basis o--> libwint.Molecule
-libwint.Molecule *-left> "1..*" libint2.Atom
+libwint.Basis *--> libint2.BasisSet
 
+libwint.Molecule *--> "1..*" libint2.Atom
+
+libwint.integrals o--> libint2.Engine
+libwint.integrals ..> libint2.Operator
+libwint.integrals ..> libint2.BasisSet
+
+libwint.geometry ..> libint2.Atom
 
 
 @enduml
