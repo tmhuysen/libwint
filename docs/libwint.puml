@@ -13,7 +13,7 @@ package libint #c6ffb3 {
 
         class Engine {
             + const target_ptr_vec& **results**()
-            + const Engine::target_ptr_vec& **compute**()
+            + const Engine::target_ptr_vec& **calculate**()
         }
 
         class BasisSet {
@@ -59,31 +59,38 @@ namespace libwint #ffffff {
 
     class Basis {
         __ private members __
-            - libint2::BasisSet libint_basis
-            - bool are_computed_overlap_integrals
-            - bool are_computed_nuclear_integrals
-            - bool are_computed_kinetic_integrals
-            - bool are_computed_tei
+            - bool are_calculated_overlap_integrals
+            - bool are_calculated_nuclear_integrals
+            - bool are_calculated_kinetic_integrals
+            - bool are_calculated_tei
+
+            - libwint::Molecule& molecule
+            - const std::string name
+
+            - libint2::BasisSet& libint_basis
+
+            + Eigen::MatrixXd S
+            + Eigen::MatrixXd T
+            + Eigen::MatrixXd V
+            + Eigen::Tensor<double, 4> eri
         __ private methods __
-           - Eigen::MatrixXd **compute_1body_integrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-           - Eigen::Tensor<double, 4> **compute_2body_integrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+           - Eigen::MatrixXd **calculateOneBodyIntegrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+           - Eigen::Tensor<double, 4> **calculateTwoElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
         == constructors ==
             Basis(Molecule& molecule, const std::string& basis_name)
-        __ public members __
-            + Molecule& molecule
-            + const std::string name
-            + Eigen::MatrixXd S
-            + Eigen::MatrixXd V
-            + Eigen::MatrixXd T
-            + Eigen::Tensor<double, 4> tei
         __ public methods __
-            + size_t **nbf**()
-            + void **compute_overlap_integrals**()
-            + void **compute_kinetic_integrals**()
-            + void **compute_nuclear_integrals**()
-            + void **compute_two_electron_integrals**()
-            + void **compute_integrals**()
-            + void **print_shell_sizes**(const libint2::BasisSet& obs)
+            + Eigen::MatrixXd **get_S**()
+            + Eigen::MatrixXd **get_T**()
+            + Eigen::MatrixXd **get_V**()
+            + Eigen::Tensor<double, 4> **get_eri**()
+
+            + size_t **calculateNumBF**()
+            + void **calculateOverlapIntegrals**()
+            + void **calculateKineticIntegrals**()
+            + void **calculateNuclearIntegrals**()
+            + void **calculateTwoElectronIntegrals**()
+            + void **calculateIntegrals**()
+            + void **printShellSizes**()
     }
 
 
@@ -100,7 +107,8 @@ namespace libwint #ffffff {
             Molecule(const std::string& xyz_filename, int molecular_charge)
         __ public methods __
             + site_t **get_N**()
-            + double **calculate_internuclear_repulsion**()
+
+            + double **calculateInternuclearRepulsion**()
     }
 
 }
