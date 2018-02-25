@@ -57,12 +57,6 @@ namespace libwint #ffffff {
             Eigen::MatrixXd **rotate_one_electron_integrals_jacobi**(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
     }
 
-    class integrals {
-        Eigen::MatrixXd **compute_1body_integrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        Eigen::Tensor<double, 4> **compute_2body_integrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        void **print_shell_sizes**(const libint2::BasisSet& obs)
-    }
-
     class Basis {
         __ private members __
             - libint2::BasisSet libint_basis
@@ -70,6 +64,9 @@ namespace libwint #ffffff {
             - bool are_computed_nuclear_integrals
             - bool are_computed_kinetic_integrals
             - bool are_computed_tei
+        __ private methods __
+           - Eigen::MatrixXd **compute_1body_integrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+           - Eigen::Tensor<double, 4> **compute_2body_integrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
         == constructors ==
             Basis(Molecule& molecule, const std::string& basis_name)
         __ public members __
@@ -86,12 +83,13 @@ namespace libwint #ffffff {
             + void **compute_nuclear_integrals**()
             + void **compute_two_electron_integrals**()
             + void **compute_integrals**()
+            + void **print_shell_sizes**(const libint2::BasisSet& obs)
     }
 
 
     class Molecule {
         __ private members __
-
+            
         __ private methods __
             - double **internuclear_distance**(const libint2::Atom& atom1, const libint2::Atom& atom2)
         == constructors ==
@@ -113,12 +111,13 @@ namespace libwint #ffffff {
 
 libwint.Basis o--> libwint.Molecule
 libwint.Basis *--> libint2.BasisSet
+libwint.Basis ..> libint2.Operator
+libwint.Basis *--> libint2.Engine
 
 libwint.Molecule *--> "1..*" libint2.Atom
 
-libwint.integrals o--> libint2.Engine
-libwint.integrals ..> libint2.Operator
-libwint.integrals ..> libint2.BasisSet
+
+
 
 
 
