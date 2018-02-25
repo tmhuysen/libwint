@@ -30,6 +30,11 @@ package libint #c6ffb3 {
             nuclear
             coulomb
         }
+
+        class global {
+            void initialize()
+            void finalize()
+        }
     }
 }
 
@@ -56,10 +61,11 @@ namespace libwint {
         == constructors ==
             Basis(Molecule& molecule, const std::string& basis_name)
         __ public methods __
-            + Eigen::MatrixXd **get_S**()
-            + Eigen::MatrixXd **get_T**()
-            + Eigen::MatrixXd **get_V**()
-            + Eigen::Tensor<double, 4> **get_eri**()
+            + libwint::Molecule& **get_molecule**() const
+            + Eigen::MatrixXd& **get_S**() const
+            + Eigen::MatrixXd& **get_T**() const
+            + Eigen::MatrixXd& **get_V**() const
+            + Eigen::Tensor<double, 4>& **get_eri**() const
 
             + size_t **calculateNumBF**()
             + void **calculateOverlapIntegrals**()
@@ -138,6 +144,7 @@ libwint.AOBasis *--> libwint.LibintCommunicator
 libwint.LibintCommunicator *--> libint2.BasisSet
 libwint.LibintCommunicator ..> libint2.Operator
 libwint.LibintCommunicator *--> libint2.Engine
+libwint.LibintCommunicator ..> libint2.global
 
 libwint.Molecule *--> "1..*" libint2.Atom
 
