@@ -63,26 +63,22 @@ namespace libwint #ffffff {
         void **print_shell_sizes**(const libint2::BasisSet& obs)
     }
 
-    class geometry {
-        double **distance**(const libint2::Atom& atom1, const libint2::Atom& atom2)
-    }
-
     class Basis {
-        __ private data __
+        __ private members __
             - libint2::BasisSet libint_basis
             - bool are_computed_overlap_integrals
             - bool are_computed_nuclear_integrals
             - bool are_computed_kinetic_integrals
             - bool are_computed_tei
-        __ public data __
+        == constructors ==
+            Basis(Molecule& molecule, const std::string& basis_name)
+        __ public members __
             + Molecule& molecule
             + const std::string name
             + Eigen::MatrixXd S
             + Eigen::MatrixXd V
             + Eigen::MatrixXd T
             + Eigen::Tensor<double, 4> tei
-        == constructors ==
-            Basis(Molecule& molecule, const std::string& basis_name)
         __ public methods __
             + size_t **nbf**()
             + void **compute_overlap_integrals**()
@@ -94,13 +90,17 @@ namespace libwint #ffffff {
 
 
     class Molecule {
-        __ public data __
-            +const std::string xyz_filename
-            +std::vector<libint2::Atom> atoms
-            +size_t nelec
+        __ private members __
+
+        __ private methods __
+            - double **internuclear_distance**(const libint2::Atom& atom1, const libint2::Atom& atom2)
         == constructors ==
             Molecule(const std::string& xyz_filename)
             Molecule(const std::string& xyz_filename, int molecular_charge)
+        __ public members __
+            +const std::string xyz_filename
+            +std::vector<libint2::Atom> atoms
+            +size_t nelec
         __ public methods __
             +size_t **natoms**()
             +size_t **nucleic_charge**()
@@ -120,7 +120,7 @@ libwint.integrals o--> libint2.Engine
 libwint.integrals ..> libint2.Operator
 libwint.integrals ..> libint2.BasisSet
 
-libwint.geometry ..> libint2.Atom
+
 
 
 @enduml
