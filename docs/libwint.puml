@@ -72,10 +72,15 @@ namespace libwint {
 
 
     class SOBasis {
+        __ private members __
+            const libwint::AOBasis& ao_basis
+            const libwint::MatrixXd& C
         __ private methods __
             - Eigen::MatrixXd **constructJacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
             - void **transformOneElectronIntegrals**(Eigen::MatrixXd& T)
             - void **transformTwoElectronIntegrals**(Eigen::MatrixXd& T)
+        == constructors ==
+            SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C)
         __ public methods __
             + void **transform**(Eigen::MatrixXd& T)
     }
@@ -137,11 +142,7 @@ libwint.LibintCommunicator *--> libint2.Engine
 libwint.Molecule *--> "1..*" libint2.Atom
 
 libwint.SOBasis ..> libwint.IntegralTransformations
-
-
-
-
-
+libwint.SOBasis o--> libwint.AOBasis
 
 
 @enduml
