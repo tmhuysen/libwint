@@ -57,7 +57,7 @@ namespace libwint {
             - bool are_calculated_overlap_integrals
             - bool are_calculated_nuclear_integrals
             - bool are_calculated_kinetic_integrals
-            - bool are_calculated_eri
+            - bool are_calculated_electron_repulsion_integrals
 
             - libwint::Molecule& molecule
             - const std::string name
@@ -66,7 +66,7 @@ namespace libwint {
             + Eigen::MatrixXd S
             + Eigen::MatrixXd T
             + Eigen::MatrixXd V
-            + Eigen::Tensor<double, 4> eri
+            + Eigen::Tensor<double, 4> g
         == constructors ==
             **Basis**(Molecule& molecule, const std::string& basis_name)
         __ public methods __
@@ -74,7 +74,7 @@ namespace libwint {
             + Eigen::MatrixXd& **get_S**() const
             + Eigen::MatrixXd& **get_T**() const
             + Eigen::MatrixXd& **get_V**() const
-            + Eigen::Tensor<double, 4>& **get_eri**() const
+            + Eigen::Tensor<double, 4>& **get_g**() const
 
             + size_t **calculateNumBF**()
             + void **calculateOverlapIntegrals**()
@@ -92,6 +92,7 @@ namespace libwint {
             - const libwint::MatrixXd& C
             - Eigen::MatrixXd& h_SO
             - Eigen::Tensor<double, 4>& g_SO
+            - const size_t K
         __ private methods __
             - Eigen::MatrixXd **constructJacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
             - void **transformOneElectronIntegrals**(Eigen::MatrixXd& T)
@@ -101,6 +102,7 @@ namespace libwint {
         __ public methods __
             + inline Eigen::MatrixXd& **get_h_SO**() const
             + inline Eigen::Tensor<double, 4>& **get_g_SO**() const
+            + inline const size_t **get_K**() const
 
             + void **transform**(Eigen::MatrixXd& T)
     }
