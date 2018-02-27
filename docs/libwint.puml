@@ -63,10 +63,10 @@ namespace libwint {
             - const std::string name
             - libint2::BasisSet& libint_basis
 
-            + Eigen::MatrixXd S
-            + Eigen::MatrixXd T
-            + Eigen::MatrixXd V
-            + Eigen::Tensor<double, 4> g
+            + Eigen::MatrixXd& S
+            + Eigen::MatrixXd& T
+            + Eigen::MatrixXd& V
+            + Eigen::Tensor<double, 4>& g
         == constructors ==
             **Basis**(Molecule& molecule, const std::string& basis_name)
         __ public methods __
@@ -100,11 +100,13 @@ namespace libwint {
         == constructors ==
             **SOBasis**(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C)
         __ public methods __
+            + inline const libwint::AOBasis& **get_ao_basis**() const
             + inline Eigen::MatrixXd& **get_h_SO**() const
             + inline Eigen::Tensor<double, 4>& **get_g_SO**() const
             + inline const size_t **get_K**() const
 
             + void **transform**(Eigen::MatrixXd& T)
+            + void **transformJacobi**(size_t p, size_t q, double angle)
     }
 
 
