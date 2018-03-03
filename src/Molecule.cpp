@@ -2,7 +2,6 @@
 
 #include <boost/filesystem.hpp>
 
-#include "geometry.hpp"
 
 
 namespace libwint {
@@ -15,7 +14,7 @@ namespace libwint {
 /**
  *  Parses a @param filename to @return a std::vector<libint2::Atom>
  */
-std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename) {
+std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename) const {
 
     // If the filename doesn't end with .xyz, we assume that the user supplied a wrong file
     boost::filesystem::path path (filename);
@@ -31,30 +30,6 @@ std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename
     }
 
     return libint2::read_dotxyz (input_file_stream);  // can't make a reference because that's how libint2 is implemented
-}
-
-
-/** @return the sum of all the charges of the nuclei
- */
-size_t Molecule::calculateTotalNucleicCharge() {
-    size_t nucleic_charge = 0;
-
-    for (const auto& atom : this->atoms) {
-        nucleic_charge += atom.atomic_number;
-    }
-
-    return nucleic_charge;
-}
-
-
-/** @return the distance between two libint2::Atoms, in Bohr
- */
-double Molecule::calculateInternuclearDistance(size_t index1, size_t index2) {
-
-    const libint2::Atom atom1 = this->atoms[index1];
-    const libint2::Atom atom2 = this->atoms[index2];
-
-    return std::sqrt((atom1.x - atom2.x)*(atom1.x - atom2.x) + (atom1.y - atom2.y)*(atom1.y - atom2.y) + (atom1.z - atom2.z)*(atom1.z - atom2.z));
 }
 
 
@@ -116,24 +91,55 @@ Molecule::Molecule(const std::vector<libint2::Atom>& atoms, int molecular_charge
 {}
 
 
+
+/*
+ *  GETTERS
+ */
+
+size_t Molecule::get_N() const { return this->N; }
+
+
+
 /*
  *  PUBLIC METHODS
  */
 
 /** @return the number of atoms in the molecule
  */
-size_t Molecule::natoms() {
-    return this->atoms.size();  // atoms is a std::vector
+size_t Molecule::numberOfAtoms() const { return this->atoms.size(); }  // atoms is a std::vector
+
+
+/** @return the sum of all the charges of the nuclei
+ */
+size_t Molecule::calculateTotalNucleicCharge() const {
+    size_t nucleic_charge = 0;
+
+    for (const auto& atom : this->atoms) {
+        nucleic_charge += atom.atomic_number;
+    }
+
+    return nucleic_charge;
+}
+
+
+/** @return the distance between two libint2::Atoms, in Bohr
+ */
+double Molecule::calculateInternuclearDistance(size_t index1, size_t index2) const {
+
+    const libint2::Atom atom1 = this->atoms[index1];
+    const libint2::Atom atom2 = this->atoms[index2];
+
+    return std::sqrt((atom1.x - atom2.x)*(atom1.x - atom2.x) + (atom1.y - atom2.y)*(atom1.y - atom2.y) + (atom1.z - atom2.z)*(atom1.z - atom2.z));
 }
 
 
 /** @return the internuclear repulsion energy due to the nuclear framework
  *
  */
-double Molecule::internuclear_repulsion() {
+double Molecule::calculateInternuclearRepulsionEnergy() const {
     double internuclear_repulsion_energy = 0.0;
 
-    auto natoms = this->natoms();
+    auto natoms = this->numberOfAtoms();
     // Sum over every unique nucleus pair
     for (size_t i = 0; i < natoms; i++) {
         for (size_t j = i + 1; j < natoms; j++ ) {
@@ -141,7 +147,7 @@ double Molecule::internuclear_repulsion() {
             const auto atom2 = this->atoms[j];
 
             // The internuclear repulsion energy (Coulomb) for every nucleus pair is Z1 * Z2 / |R1 - R2|
-            internuclear_repulsion_energy += atom1.atomic_number * atom2.atomic_number / libwint::distance(atom1, atom2);
+            internuclear_repulsion_energy += atom1.atomic_number * atom2.atomic_number / this->calculateInternuclearDistance(i, j);
         }
     }
 

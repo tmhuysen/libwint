@@ -6,6 +6,7 @@
 #include <libint2.hpp>
 
 
+
 namespace libwint {
 
 
@@ -18,7 +19,7 @@ private:
     /**
      *  Parses a @param filename to @return a std::vector<libint2::Atom>
      */
-    std::vector<libint2::Atom> parseXYZFilename(const std::string filename);
+    std::vector<libint2::Atom> parseXYZFilename(const std::string filename) const;
 
 
 
@@ -62,29 +63,27 @@ public:
     Molecule(const std::vector<libint2::Atom>& atoms, int molecular_charge);
 
 
+    // Getters
+    size_t get_N() const;
+
 
     // Methods
+    /** @return the number of atoms in the molecule
+     */
+    size_t numberOfAtoms() const;
+
     /** @return the sum of all the charges of the nuclei
      */
-    size_t calculateTotalNucleicCharge();
+    size_t calculateTotalNucleicCharge() const;
 
     /** @return the distance between two libint2::Atoms, in Bohr
      */
-    double calculateInternuclearDistance(size_t index1, size_t index2);
-
-
-    /** @return the number of atoms in the molecule
-     */
-    size_t natoms();
-
-
-
-
+    double calculateInternuclearDistance(size_t index1, size_t index2) const;
 
     /** @return the internuclear repulsion energy due to the nuclear framework
      *
      */
-    double internuclear_repulsion();
+    double calculateInternuclearRepulsionEnergy() const;
 };
 
 } // namespace libwint

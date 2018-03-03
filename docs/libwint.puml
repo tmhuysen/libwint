@@ -140,18 +140,19 @@ namespace libwint {
             - const size_t N
             - const std::vector<libint2::Atom> atoms
         __ private methods __
-            - std::vector<libint2::Atom> parseXYZFilename(const std::string filename)
+            - std::vector<libint2::Atom> parseXYZFilename(const std::string filename) const
         == constructors ==
             **Molecule**(const std::string& xyz_filename)
             **Molecule**(const std::string& xyz_filename, int molecular_charge)
             **Molecule**(const std::vector<libint2::Atom>& atoms)
             **Molecule**(const std::vector<libint2::Atom>& atoms, int molecular_charge)
         __ public methods __
-            + site_t **get_N**()
+            + site_t **get_N** const ()
 
-            + size_t **calculateTotalNucleicCharge**()
-            + double **calculateInternuclearDistance**(size_t index1, size_t index2)
-            + double **calculateInternuclearRepulsion**()
+            + size_t numberOfAtoms() const
+            + size_t **calculateTotalNucleicCharge**() const
+            + double **calculateInternuclearDistance**(size_t index1, size_t index2) const
+            + double **calculateInternuclearRepulsionEnergy**() const
     }
 
 }
