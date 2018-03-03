@@ -19,23 +19,26 @@ BOOST_AUTO_TEST_CASE ( parse_xyz_filename ) {
 
 BOOST_AUTO_TEST_CASE ( distance ) {
 
-    // Create some libint2::Atoms (charge, x, y ,z)
+    // Create a fictitious molecule from some libint2::Atoms (charge, x, y ,z)
     libint2::Atom A {0, 0, 3, 0};
     libint2::Atom B {0, 0, 0, 4};
     libint2::Atom C {0, 3, 0, 0};
     libint2::Atom D {0, 0, 0, 5};
+    std::vector<libint2::Atom> atoms = {A, B, C, D};
+    libwint::Molecule molecule (atoms);
+
 
     // Check their distances
-    BOOST_CHECK(std::abs(libwint::distance(A, B) - 5) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(A, C) - std::sqrt(18.0)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(A, B) - libwint::distance(B, C)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(B, C) - 5) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(B, D) - 1) < 1.0e-8);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(0, 1) - 5) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(0, 2) - std::sqrt(18.0)) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(0, 1) - molecule.calculateInternuclearDistance(1, 2)) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(1, 2) - 5) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(1, 3) - 1) < 1.0e-12);
 
     // Check that the distances are symmetric
-    BOOST_CHECK(std::abs(libwint::distance(A, B) - libwint::distance(B, A)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(A, C) - libwint::distance(C, A)) < 1.0e-8);
-    BOOST_CHECK(std::abs(libwint::distance(B, C) - libwint::distance(C, B)) < 1.0e-8);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(0, 1) - molecule.calculateInternuclearDistance(1, 0)) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(0, 2) - molecule.calculateInternuclearDistance(2, 0)) < 1.0e-12);
+    BOOST_CHECK(std::abs(molecule.calculateInternuclearDistance(1, 2) - molecule.calculateInternuclearDistance(2, 1)) < 1.0e-12);
 }
 
 

@@ -62,6 +62,7 @@ public:
     Molecule(const std::vector<libint2::Atom>& atoms, int molecular_charge);
 
 
+
     // Methods
     /** @return the sum of all the charges of the nuclei
      */
