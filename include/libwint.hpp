@@ -6,6 +6,7 @@
 #include "Basis.hpp"
 #include "geometry.hpp"
 #include "integrals.hpp"
+#include "LibintCommunicator.hpp"
 #include "Molecule.hpp"
 #include "transformations.hpp"
 #include "utility.hpp"
