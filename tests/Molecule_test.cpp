@@ -42,12 +42,9 @@ BOOST_AUTO_TEST_CASE ( distance ) {
 }
 
 
+BOOST_AUTO_TEST_CASE ( constructor ) {
 
-BOOST_AUTO_TEST_CASE( constructor ) {
-
-    // Create the molecules
-    //      !!! Apparently, when working with an out-of-source build, the 'working directory' for executables is the 'build' directory.
-    //      !!! To make sure that no errors occur when building with CLion, specify the 'build' directory as 'working directory' in Edit Configurations.
+    // Create some molecule objects
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     libwint::Molecule water (xyzfilename);
     libwint::Molecule water_anion (xyzfilename, -1);
@@ -55,10 +52,10 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     libwint::Molecule water_cation (xyzfilename, +1);
 
     // Test the number of electrons created by the constructor
-    BOOST_CHECK_EQUAL(water.N, 10);
-    BOOST_CHECK_EQUAL(water_anion.N, 11);
-    BOOST_CHECK_EQUAL(water_neutral.N, 10);
-    BOOST_CHECK_EQUAL(water_cation.N, 9);
+    BOOST_CHECK_EQUAL(water.get_N(), 10);
+    BOOST_CHECK_EQUAL(water_anion.get_N(), 11);
+    BOOST_CHECK_EQUAL(water_neutral.get_N(), 10);
+    BOOST_CHECK_EQUAL(water_cation.get_N(), 9);
 }
 
 
@@ -79,7 +76,7 @@ BOOST_AUTO_TEST_CASE ( methods_water ) {
 
 BOOST_AUTO_TEST_CASE ( methods_h2 ) {
 
-    // Create the water molecule
+    // Create the hydrogen gas molecule
     const std::string xyzfilename = "../tests/ref_data/h2.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     libwint::Molecule h2 (xyzfilename);
 
