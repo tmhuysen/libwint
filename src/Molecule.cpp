@@ -1,19 +1,67 @@
 #include "Molecule.hpp"
 
+#include <boost/filesystem.hpp>
+
 #include "geometry.hpp"
 
 
-/** Parses a file name to obtain atoms
- *
- * @param filename
- * @return std::vector<libint2::Atom>
+namespace libwint {
+
+
+/*
+ *  PRIVATE METHODS
  */
-std::vector<libint2::Atom> libwint::parse_filename(const std::string& filename) {
+
+/**
+ *  Parses a @param filename to @return a std::vector<libint2::Atom>
+ */
+std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename) {
+
+    // If the filename doesn't end with .xyz, we assume that the user supplied a wrong file
+    boost::filesystem::path path (filename);
+    std::string extension = path.filename().string();
+    if (!(extension == ".xyz")) {
+        throw std::runtime_error("You did not provide a .xyz file name");
+    }
+
+    // If the filename isn't properly converted into an input file stream, we assume the user supplied a wrong file
     std::ifstream input_file_stream (filename);
-    assert(input_file_stream.good());   // If this assertion fails, we know for sure that we specified a wrong relative path
-    return libint2::read_dotxyz (input_file_stream);
+    if (!input_file_stream.good()) {
+        throw std::runtime_error("The provided .xyz file name is illegible. Maybe you specified a wrong path?");
+    }
+
+    return libint2::read_dotxyz (input_file_stream);  // can't make a reference because that's how libint2 is implemented
 }
 
+
+/** @return the sum of all the charges of the nuclei
+ */
+size_t Molecule::calculateTotalNucleicCharge() {
+    size_t nucleic_charge = 0;
+
+    for (const auto& atom : this->atoms) {
+        nucleic_charge += atom.atomic_number;
+    }
+
+    return nucleic_charge;
+}
+
+
+/** @return the distance between two libint2::Atoms, in Bohr
+ */
+double Molecule::calculateInternuclearDistance(size_t index1, size_t index2) {
+
+    const libint2::Atom atom1 = this->atoms[index1];
+    const libint2::Atom atom2 = this->atoms[index2];
+
+    return std::sqrt((atom1.x - atom2.x)*(atom1.x - atom2.x) + (atom1.y - atom2.y)*(atom1.y - atom2.y) + (atom1.z - atom2.z)*(atom1.z - atom2.z));
+}
+
+
+
+/*
+ *  CONSTRUCTORS
+ */
 
 /** Constructor from a given xyz_filename
  *      The constructed molecule instance corresponds to a neutral atom (i.e. nelec = sum of nucleus charges)
@@ -21,14 +69,10 @@ std::vector<libint2::Atom> libwint::parse_filename(const std::string& filename) 
  * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
  *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
  */
-libwint::Molecule::Molecule(const std::string& xyz_filename) :
-        xyz_filename(xyz_filename)
-{
-    this->atoms = parse_filename(this->xyz_filename);
-
-    // For a neutral atom, the number of electrons is equal to the total nucleic charge
-    this->nelec = this->nucleic_charge();
-}
+Molecule::Molecule(const std::string& xyz_filename) :
+        atoms (this->parseXYZFilename(xyz_filename)),
+        N (this->calculateTotalNucleicCharge())
+{}
 
 
 /** Constructor from a given xyz_filename and a molecular charge
@@ -40,41 +84,53 @@ libwint::Molecule::Molecule(const std::string& xyz_filename) :
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-libwint::Molecule::Molecule(const std::string& xyz_filename, int molecular_charge) :
-    xyz_filename(xyz_filename)
-{
-    this->atoms = parse_filename(this->xyz_filename);
+Molecule::Molecule(const std::string& xyz_filename, int molecular_charge) :
+        atoms (this->parseXYZFilename(xyz_filename)),
+        N (this->calculateTotalNucleicCharge() - molecular_charge)  // we're possibly creating an ion, so N = charges of nuclei - total molecular charge
+{}
 
-    // We're creating an ion here. Since removing an electron increases the charge:
-    //  nelec = nucleic_charges - charge
-    this->nelec = this->nucleic_charge() - molecular_charge;
-}
 
+/**
+ *  Constructor from a @param atoms: a given std::vector of libint2::Atoms
+ *
+ *  IMPORTANT!!! The coordinates of the atoms should be input in Bohr.
+ */
+Molecule::Molecule(const std::vector<libint2::Atom>& atoms) :
+    atoms (atoms),
+    N (this->calculateTotalNucleicCharge())
+{}
+
+
+/**
+ *  Constructor from a @param atoms: a given std::vector of libint2::Atoms and a @param molecular_charge
+ *      The constructed molecule instance corresponds to an ion:
+ *          charge = +1 -> cation (one electron less than the neutral molecule)
+ *          charge = 0  -> neutral molecule
+ *          charge = -1 -> anion (one electron more than the neutral molecule)
+ *
+ *  IMPORTANT!!! The coordinates of the atoms should be input in Bohr.
+ */
+Molecule::Molecule(const std::vector<libint2::Atom>& atoms, int molecular_charge) :
+    atoms (atoms),
+    N (this->calculateTotalNucleicCharge() - molecular_charge)
+{}
+
+
+/*
+ *  PUBLIC METHODS
+ */
 
 /** @return the number of atoms in the molecule
  */
-size_t libwint::Molecule::natoms() {
+size_t Molecule::natoms() {
     return this->atoms.size();  // atoms is a std::vector
-}
-
-
-/** @return the sum of the charges of the nuclei
- */
-size_t libwint::Molecule::nucleic_charge() {
-    size_t nucleic_charge = 0;
-
-    for (const auto& atom : this->atoms) {
-        nucleic_charge += atom.atomic_number;
-    }
-
-    return nucleic_charge;
 }
 
 
 /** @return the internuclear repulsion energy due to the nuclear framework
  *
  */
-double libwint::Molecule::internuclear_repulsion() {
+double Molecule::internuclear_repulsion() {
     double internuclear_repulsion_energy = 0.0;
 
     auto natoms = this->natoms();
@@ -91,3 +147,6 @@ double libwint::Molecule::internuclear_repulsion() {
 
     return internuclear_repulsion_energy;
 }
+
+
+}  // namespace libwint

@@ -5,7 +5,7 @@
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 
-# Find the boost package - needed for unittests
+# Find the boost package
 find_package(Boost REQUIRED)
 
 
