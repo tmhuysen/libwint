@@ -122,15 +122,16 @@ namespace libwint {
 
 
     class LibintCommunicator {
-        __ private members __
-            - {static} bool is_communicating = false
         __ private methods __
+            - **LibintCommunicator**()
             - Eigen::MatrixXd **calculateOneBodyIntegrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
             - Eigen::Tensor<double, 4> **calculateTwoElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        == constructors ==
-            **LibintCommunicator**()
-        == destructor ==
+        == private destructor ==
             ~ ~LibintCommunicator()
+        __ public methods __
+            + {static} LibintCommunicator& get()
+            + LibintCommunicator(LibintCommunicator const& libint_communicator) = delete
+            + void operator=(LibintCommunicator const& libint_communicator) = delete
     }
 
 
