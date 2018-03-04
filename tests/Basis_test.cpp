@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE "Basis"
 
-#include "Basis.hpp"
+#include "AOBasis.hpp"
 #include "utility.hpp"
 
 #include <boost/test/unit_test.hpp>
@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     const std::string basis_name = "STO-3G";
 
     libwint::Molecule water (xyzfilename);
-    libwint::Basis basis (water, basis_name);
+    libwint::AOBasis basis (water, basis_name);
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
     BOOST_CHECK_EQUAL(basis.nbf(), 7);
@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
     libwint::Molecule water (xyzfilename);
-    libwint::Basis basis (water, basis_name);
+    libwint::AOBasis basis (water, basis_name);
     auto nbf = basis.nbf();
 
     basis.compute_integrals();
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     BOOST_CHECK(basis.S.isApprox(S_test, 1.0e-8));
     BOOST_CHECK(basis.T.isApprox(T_test, 1.0e-8));
     BOOST_CHECK(basis.V.isApprox(V_test, 1.0e-8));
-    BOOST_CHECK(libwint::utility::are_equal(basis.tei, tei_test, 1.0e-6));
+    BOOST_CHECK(libwint::utility::are_equal(basis.g, tei_test, 1.0e-6));
 
     // Finalize libint2
     libint2::finalize();
@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     const std::string xyzfilename = "../tests/ref_data/h2.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
 
-    // Create a Molecule and a Basis
+    // Create a Molecule and a AOBasis
     libwint::Molecule h2 (xyzfilename);
     BOOST_CHECK(std::abs(h2.atoms[1].z - 1.4) < 1.0e-6);    // Check if the conversion from Angstrom to a.u. is correct
-    libwint::Basis basis (h2, basis_name);
+    libwint::AOBasis basis (h2, basis_name);
     BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
@@ -97,15 +97,15 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
 
 
     // Calculate the two-electron integrals, and check the unique values listed in Szabo. These are given in chemist's notation in Szabo, so this confirms that this libwint gives them in chemist's notation as well.
-    BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - 0.7746) < 1.0e-4);
-    BOOST_CHECK(std::abs(basis.tei(0,0,0,0) - basis.tei(1,1,1,1)) < 1.0e-12);
+    BOOST_CHECK(std::abs(basis.g(0,0,0,0) - 0.7746) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.g(0,0,0,0) - basis.g(1,1,1,1)) < 1.0e-12);
 
-    BOOST_CHECK(std::abs(basis.tei(0,0,1,1) - 0.5697) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.g(0,0,1,1) - 0.5697) < 1.0e-4);
 
-    BOOST_CHECK(std::abs(basis.tei(1,0,0,0) - 0.4441) < 1.0e-4);
-    BOOST_CHECK(std::abs(basis.tei(1,0,0,0) - basis.tei(1,1,1,0)) < 1.0e-12);
+    BOOST_CHECK(std::abs(basis.g(1,0,0,0) - 0.4441) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.g(1,0,0,0) - basis.g(1,1,1,0)) < 1.0e-12);
 
-    BOOST_CHECK(std::abs(basis.tei(1,0,1,0) - 0.2970) < 1.0e-4);
+    BOOST_CHECK(std::abs(basis.g(1,0,1,0) - 0.2970) < 1.0e-4);
 
     libint2::finalize();
 }

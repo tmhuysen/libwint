@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE "transformations"
 
-#include "Basis.hpp"
+#include "AOBasis.hpp"
 #include "transformations.hpp"
 #include "utility.hpp"
 
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_h2o ) {
     const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
     const std::string basis_name = "STO-3G";
     libwint::Molecule water (xyzfilename);
-    libwint::Basis basis (water, basis_name);
+    libwint::AOBasis basis (water, basis_name);
     basis.compute_kinetic_integrals();
     Eigen::MatrixXd T = basis.T;
     libint2::finalize();

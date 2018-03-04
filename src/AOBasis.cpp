@@ -1,4 +1,4 @@
-#include "Basis.hpp"
+#include "AOBasis.hpp"
 
 #include "integrals.hpp"
 
@@ -8,7 +8,7 @@
  * @param molecule      Molecule object
  * @param basis_name    string
  */
-libwint::Basis::Basis(Molecule& molecule, const std::string& basis_name) :
+libwint::AOBasis::AOBasis(Molecule& molecule, const std::string& basis_name) :
         molecule(molecule), name(basis_name) {
     // Constructing the basis also constructs the associated libint2::BasisSet object
     libint2::BasisSet libint_basis(this->name, this->molecule.atoms);
@@ -18,7 +18,7 @@ libwint::Basis::Basis(Molecule& molecule, const std::string& basis_name) :
 
 /** Calculate and return the number of basis functions in the basis
  */
-size_t libwint::Basis::nbf() {
+size_t libwint::AOBasis::nbf() {
     return static_cast<size_t>(this->libint_basis.nbf());
 }
 
@@ -27,7 +27,7 @@ size_t libwint::Basis::nbf() {
  *
  *      If the overlap integrals have already been calculated, print an error message
  */
-void libwint::Basis::compute_overlap_integrals() {
+void libwint::AOBasis::compute_overlap_integrals() {
 
     if (!this->are_computed_overlap_integrals) {
         this->S = compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
@@ -42,7 +42,7 @@ void libwint::Basis::compute_overlap_integrals() {
 
 /** Calculate and set the kinetic integrals
 */
-void libwint::Basis::compute_kinetic_integrals() {
+void libwint::AOBasis::compute_kinetic_integrals() {
 
     if (!this->are_computed_kinetic_integrals) {
         this -> T = compute_1body_integrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.atoms);
@@ -57,7 +57,7 @@ void libwint::Basis::compute_kinetic_integrals() {
 
 /** Calculate and set the nuclear integrals
 */
-void libwint::Basis::compute_nuclear_integrals() {
+void libwint::AOBasis::compute_nuclear_integrals() {
 
     if (!this->are_computed_nuclear_integrals) {
         this-> V = compute_1body_integrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.atoms);
@@ -72,10 +72,10 @@ void libwint::Basis::compute_nuclear_integrals() {
 
 /** Calculate and set the kinetic integrals
 */
-void libwint::Basis::compute_two_electron_integrals() {
+void libwint::AOBasis::compute_two_electron_integrals() {
 
     if (!this->are_computed_tei) {
-        this -> tei = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
+        this -> g = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
 
         this->are_computed_tei = true;
     } else {
@@ -87,7 +87,7 @@ void libwint::Basis::compute_two_electron_integrals() {
 
 /** Calculate and set all the integrals
  */
-void libwint::Basis::compute_integrals() {
+void libwint::AOBasis::compute_integrals() {
     compute_overlap_integrals();
     compute_kinetic_integrals();
     compute_nuclear_integrals();

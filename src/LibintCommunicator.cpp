@@ -105,8 +105,8 @@ Eigen::Tensor<double, 4> LibintCommunicator::computeTwoBodyIntegrals(const libin
     const auto nsh = static_cast<size_t>(obs.size());
     const auto nbf = static_cast<size_t>(obs.nbf());
 
-    // Initialize the two-electron integrals tensor
-    Eigen::Tensor<double, 4> tei(nbf, nbf, nbf, nbf);       // Create a rank 4 tensor with dimensions nbf
+    // Initialize the rank-4 two-electron integrals Tensor
+    Eigen::Tensor<double, 4> g (nbf, nbf, nbf, nbf);
 
 
     // Construct the libint2 engine
@@ -153,7 +153,7 @@ Eigen::Tensor<double, 4> LibintCommunicator::computeTwoBodyIntegrals(const libin
                                     auto computed_integral = calculated_integrals[f4 + nbf_sh4 * (f3 + nbf_sh3 * (f2 + nbf_sh2 * (f1)))];  // row-major storage accessing
 
                                     // The two-electron integrals are given in CHEMIST'S: (11|22)
-                                    tei(f1 + bf1, f2 + bf2, f3 + bf3, f4 + bf4) = computed_integral;
+                                    g(f1 + bf1, f2 + bf2, f3 + bf3, f4 + bf4) = computed_integral;
                                 }
                             }
                         }
@@ -164,7 +164,7 @@ Eigen::Tensor<double, 4> LibintCommunicator::computeTwoBodyIntegrals(const libin
             }
         }
     } // shell loop
-    return tei;
+    return g;
 };
 
 
