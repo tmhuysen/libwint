@@ -38,7 +38,7 @@ public:
      * @param molecule      Molecule object
      * @param basis_name    string
      */
-    AOBasis(Molecule& molecule, const std::string basis_name);
+    AOBasis(Molecule& molecule, std::string basis_name);
 
 
     // Getters

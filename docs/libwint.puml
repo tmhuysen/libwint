@@ -55,53 +55,30 @@ namespace libwint {
 
     class AOBasis {
         __ private members __
-            - bool are_calculated_overlap_integrals
-            - bool are_calculated_nuclear_integrals
-            - bool are_calculated_kinetic_integrals
-            - bool are_calculated_electron_repulsion_integrals
-
-            - libwint::Molecule& molecule
-            - const std::string name
-            - libint2::BasisSet& libint_basis
-
-            - Eigen::MatrixXd& S
-            - Eigen::MatrixXd& T
-            - Eigen::MatrixXd& V
-            - Eigen::Tensor<double, 4>& g
+            - const Eigen::MatrixXd& S
+            - const Eigen::MatrixXd& T
+            - const Eigen::MatrixXd& V
+            - const Eigen::Tensor<double, 4>& g
+            - const size_t K
         == constructors ==
             **AOBasis**(Molecule& molecule, const std::string basis_name)
         __ public methods __
-            + libwint::Molecule& **get_molecule**() const
             + Eigen::MatrixXd& **get_S**() const
             + Eigen::MatrixXd& **get_T**() const
             + Eigen::MatrixXd& **get_V**() const
             + Eigen::Tensor<double, 4>& **get_g**() const
-
-            + size_t **calculateNumberOfBasisFunctions**()
-            + void **calculateOverlapIntegrals**()
-            + void **calculateKineticIntegrals**()
-            + void **calculateNuclearIntegrals**()
-            + void **calculateTwoElectronRepulsionIntegrals**()
-            + void **calculateIntegrals**()
-            + void **printShellSizes**()
+            + size_t **get_K**()
     }
 
 
     class SOBasis {
         __ private members __
-            - const libwint::AOBasis& ao_basis
-            - const libwint::MatrixXd& C
             - Eigen::MatrixXd& h_SO
             - Eigen::Tensor<double, 4>& g_SO
             - const size_t K
-        __ private methods __
-            - Eigen::MatrixXd **constructJacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
-            - void **transformOneElectronIntegrals**(Eigen::MatrixXd& T)
-            - void **transformTwoElectronIntegrals**(Eigen::MatrixXd& T)
         == constructors ==
             **SOBasis**(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C)
         __ public methods __
-            + inline const libwint::AOBasis& **get_ao_basis**() const
             + inline Eigen::MatrixXd& **get_h_SO**() const
             + inline Eigen::Tensor<double, 4>& **get_g_SO**() const
             + inline const size_t **get_K**() const
