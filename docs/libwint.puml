@@ -55,6 +55,15 @@ namespace libwint {
 
     class AOBasis {
         __ private members __
+            - bool are_calculated_overlap_integrals
+            - bool are_calculated_nuclear_integrals
+            - bool are_calculated_kinetic_integrals
+            - bool are_calculated_electron_repulsion_integrals
+
+            - libwint::Molecule& molecule
+            - const std::string name
+            - libint2::BasisSet& libint_basis
+
             - const Eigen::MatrixXd& S
             - const Eigen::MatrixXd& T
             - const Eigen::MatrixXd& V
@@ -63,11 +72,19 @@ namespace libwint {
         == constructors ==
             **AOBasis**(Molecule& molecule, const std::string basis_name)
         __ public methods __
+            + libwint::Molecule& **get_molecule**() const
             + Eigen::MatrixXd& **get_S**() const
             + Eigen::MatrixXd& **get_T**() const
             + Eigen::MatrixXd& **get_V**() const
             + Eigen::Tensor<double, 4>& **get_g**() const
-            + size_t **get_K**()
+
+            + size_t **calculateNumberOfBasisFunctions**()
+            + void **calculateOverlapIntegrals**()
+            + void **calculateKineticIntegrals**()
+            + void **calculateNuclearIntegrals**()
+            + void **calculateTwoElectronRepulsionIntegrals**()
+            + void **calculateIntegrals**()
+            + void **printShellSizes**()
     }
 
 
