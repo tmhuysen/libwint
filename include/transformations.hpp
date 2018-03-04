@@ -5,7 +5,8 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 
-namespace libwint {
+
+namespace libwint::transformations {
 
 
 /** Given:
@@ -22,7 +23,7 @@ namespace libwint {
  *
  *  where the basis vectors are collected as elements of a row vector.
  */
-Eigen::MatrixXd transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T);
+Eigen::MatrixXd transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T);
 
 
 /** Given:
@@ -39,7 +40,7 @@ Eigen::MatrixXd transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::Matr
  *
  *  where the basis vectors are collected as elements of a row vector.
  */
-Eigen::Tensor<double, 4> transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T);
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T);
 
 
 /** Given:

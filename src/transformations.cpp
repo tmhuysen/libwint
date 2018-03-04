@@ -18,7 +18,7 @@
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::MatrixXd libwint::transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
+Eigen::MatrixXd libwint::transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
     return T.adjoint() * h * T;
 }
 
@@ -81,7 +81,7 @@ Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor
  *  transform and return the matrix in the SO basis
  */
 Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
-    return transform_one_electron_integrals(f_AO, C);
+    return transformOneElectronIntegrals(f_AO, C);
 }
 
 
@@ -93,7 +93,7 @@ Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::Matrix
  */
 Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
     Eigen::MatrixXd C_inverse = C.inverse();
-    return transform_one_electron_integrals(f_SO, C_inverse);
+    return transformOneElectronIntegrals(f_SO, C_inverse);
 }
 
 
@@ -119,7 +119,7 @@ Eigen::MatrixXd libwint::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U
         throw std::invalid_argument("The given matrix U is not unitary.");
     }
 
-    return transform_one_electron_integrals(h, U);
+    return transformOneElectronIntegrals(h, U);
 }
 
 

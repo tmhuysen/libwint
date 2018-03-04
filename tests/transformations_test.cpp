@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE ( transform_one_electron_trivial ) {
     Eigen::MatrixXd T = Eigen::MatrixXd::Identity(3, 3);
     Eigen::MatrixXd h = Eigen::MatrixXd::Random(3, 3);
 
-    Eigen::MatrixXd h_transformed = libwint::transform_one_electron_integrals(h, T);
+    Eigen::MatrixXd h_transformed = libwint::transformOneElectronIntegrals(h, T);
 
     BOOST_CHECK(h_transformed.isApprox(h, 1.0e-12));
 }
@@ -30,9 +30,9 @@ BOOST_AUTO_TEST_CASE ( transform_one_electron_and_back ) {
     Eigen::MatrixXd T_inverse = T.inverse();
 
     // Transform to SO basis
-    Eigen::MatrixXd h_transformed = libwint::transform_one_electron_integrals(h, T);
+    Eigen::MatrixXd h_transformed = libwint::transformOneElectronIntegrals(h, T);
 
-    BOOST_CHECK(h.isApprox(libwint::transform_one_electron_integrals(h_transformed, T_inverse), 1.0e-12));
+    BOOST_CHECK(h.isApprox(libwint::transformOneElectronIntegrals(h_transformed, T_inverse), 1.0e-12));
 }
 
 
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
 
 
     // Are the rotated one-electron integrals the same?
-    Eigen::MatrixXd h_SO_rotated = libwint::transform_one_electron_integrals(h_SO, U);
+    Eigen::MatrixXd h_SO_rotated = libwint::transformOneElectronIntegrals(h_SO, U);
 
     Eigen::MatrixXd h_SO_rotated_olsens (6, 6);
     libwint::utility::read_array_from_file("../tests/ref_data/lih_hf_sto6g_oneint_rotated.data", h_SO_rotated_olsens);
