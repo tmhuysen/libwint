@@ -37,12 +37,12 @@ package libint #c6ffb3 {
             coulomb
         }
 
-        class global::cxxapi {
+        class cxxapi {
                 void **initialize**()
                 void **finalize**()
         }
 
-        class global::atom {
+        class atom {
             inline std::vector<Atom> **read_dotxyz**(std::istream& is, <...>)
         }
     }
@@ -111,7 +111,7 @@ namespace libwint {
     }
 
 
-    class global::transformations {
+    class transformations {
             Eigen::MatrixXd **transformOneElectronIntegrals**(Eigen::MatrixXd& h, Eigen::MatrixXd& T)
             Eigen::Tensor<double, 4> **transformTwoElectronIntegrals**(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T)
 
@@ -165,12 +165,12 @@ libwint.AOBasis *--> libwint.LibintCommunicator
 libwint.LibintCommunicator *--> libint2.BasisSet
 libwint.LibintCommunicator ..> libint2.Operator
 libwint.LibintCommunicator *--> libint2.Engine
-libwint.LibintCommunicator ..> libint2.global::cxxapi
+libwint.LibintCommunicator ..> libint2.cxxapi
 
 libwint.Molecule *--> "1..*" libint2.Atom
-libwint.Molecule ..> libint2.global::atom
+libwint.Molecule ..> libint2.atom
 
-libwint.SOBasis ..> libwint.global::transformations
+libwint.SOBasis ..> libwint.transformations
 libwint.SOBasis o--> libwint.AOBasis
 
 
