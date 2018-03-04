@@ -2,8 +2,9 @@
 #define LIBWINT_LIBINTCOMMUNICATOR_HPP
 
 
-#include <libwint.hpp>
+#include <libint2.hpp>
 #include <Eigen/Dense>
+#include <unsupported/Eigen/CXX11/Tensor>
 
 
 
@@ -24,6 +25,20 @@ private:
     ~LibintCommunicator();
 
 
+
+public:
+    /**
+     *  @return the static singleton instance
+     */
+    static LibintCommunicator& get();
+
+
+    // Delete the following methods (as required by the singleton class design).
+    LibintCommunicator(LibintCommunicator const& libint_communicator) = delete;
+    void operator=(LibintCommunicator const& libint_communicator) = delete;
+
+
+    // Methods
     /**
      * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
 
@@ -44,19 +59,6 @@ private:
      * @return: an Eigen::Tensor<double, 4> storing the integrals in CHEMIST'S NOTATION (11|22)
      */
     Eigen::Tensor<double, 4> computeTwoBodyIntegrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms);
-
-
-
-public:
-    /**
-     *  @return the static singleton instance
-     */
-    static LibintCommunicator& get();
-
-
-    // Delete the following methods (as required by the singleton class design).
-    LibintCommunicator(LibintCommunicator const& libint_communicator) = delete;
-    void operator=(LibintCommunicator const& libint_communicator) = delete;
 };
 
 

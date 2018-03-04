@@ -1,24 +1,79 @@
 #include "AOBasis.hpp"
 
-#include "integrals.hpp"
+#include "LibintCommunicator.hpp"
 
+
+
+namespace libwint {
+
+/*
+ *  CONSTRUCTORS
+ */
 
 /** Constructor from a molecule and a basis name.
  *
  * @param molecule      Molecule object
  * @param basis_name    string
  */
-libwint::AOBasis::AOBasis(Molecule& molecule, const std::string& basis_name) :
-        molecule(molecule), name(basis_name) {
-    // Constructing the basis also constructs the associated libint2::BasisSet object
-    libint2::BasisSet libint_basis(this->name, this->molecule.atoms);
-    this->libint_basis = libint_basis;
+AOBasis::AOBasis(Molecule& molecule, const std::string basis_name) :
+        molecule(molecule),
+        name(basis_name),
+        libint_basis(libint2::BasisSet (this->name, this->molecule.get_atoms()))
+{}
+
+
+
+/*
+ *  GETTERS
+ */
+
+libwint::Molecule AOBasis::get_molecule() const { return this->molecule; }
+
+Eigen::MatrixXd AOBasis::get_S() const {
+
+    if (!this->are_calculated_overlap_integrals) {
+        throw std::logic_error("You haven't calculated the overlap integrals yet and are trying to access them.");
+    } else {
+        return this->S;
+    }
 }
 
+Eigen::MatrixXd AOBasis::get_T() const {
+
+    if (!this->are_calculated_kinetic_integrals) {
+        throw std::logic_error("You haven't calculated the kinetic integrals yet and are trying to access them.");
+    } else {
+        return this->T;
+    }
+}
+
+Eigen::MatrixXd AOBasis::get_V() const {
+
+    if (!this->are_calculated_nuclear_integrals) {
+        throw std::logic_error("You haven't calculated the nuclear integrals yet and are trying to access them.");
+    } else {
+        return this->V;
+    }
+}
+
+Eigen::Tensor<double, 4> AOBasis::get_g() const {
+
+    if (!this->are_calculated_electron_repulsion_integrals) {
+        throw std::logic_error("You haven't calculated the electron repulsion integrals yet and are trying to access them.");
+    } else {
+        return this->g;
+    }
+};
+
+
+
+/*
+ *  PUBLIC METHODS
+ */
 
 /** Calculate and return the number of basis functions in the basis
  */
-size_t libwint::AOBasis::nbf() {
+size_t AOBasis::calculateNumberOfBasisFunctions() const {
     return static_cast<size_t>(this->libint_basis.nbf());
 }
 
@@ -27,12 +82,11 @@ size_t libwint::AOBasis::nbf() {
  *
  *      If the overlap integrals have already been calculated, print an error message
  */
-void libwint::AOBasis::compute_overlap_integrals() {
+void AOBasis::calculateOverlapIntegrals() {
 
-    if (!this->are_computed_overlap_integrals) {
-        this->S = compute_1body_integrals(libint2::Operator::overlap, this->libint_basis, this->molecule.atoms);
-
-        this->are_computed_overlap_integrals = true;
+    if (!this->are_calculated_overlap_integrals) {
+        this->S = libwint::LibintCommunicator::get().computeOneBodyIntegrals(libint2::Operator::overlap, this->libint_basis, this->molecule.get_atoms());
+        this->are_calculated_overlap_integrals = true;
     } else {
         std::cout << "The overlap integrals have already been calculated in this basis ..." << std::endl;
     }
@@ -42,12 +96,11 @@ void libwint::AOBasis::compute_overlap_integrals() {
 
 /** Calculate and set the kinetic integrals
 */
-void libwint::AOBasis::compute_kinetic_integrals() {
+void AOBasis::calculateKineticIntegrals() {
 
-    if (!this->are_computed_kinetic_integrals) {
-        this -> T = compute_1body_integrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.atoms);
-
-        this->are_computed_kinetic_integrals = true;
+    if (!this->are_calculated_kinetic_integrals) {
+        this -> T = libwint::LibintCommunicator::get().computeOneBodyIntegrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.get_atoms());
+        this->are_calculated_kinetic_integrals = true;
     } else {
         std::cout << "The kinetic integrals have already been calculated in this basis ..." << std::endl;
     }
@@ -57,12 +110,11 @@ void libwint::AOBasis::compute_kinetic_integrals() {
 
 /** Calculate and set the nuclear integrals
 */
-void libwint::AOBasis::compute_nuclear_integrals() {
+void AOBasis::calculateNuclearIntegrals() {
 
-    if (!this->are_computed_nuclear_integrals) {
-        this-> V = compute_1body_integrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.atoms);
-
-        this->are_computed_nuclear_integrals = true;
+    if (!this->are_calculated_nuclear_integrals) {
+        this-> V = libwint::LibintCommunicator::get().computeOneBodyIntegrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.get_atoms());
+        this->are_calculated_nuclear_integrals = true;
     } else {
         std::cout << "The nuclear integrals have already been calculated in this basis ..." << std::endl;
     }
@@ -72,12 +124,11 @@ void libwint::AOBasis::compute_nuclear_integrals() {
 
 /** Calculate and set the kinetic integrals
 */
-void libwint::AOBasis::compute_two_electron_integrals() {
+void AOBasis::calculateElectronRepulsionIntegrals() {
 
-    if (!this->are_computed_tei) {
-        this -> g = compute_2body_integrals(this->libint_basis, this->molecule.atoms);
-
-        this->are_computed_tei = true;
+    if (!this->are_calculated_electron_repulsion_integrals) {
+        this -> g = libwint::LibintCommunicator::get().computeTwoBodyIntegrals(this->libint_basis, this->molecule.get_atoms());
+        this->are_calculated_electron_repulsion_integrals = true;
     } else {
         std::cout << "The two-electron integrals have already been calculated in this basis ..." << std::endl;
     }
@@ -87,9 +138,12 @@ void libwint::AOBasis::compute_two_electron_integrals() {
 
 /** Calculate and set all the integrals
  */
-void libwint::AOBasis::compute_integrals() {
-    compute_overlap_integrals();
-    compute_kinetic_integrals();
-    compute_nuclear_integrals();
-    compute_two_electron_integrals();
+void AOBasis::calculateIntegrals() {
+    calculateOverlapIntegrals();
+    calculateKineticIntegrals();
+    calculateNuclearIntegrals();
+    calculateElectronRepulsionIntegrals();
 }
+
+
+}  // namespace libwint

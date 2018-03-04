@@ -24,7 +24,7 @@ package libint #c6ffb3 {
                 **BasisSet**(std::string name, const std::vector<Atom>& atoms)
             __ public methods __
                 + size_type **size**()
-                + long **nbf**()
+                + long **calculateNumberOfBasisFunctions**()
                 + size_t **max_nprim**()
                 + long **max_l**()
                 + const std::vector<size_t>& **shell2bf**()
@@ -77,11 +77,11 @@ namespace libwint {
             + Eigen::MatrixXd& **get_V**() const
             + Eigen::Tensor<double, 4>& **get_g**() const
 
-            + size_t **calculateNumBF**()
+            + size_t **calculateNumberOfBasisFunctions**()
             + void **calculateOverlapIntegrals**()
             + void **calculateKineticIntegrals**()
             + void **calculateNuclearIntegrals**()
-            + void **calculateTwoElectronIntegrals**()
+            + void **calculateTwoElectronRepulsionIntegrals**()
             + void **calculateIntegrals**()
             + void **printShellSizes**()
     }
@@ -125,14 +125,14 @@ namespace libwint {
     class LibintCommunicator {
         __ private methods __
             - **LibintCommunicator**()
-            - Eigen::MatrixXd **calculateOneBodyIntegrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-            - Eigen::Tensor<double, 4> **calculateTwoElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
         == private destructor ==
             ~ ~LibintCommunicator()
         __ public methods __
             + {static} LibintCommunicator& get()
             + LibintCommunicator(LibintCommunicator const& libint_communicator) = delete
             + void operator=(LibintCommunicator const& libint_communicator) = delete
+            + Eigen::MatrixXd **calculateOneBodyIntegrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
     }
 
 

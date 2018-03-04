@@ -1,6 +1,5 @@
 #include "LibintCommunicator.hpp"
 
-#include <libint2.hpp>
 
 
 namespace libwint {
@@ -34,7 +33,7 @@ LibintCommunicator::~LibintCommunicator() {
 Eigen::MatrixXd LibintCommunicator::computeOneBodyIntegrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) {
 
     const auto nsh = static_cast<size_t>(obs.size());    // nsh: number of shells in the obs
-    const auto nbf = static_cast<size_t>(obs.nbf());     // nbf: number of basis functions in the obs
+    const auto nbf = static_cast<size_t>(obs.nbf());     // calculateNumberOfBasisFunctions: number of basis functions in the obs
 
     // Initialize the eigen matrix:
     //  Since the matrices we will encounter (S, T, V) are symmetric, the issue of row major vs column major doesn't matter.

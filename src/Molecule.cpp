@@ -98,6 +98,8 @@ Molecule::Molecule(const std::vector<libint2::Atom>& atoms, int molecular_charge
 
 size_t Molecule::get_N() const { return this->N; }
 
+std::vector<libint2::Atom> Molecule::get_atoms() const { return this->atoms; }
+
 
 
 /*

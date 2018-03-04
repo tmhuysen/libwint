@@ -66,6 +66,7 @@ public:
 
     // Getters
     size_t get_N() const;
+    std::vector<libint2::Atom> get_atoms() const;
 
 
     // Methods
@@ -86,6 +87,7 @@ public:
      */
     double calculateInternuclearRepulsionEnergy() const;
 };
+
 
 } // namespace libwint
 

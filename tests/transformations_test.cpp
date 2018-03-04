@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_h2o ) {
     const std::string basis_name = "STO-3G";
     libwint::Molecule water (xyzfilename);
     libwint::AOBasis basis (water, basis_name);
-    basis.compute_kinetic_integrals();
+    basis.calculateKineticIntegrals();
     Eigen::MatrixXd T = basis.T;
     libint2::finalize();
 
@@ -192,6 +192,6 @@ BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_h2o ) {
     size_t P = 3;
     size_t Q = 6;
     double theta = 62.7219;
-    Eigen::MatrixXd U = libwint::jacobi_rotation_matrix(P, Q, theta, basis.nbf());
+    Eigen::MatrixXd U = libwint::jacobi_rotation_matrix(P, Q, theta, basis.calculateNumberOfBasisFunctions());
     BOOST_CHECK(libwint::rotate_integrals(T, U).isApprox(libwint::rotate_one_electron_integrals_jacobi(T, P, Q, theta)));
 }

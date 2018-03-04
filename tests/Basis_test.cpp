@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE( constructor ) {
     libwint::AOBasis basis (water, basis_name);
 
     BOOST_CHECK_EQUAL(basis.name, "STO-3G");
-    BOOST_CHECK_EQUAL(basis.nbf(), 7);
+    BOOST_CHECK_EQUAL(basis.calculateNumberOfBasisFunctions(), 7);
 
     // Test if a reference to the Molecule object is actually made
     BOOST_CHECK_EQUAL(&basis.molecule, &water);
@@ -36,9 +36,9 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
     const std::string basis_name = "STO-3G";
     libwint::Molecule water (xyzfilename);
     libwint::AOBasis basis (water, basis_name);
-    auto nbf = basis.nbf();
+    auto nbf = basis.calculateNumberOfBasisFunctions();
 
-    basis.compute_integrals();
+    basis.calculateIntegrals();
 
     Eigen::MatrixXd S_test (nbf, nbf);
     Eigen::MatrixXd T_test (nbf, nbf);
@@ -72,10 +72,10 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     libwint::Molecule h2 (xyzfilename);
     BOOST_CHECK(std::abs(h2.atoms[1].z - 1.4) < 1.0e-6);    // Check if the conversion from Angstrom to a.u. is correct
     libwint::AOBasis basis (h2, basis_name);
-    BOOST_CHECK_EQUAL(basis.nbf(), 2);                      // Check if there are only two basis functions
+    BOOST_CHECK_EQUAL(basis.calculateNumberOfBasisFunctions(), 2);                      // Check if there are only two basis functions
 
     // Calculate S, T, V and H_core
-    basis.compute_integrals();
+    basis.calculateIntegrals();
     Eigen::MatrixXd H_core = basis.T + basis.V;
 
     // Fill in the reference values from Szabo
