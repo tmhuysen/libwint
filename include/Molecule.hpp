@@ -32,7 +32,7 @@ public:
      *
      *  IMPORTANT!!! The coordinates of the atoms should be input in Angstrom, but libint2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string xyz_filename);
+    Molecule(std::string xyz_filename);
 
     /**
      *  Constructor from a given @param xyz_filename and a @param molecular_charge
@@ -43,7 +43,7 @@ public:
      *
      *  IMPORTANT!!! The coordinates of the atoms should be input in Angstrom, but libint2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-    Molecule(const std::string xyz_filename, int molecular_charge);
+    Molecule(std::string xyz_filename, int molecular_charge);
 
     /**
      *  Constructor from a @param atoms: a given std::vector of libint2::Atoms

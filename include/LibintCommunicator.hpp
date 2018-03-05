@@ -30,7 +30,7 @@ public:
     /**
      *  @return the static singleton instance
      */
-    static LibintCommunicator& get() const;
+    static LibintCommunicator& get();
 
 
     // Delete the following methods (as required by the singleton class design).

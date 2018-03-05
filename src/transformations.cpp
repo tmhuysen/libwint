@@ -43,10 +43,12 @@ Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Ei
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T) {
 
     // Since we're only getting T as a matrix, we should make the appropriate tensor to perform contractions
-    Eigen::TensorMap<Eigen::Tensor<double, 2>> T_tensor (T.data(), T.rows(), T.cols());
+    // For the const Eigen::MatrixXd& argument, we need the const double in the template
+    //      For more info, see: https://stackoverflow.com/questions/45283468/eigen-const-tensormap
+    Eigen::TensorMap<Eigen::Tensor<const double, 2>> T_tensor (T.data(), T.rows(), T.cols());
 
 
     // We will have to do four single contractions, so we specify the contraction indices
@@ -107,7 +109,7 @@ Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::Mat
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C) {
     return transformTwoElectronIntegrals(g_AO, C);
 };
 

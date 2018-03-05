@@ -40,7 +40,7 @@ Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Ei
  *
  *  where the basis vectors are collected as elements of a row vector.
  */
-Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T);
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T);
 
 /** Given:
  *      - a matrix representation in an AO basis (f_AO)
@@ -64,7 +64,7 @@ Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::Mat
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C);
 
 /** Give the M-dimensional Jacobi rotation matrix for the orbitals p and q (p < q) and a given @param angle.
  *

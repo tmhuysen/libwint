@@ -174,7 +174,7 @@ Eigen::Tensor<double, 4> LibintCommunicator::calculateTwoBodyIntegrals(const lib
 /**
  *  @return the static singleton instance
  */
-LibintCommunicator& LibintCommunicator::get() const {
+LibintCommunicator& LibintCommunicator::get() {  // need to return by reference since we deleted the relevant constructor
     static LibintCommunicator singleton_instance;  // instantiated on first use and guaranteed to be destroyed
     return singleton_instance;
 }
