@@ -3,6 +3,11 @@
 #include <iostream>
 
 
+
+namespace libwint {
+namespace transformations {
+
+
 /** Given:
  *      - a matrix h, which contains one-electron integrals in some basis B
  *      - a transformation matrix which represents the transformation of B into B'
@@ -18,7 +23,7 @@
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::MatrixXd libwint::transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
+Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& T) {
     return T.adjoint() * h * T;
 }
 
@@ -38,7 +43,7 @@ Eigen::MatrixXd libwint::transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T) {
 
     // Since we're only getting T as a matrix, we should make the appropriate tensor to perform contractions
     Eigen::TensorMap<Eigen::Tensor<double, 2>> T_tensor (T.data(), T.rows(), T.cols());
@@ -73,14 +78,13 @@ Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor
 };
 
 
-
 /** Given:
  *      - a matrix representation in an AO basis (f_AO)
  *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
  *
  *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
+Eigen::MatrixXd transform_AO_to_SO(const Eigen::MatrixXd& f_AO, const Eigen::MatrixXd& C) {
     return transformOneElectronIntegrals(f_AO, C);
 }
 
@@ -91,7 +95,7 @@ Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::Matrix
  *
  *  transform and return the matrix in the AO basis
  */
-Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
+Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::MatrixXd& C){
     Eigen::MatrixXd C_inverse = C.inverse();
     return transformOneElectronIntegrals(f_SO, C_inverse);
 }
@@ -103,8 +107,8 @@ Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::Matrix
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> libwint::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
-    return transform_two_electron_integrals(g_AO, C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C) {
+    return transformTwoElectronIntegrals(g_AO, C);
 };
 
 
@@ -112,7 +116,7 @@ Eigen::Tensor<double, 4> libwint::transform_AO_to_SO(Eigen::Tensor<double, 4>& g
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::MatrixXd libwint::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U) {
+Eigen::MatrixXd rotateIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& U) {
 
     // Check if the given matrix U is unitary
     if (!U.isUnitary()) {
@@ -127,14 +131,14 @@ Eigen::MatrixXd libwint::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U) {
+Eigen::Tensor<double, 4> rotateIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& U) {
 
     // Check if the given matrix U is unitary
     if (!U.isUnitary()) {
         throw std::invalid_argument("The given matrix U is not unitary.");
     }
 
-    return transform_two_electron_integrals(g, U);
+    return transformTwoElectronIntegrals(g, U);
 };
 
 
@@ -145,14 +149,14 @@ Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, 
  *
  * Note that we work with the (cos, sin, -sin, cos) definition
  */
-Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M) {
+Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M) {
 
-    if (P >= Q) {
-        throw std::invalid_argument("P should be smaller than Q");
+    if (p >= q) {
+        throw std::invalid_argument("p should be smaller than q");
     }
 
-    if ((M < P + 1) || (M < Q + 1)) {
-        throw std::invalid_argument("M should be larger than (P+1) and larger than (Q+1).");
+    if ((M < p + 1) || (M < q + 1)) {
+        throw std::invalid_argument("M should be larger than (p+1) and larger than (q+1).");
     }
 
     // The union of these two conditions also excludes M < 2
@@ -163,10 +167,10 @@ Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta
     Eigen::MatrixXd J = Eigen::MatrixXd::Identity(M, M);
 
     // Add the Jacobi rotation terms
-    J(P, P) = std::cos(theta);
-    J(P, Q) = std::sin(theta);
-    J(Q, P) = -std::sin(theta);
-    J(Q, Q) = std::cos(theta);
+    J(p, p) = std::cos(theta);
+    J(p, q) = std::sin(theta);
+    J(q, p) = -std::sin(theta);
+    J(q, q) = std::cos(theta);
 
     return J;
 }
@@ -177,7 +181,7 @@ Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta
  * In this function, I've implemented it so it can be checked to be correct.
  * In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
  */
-Eigen::MatrixXd libwint::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
 
     // Assert the assumption of a symmetric matrix
     assert(h.isApprox(h.transpose()));
@@ -206,3 +210,7 @@ Eigen::MatrixXd libwint::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h
 
     return h_rotated;
 }
+
+
+}  // namespace transformations
+}  // namespace libwint

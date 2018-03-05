@@ -6,7 +6,8 @@
 
 
 
-namespace libwint::transformations {
+namespace libwint {
+namespace transformations {
 
 
 /** Given:
@@ -23,7 +24,7 @@ namespace libwint::transformations {
  *
  *  where the basis vectors are collected as elements of a row vector.
  */
-Eigen::MatrixXd transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T);
+Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& T);
 
 
 /** Given:
@@ -40,7 +41,7 @@ Eigen::MatrixXd transformOneElectronIntegrals(Eigen::MatrixXd& h, Eigen::MatrixX
  *
  *  where the basis vectors are collected as elements of a row vector.
  */
-Eigen::Tensor<double, 4> transformTwoElectronIntegrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T);
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T);
 
 
 /** Given:
@@ -49,7 +50,7 @@ Eigen::Tensor<double, 4> transformTwoElectronIntegrals(Eigen::Tensor<double, 4>&
  *
  *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C);
+Eigen::MatrixXd transform_AO_to_SO(const Eigen::MatrixXd& f_AO, const Eigen::MatrixXd& C);
 
 
 /** Given:
@@ -58,7 +59,7 @@ Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C);
  *
  *  transform and return the matrix in the AO basis
  */
-Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C);
+Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::MatrixXd& C);
 
 
 /** Given:
@@ -67,31 +68,41 @@ Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C);
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C);
 
 
 /** Given a unitary matrix U that transforms a basis B into B', return the one-electron integrals in the rotated basis
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U);
+Eigen::MatrixXd rotateIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& U);
 
 
 /** Given a unitary matrix U that transforms a basis B into B', return the two-electron integrals in the rotated basis
  *
  * Note that the basis transformation is explicitly written as (B' = B U)
  */
-Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U);
+Eigen::Tensor<double, 4> rotateIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& U);
 
+
+/** Give the M-dimensional Jacobi rotation matrix for the orbitals p and q (p < q) and a given @param angle.
+ *
+ * M is the actual dimension of the matrix that is returned
+ * @param p and @param q represent the rows and columns, i.e. they start at 0
+ *
+ * Note that we work with the (cos, sin, -sin, cos) definition
+ */
+Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M);
 
 
 /** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
  *
  *  In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
  */
-Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
+Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
 
 
+}  // namespace transformations
 }  // namespace libwint
 
 #endif // LIBWINT_TRANSFORMATIONS_HPP

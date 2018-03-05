@@ -15,8 +15,8 @@ class SOBasis {
 private:
     const libwint::AOBasis& ao_basis;
     const Eigen::MatrixXd& C;  // the coefficient matrix that links the spatial orbitals with the underlying atomic orbitals
-    Eigen::MatrixXd& h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis
-    Eigen::Tensor<double, 4>& g_SO;  // the two-electron repulsion integrals in the spatial orbital basis
+    Eigen::MatrixXd h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis
+    Eigen::Tensor<double, 4> g_SO;  // the two-electron repulsion integrals in the spatial orbital basis
     const size_t K;  // the number of spatial orbitals
 
 
@@ -30,9 +30,9 @@ public:
 
 
     // Getters
-    Eigen::MatrixXd& get_h_SO();
-    Eigen::Tensor<double, 4>& get_g_SO();
-    const size_t& get_K();
+    Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
+    Eigen::Tensor<double, 4> get_g_SO() { return this->g_SO; }
+    const size_t get_K() { return this->K; }
 
 
     // Methods
