@@ -91,18 +91,17 @@ namespace libwint {
 
     class SOBasis {
         __ private members __
-            - Eigen::MatrixXd& h_SO
-            - Eigen::Tensor<double, 4>& g_SO
+            - Eigen::MatrixXd h_SO
+            - Eigen::Tensor<double, 4> g_SO
             - const size_t K
         == constructors ==
-            **SOBasis**(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C)
-            **SOBasis**(
+            **SOBasis**(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C)
         __ public methods __
-            + inline Eigen::MatrixXd& **get_h_SO**() const
-            + inline Eigen::Tensor<double, 4>& **get_g_SO**() const
-            + inline const size_t **get_K**() const
+            + Eigen::MatrixXd **get_h_SO**() const
+            + Eigen::Tensor<double, 4> **get_g_SO**() const
+            + const size_t **get_K**() const
 
-            + void **transform**(Eigen::MatrixXd& T)
+            + void **transform**(const Eigen::MatrixXd& T)
             + void **transformJacobi**(size_t p, size_t q, double angle)
     }
 

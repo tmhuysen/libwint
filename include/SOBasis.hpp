@@ -25,20 +25,20 @@ public:
     /**
      *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
      */
-    SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C);
+    SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C);
 
 
     // Getters
     Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
-    Eigen::Tensor<double, 4> get_g_SO() { return this->g_SO; }
-    const size_t get_K() { return this->K; }
+    Eigen::Tensor<double, 4> get_g_SO() const { return this->g_SO; }
+    const size_t get_K() const { return this->K; }
 
 
     // Methods
     /**
      *  Transform the one- and two-electron integrals according to the basis transformation matrix @param T
      */
-    void transform(Eigen::MatrixXd& T);
+    void transform(const Eigen::MatrixXd& T);
 
 
     /**

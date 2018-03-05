@@ -14,7 +14,7 @@ namespace libwint {
 /**
  *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
  */
-SOBasis::SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C):
+SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C):
         K(ao_basis.calculateNumberOfBasisFunctions())
 {
     Eigen::MatrixXd h_AO = ao_basis.get_T() + ao_basis.get_V();
@@ -31,7 +31,7 @@ SOBasis::SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C):
 /**
  *  Transform the one- and two-electron integrals according to the basis transformation matrix @param T
  */
-void SOBasis::transform(Eigen::MatrixXd& T) {
+void SOBasis::transform(const Eigen::MatrixXd& T) {
 
     this->h_SO = libwint::transformations::transformOneElectronIntegrals(this->h_SO, T);
     this->g_SO = libwint::transformations::transformTwoElectronIntegrals(this->g_SO, T);
