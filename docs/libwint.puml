@@ -64,21 +64,22 @@ namespace libwint {
             - const std::string name
             - libint2::BasisSet& libint_basis
 
-            - const Eigen::MatrixXd& S
-            - const Eigen::MatrixXd& T
-            - const Eigen::MatrixXd& V
-            - const Eigen::Tensor<double, 4>& g
+            - Eigen::MatrixXd S
+            - Eigen::MatrixXd T
+            - Eigen::MatrixXd V
+            - Eigen::Tensor<double, 4> g
             - const size_t K
         == constructors ==
-            **AOBasis**(Molecule& molecule, const std::string basis_name)
+            **AOBasis**(Molecule& molecule, std::string basis_name)
         __ public methods __
-            + libwint::Molecule& **get_molecule**() const
-            + Eigen::MatrixXd& **get_S**() const
-            + Eigen::MatrixXd& **get_T**() const
-            + Eigen::MatrixXd& **get_V**() const
-            + Eigen::Tensor<double, 4>& **get_g**() const
+            + const libwint::Molecule& **get_molecule**() const
+            + Eigen::MatrixXd **get_S**() const
+            + Eigen::MatrixXd **get_T**() const
+            + Eigen::MatrixXd **get_V**() const
+            + Eigen::Tensor<double, 4> **get_g**() const
 
-            + size_t **calculateNumberOfBasisFunctions**()
+            + size_t **calculateNumberOfBasisFunctions**() const
+
             + void **calculateOverlapIntegrals**()
             + void **calculateKineticIntegrals**()
             + void **calculateNuclearIntegrals**()

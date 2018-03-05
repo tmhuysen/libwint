@@ -42,7 +42,7 @@ public:
 
 
     // Getters
-    libwint::Molecule get_molecule() const;
+    const libwint::Molecule& get_molecule() const { return this->molecule; }
     Eigen::MatrixXd get_S() const;
     Eigen::MatrixXd get_T() const;
     Eigen::MatrixXd get_V() const;
