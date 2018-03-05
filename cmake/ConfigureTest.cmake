@@ -12,5 +12,10 @@ target_link_libraries(${TEST_NAME} PUBLIC Eigen3::Eigen)
 # ... add the libint2 headers ...
 target_include_directories(${TEST_NAME} PUBLIC ${libint2_INCLUDE_DIRS})
 
+# ... include cpputil ...
+target_include_directories(${TEST_NAME} PRIVATE ${cpputil_INCLUDE_DIRS})
+target_link_libraries(${TEST_NAME} PRIVATE cpputil)
+
 # ... link to this project's library ...
 target_link_libraries(${TEST_NAME} PRIVATE ${LIBRARY_NAME})
+

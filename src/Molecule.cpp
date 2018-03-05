@@ -48,7 +48,7 @@ std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename
  * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
  *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
  */
-Molecule::Molecule(const std::string& xyz_filename) :
+Molecule::Molecule(const std::string xyz_filename) :
         atoms (this->parseXYZFilename(xyz_filename)),
         N (this->calculateTotalNucleicCharge())
 {}
@@ -63,7 +63,7 @@ Molecule::Molecule(const std::string& xyz_filename) :
      * @param xyz_filename: the path to a .xyz-file that contains the geometry specifications of the molecule.
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
-Molecule::Molecule(const std::string& xyz_filename, int molecular_charge) :
+Molecule::Molecule(const std::string xyz_filename, int molecular_charge) :
         atoms (this->parseXYZFilename(xyz_filename)),
         N (this->calculateTotalNucleicCharge() - molecular_charge)  // we're possibly creating an ion, so N = charges of nuclei - total molecular charge
 {}
@@ -118,7 +118,6 @@ size_t Molecule::numberOfAtoms() const { return this->atoms.size(); }  // atoms 
 /** @return the sum of all the charges of the nuclei
  */
 size_t Molecule::calculateTotalNucleicCharge() const {
-    std::cout << "I'm in calculateTotalNucleicCharge." << std::endl;
 
     size_t nucleic_charge = 0;
 

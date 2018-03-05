@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE "Molecule"
 
+
 #include "Molecule.hpp"
 
 #include <boost/test/unit_test.hpp>
@@ -45,10 +46,10 @@ BOOST_AUTO_TEST_CASE ( distance ) {
 }
 
 
-BOOST_AUTO_TEST_CASE ( constructor ) {
+BOOST_AUTO_TEST_CASE ( molecule_constructor ) {
 
     // Create some molecule objects
-    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
+    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
     libwint::Molecule water (xyzfilename);
     libwint::Molecule water_anion (xyzfilename, -1);
     libwint::Molecule water_neutral (xyzfilename, 0);
@@ -64,29 +65,33 @@ BOOST_AUTO_TEST_CASE ( constructor ) {
 
 BOOST_AUTO_TEST_CASE ( methods_water ) {
 
+    // We have reference internuclear repulsion energy from Horton
+    double ref_internuclear_repulsion_energy = 8.00236693455;
+
     // Create the water molecule
-    const std::string xyzfilename = "../tests/ref_data/h2o.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
-    libwint::Molecule water (xyzfilename);
+    libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
 
     // Test the basic methods
     BOOST_CHECK_EQUAL(water.numberOfAtoms(), 3);
     BOOST_CHECK_EQUAL(water.calculateTotalNucleicCharge(), 10);
 
     // Test the calculation of the nuclear repulsion energy
-    BOOST_CHECK(std::abs(water.calculateInternuclearRepulsionEnergy() - 8.00236693455) < 1.0e-05); // Reference data from horton
+    BOOST_CHECK(std::abs(water.calculateInternuclearRepulsionEnergy() - ref_internuclear_repulsion_energy) < 1.0e-07);  // reference data from horton
 }
 
 
 BOOST_AUTO_TEST_CASE ( methods_h2 ) {
 
+    // We have reference internuclear repulsion energy from Horton
+    double ref_internuclear_repulsion_energy = 0.714285658963;
+
     // Create the hydrogen gas molecule
-    const std::string xyzfilename = "../tests/ref_data/h2.xyz";  // Specify the relative path to the input .xyz-file (w.r.t. the out-of-source build directory)
-    libwint::Molecule h2 (xyzfilename);
+    libwint::Molecule h2 ("../tests/ref_data/h2.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
 
     // Test the basic methods
     BOOST_CHECK_EQUAL(h2.numberOfAtoms(), 2);
     BOOST_CHECK_EQUAL(h2.calculateTotalNucleicCharge(), 2);
 
     // Test the calculation of the nuclear repulsion energy
-    BOOST_CHECK(std::abs(h2.calculateInternuclearRepulsionEnergy() - 0.714285658963) < 1.0e-05); // Reference data from horton
+    BOOST_CHECK(std::abs(h2.calculateInternuclearRepulsionEnergy() - ref_internuclear_repulsion_energy) < 1.0e-07);  // reference data from horton
 }

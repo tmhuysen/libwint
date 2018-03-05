@@ -11,3 +11,7 @@ find_package(Boost REQUIRED)
 
 # libint2 doesn't include a way to use find_package(libint2). Until then, we will use our custom Findlibint2.cmake-file, so that we can use find_package(libint2)
 find_package(libint2 REQUIRED)
+
+
+# Find the cpputil library
+find_package(cpputil REQUIRED)
