@@ -12,6 +12,9 @@ BOOST_AUTO_TEST_CASE ( parse_xyz_filename ) {
     // Make sure we get an error when a nonsense path is given for the .xyz file name
     BOOST_REQUIRE_THROW(libwint::Molecule ("this is a nonsense data path"), std::runtime_error);
 
+    // Make sure we get an error when a path with a wrong extension is given
+    BOOST_REQUIRE_THROW(libwint::Molecule ("../tests/ref_data/nuclear.data"), std::runtime_error);
+
     // Make sure we don't get an error when a correct path is given
     BOOST_REQUIRE_NO_THROW(libwint::Molecule ("../tests/ref_data/h2o.xyz"));
 }

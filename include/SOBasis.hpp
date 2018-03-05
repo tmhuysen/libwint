@@ -15,9 +15,10 @@ class SOBasis {
 private:
     const libwint::AOBasis& ao_basis;
     const Eigen::MatrixXd& C;  // the coefficient matrix that links the spatial orbitals with the underlying atomic orbitals
+    const size_t K;  // the number of spatial orbitals
+
     Eigen::MatrixXd h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis
     Eigen::Tensor<double, 4> g_SO;  // the two-electron repulsion integrals in the spatial orbital basis
-    const size_t K;  // the number of spatial orbitals
 
 
 
@@ -26,7 +27,7 @@ public:
     /**
      *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
      */
-    SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C);
+    SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C);
 
 
     // Getters
@@ -39,7 +40,7 @@ public:
     /**
      *  Transform the one- and two-electron integrals according to the basis transformation matrix @param T
      */
-    void transform(const Eigen::MatrixXd& T);
+    void transform(Eigen::MatrixXd& T);
 
 
     /**

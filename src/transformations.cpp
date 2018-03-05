@@ -43,7 +43,7 @@ Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Ei
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T) {
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
 
     // Since we're only getting T as a matrix, we should make the appropriate tensor to perform contractions
     Eigen::TensorMap<Eigen::Tensor<double, 2>> T_tensor (T.data(), T.rows(), T.cols());
@@ -107,38 +107,8 @@ Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::Mat
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C) {
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
     return transformTwoElectronIntegrals(g_AO, C);
-};
-
-
-/** Given a unitary matrix U that transforms a basis B into B', return the one-electron integrals in the rotated basis
- *
- * Note that the basis transformation is explicitly written as (B' = B U)
- */
-Eigen::MatrixXd rotateIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& U) {
-
-    // Check if the given matrix U is unitary
-    if (!U.isUnitary()) {
-        throw std::invalid_argument("The given matrix U is not unitary.");
-    }
-
-    return transformOneElectronIntegrals(h, U);
-}
-
-
-/** Given a unitary matrix U that transforms a basis B into B', return the two-electron integrals in the rotated basis
- *
- * Note that the basis transformation is explicitly written as (B' = B U)
- */
-Eigen::Tensor<double, 4> rotateIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& U) {
-
-    // Check if the given matrix U is unitary
-    if (!U.isUnitary()) {
-        throw std::invalid_argument("The given matrix U is not unitary.");
-    }
-
-    return transformTwoElectronIntegrals(g, U);
 };
 
 

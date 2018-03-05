@@ -20,9 +20,9 @@ private:
     bool are_calculated_kinetic_integrals = false;
     bool are_calculated_electron_repulsion_integrals = false;
 
-    const libint2::BasisSet& libint_basis;
-    const std::string name;
     const Molecule& molecule;
+    const std::string name;
+    const libint2::BasisSet& libint_basis;
 
     Eigen::MatrixXd S;  // The overlap integrals matrix for the given basis and molecule
     Eigen::MatrixXd V;  // The nuclear integrals matrix for the given basis and molecule

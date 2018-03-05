@@ -14,7 +14,7 @@ namespace libwint {
 /**
  *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
  */
-SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C):
+SOBasis::SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C):
         ao_basis(ao_basis),
         C(C),
         K(this->ao_basis.calculateNumberOfBasisFunctions())
@@ -33,7 +33,7 @@ SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C):
 /**
  *  Transform the one- and two-electron integrals according to the basis transformation matrix @param T
  */
-void SOBasis::transform(const Eigen::MatrixXd& T) {
+void SOBasis::transform(Eigen::MatrixXd& T) {
 
     this->h_SO = libwint::transformations::transformOneElectronIntegrals(this->h_SO, T);
     this->g_SO = libwint::transformations::transformTwoElectronIntegrals(this->g_SO, T);
@@ -46,7 +46,7 @@ void SOBasis::transform(const Eigen::MatrixXd& T) {
 void SOBasis::transformJacobi(size_t p, size_t q, double angle) {
 
     // Construct a Jacobi rotation matrix and to the transformation with that matrix
-    size_t dim = static_cast<size_t>(this->h_SO.cols());  // cols() returns a long
+    auto dim = static_cast<size_t>(this->h_SO.cols());  // cols() returns a long
     Eigen::MatrixXd jacobi_rotation_matrix = libwint::transformations::jacobiRotationMatrix(p, q, angle, dim);
 
     this->transform(jacobi_rotation_matrix);

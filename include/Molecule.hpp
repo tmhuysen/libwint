@@ -13,8 +13,8 @@ namespace libwint {
 
 class Molecule {
 private:
-    const size_t N;  // number of electrons
     const std::vector<libint2::Atom> atoms;
+    const size_t N;  // number of electrons
 
 
     /**

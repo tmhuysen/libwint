@@ -1,8 +1,5 @@
 #include "Molecule.hpp"
 
-#include <boost/filesystem.hpp>
-
-
 
 namespace libwint {
 
@@ -16,10 +13,17 @@ namespace libwint {
  */
 std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename) const {
 
-    // If the filename doesn't end with .xyz, we assume that the user supplied a wrong file
-    boost::filesystem::path path (filename);
-    std::string extension = path.filename().string();
-    if (!(extension == ".xyz")) {
+    // Find the extension of the given path (https://stackoverflow.com/a/51992)
+    std::string extension;
+    std::string::size_type idx = filename.rfind('.');
+
+    if (idx != std::string::npos) {
+        extension = filename.substr(idx+1);
+    } else {
+        throw std::runtime_error("I did not find an extension in your given path.");
+    }
+
+    if (!(extension == "xyz")) {
         throw std::runtime_error("You did not provide a .xyz file name");
     }
 
@@ -27,9 +31,9 @@ std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename
     std::ifstream input_file_stream (filename);
     if (!input_file_stream.good()) {
         throw std::runtime_error("The provided .xyz file name is illegible. Maybe you specified a wrong path?");
+    } else {
+        return libint2::read_dotxyz (input_file_stream);  // can't make a reference because that's how libint2 is implemented
     }
-
-    return libint2::read_dotxyz (input_file_stream);  // can't make a reference because that's how libint2 is implemented
 }
 
 
@@ -114,6 +118,8 @@ size_t Molecule::numberOfAtoms() const { return this->atoms.size(); }  // atoms 
 /** @return the sum of all the charges of the nuclei
  */
 size_t Molecule::calculateTotalNucleicCharge() const {
+    std::cout << "I'm in calculateTotalNucleicCharge." << std::endl;
+
     size_t nucleic_charge = 0;
 
     for (const auto& atom : this->atoms) {
