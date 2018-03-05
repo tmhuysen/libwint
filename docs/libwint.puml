@@ -95,6 +95,7 @@ namespace libwint {
             - const size_t K
         == constructors ==
             **SOBasis**(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C)
+            **SOBasis**(
         __ public methods __
             + inline Eigen::MatrixXd& **get_h_SO**() const
             + inline Eigen::Tensor<double, 4>& **get_g_SO**() const
@@ -127,8 +128,9 @@ namespace libwint {
             + {static} LibintCommunicator& get()
             + LibintCommunicator(LibintCommunicator const& libint_communicator) = delete
             + void operator=(LibintCommunicator const& libint_communicator) = delete
-            + Eigen::MatrixXd **calculateOneBodyIntegrals**(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
+
+            + Eigen::MatrixXd **calculateOneBodyIntegrals**(libint2::Operator opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const
+            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const
     }
 
 

@@ -18,10 +18,10 @@ namespace libwint {
  */
 class LibintCommunicator {
 private:
-    // Constructor
+    // Private constructor for the singleton class
     LibintCommunicator();
 
-    // Destructor: we don't want anyone else to possibly delete the singleton object
+    // Private destructor: we don't want anyone else to possibly delete the singleton object
     ~LibintCommunicator();
 
 
@@ -30,7 +30,7 @@ public:
     /**
      *  @return the static singleton instance
      */
-    static LibintCommunicator& get();
+    static LibintCommunicator& get() const;
 
 
     // Delete the following methods (as required by the singleton class design).
@@ -43,12 +43,12 @@ public:
      * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
 
      * @param opertype: a libint2::Operator (e.g. libint2::Operator::overlap)
-     * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
+     * @param basis_set:      a libint2::BasisSet object that represents the basis put on the molecule
      * @param atoms:    a std::vector<Atom>
 
      * @return: an Eigen::MatrixXd storing the integrals
      */
-    Eigen::MatrixXd computeOneBodyIntegrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms);
+    Eigen::MatrixXd calculateOneBodyIntegrals(libint2::Operator opertype, const libint2::BasisSet& basis_set, const std::vector<libint2::Atom>& atoms) const;
 
     /**
      * Calculates the two-electron integrals, given an orbital basis and atoms.
@@ -58,7 +58,7 @@ public:
 
      * @return: an Eigen::Tensor<double, 4> storing the integrals in CHEMIST'S NOTATION (11|22)
      */
-    Eigen::Tensor<double, 4> computeTwoBodyIntegrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms);
+    Eigen::Tensor<double, 4> calculateTwoBodyIntegrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const;
 };
 
 

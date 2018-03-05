@@ -13,8 +13,6 @@ namespace libwint {
 
 class SOBasis {
 private:
-    const libwint::AOBasis& ao_basis;
-    const Eigen::MatrixXd& C;  // the coefficient matrix that links the spatial orbitals with the underlying atomic orbitals
     const size_t K;  // the number of spatial orbitals
 
     Eigen::MatrixXd h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis

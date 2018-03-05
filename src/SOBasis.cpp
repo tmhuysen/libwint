@@ -15,14 +15,12 @@ namespace libwint {
  *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
  */
 SOBasis::SOBasis(const libwint::AOBasis& ao_basis, Eigen::MatrixXd& C):
-        ao_basis(ao_basis),
-        C(C),
-        K(this->ao_basis.calculateNumberOfBasisFunctions())
+        K(ao_basis.calculateNumberOfBasisFunctions())
 {
-    Eigen::MatrixXd h_AO = this->ao_basis.get_T() + this->ao_basis.get_V();
+    Eigen::MatrixXd h_AO = ao_basis.get_T() + ao_basis.get_V();
     this->h_SO = libwint::transformations::transform_AO_to_SO(h_AO, C);
 
-    this->g_SO = libwint::transformations::transform_AO_to_SO(this->ao_basis.get_g(), C);
+    this->g_SO = libwint::transformations::transform_AO_to_SO(ao_basis.get_g(), C);
 }
 
 
