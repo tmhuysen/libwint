@@ -10,6 +10,10 @@ namespace libwint {
 namespace transformations {
 
 
+/*
+ *  GENERAL TRANSFORMATIONS
+ */
+
 /** Given:
  *      - a matrix h, which contains one-electron integrals in some basis B
  *      - a transformation matrix which represents the transformation of B into B'
@@ -82,6 +86,10 @@ Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<doubl
 };
 
 
+/*
+ *  AO AND SO CONVERSION WRAPPERS
+ */
+
 /** Given:
  *      - a matrix representation in an AO basis (f_AO)
  *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
@@ -116,6 +124,10 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
 };
 
 
+/*
+ *  JACOBI ROTATIONS AND WRAPPERS
+ */
+
 /** Give the M-dimensional Jacobi rotation matrix (with an angle @param: theta in radians) for the orbitals P and Q (P < Q).
  *
  * M is the actual dimension of the matrix that is returned
@@ -149,48 +161,21 @@ Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M)
 
 
 /**
- *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
+ *  Using a Jacobi rotation with angle theta of the orbitals p and q, return the transformed one-electron integrals.
  *  This function is implemented using Eigen's Jacobi module.
  */
-Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t p, size_t q, double theta) {
 
-//    double c,s;
-//    c = cos (rot * PI / 180.0);
-//    s = sin (rot * PI / 180.0);
-//    Eigen::JacobiRotation<double> J(c,s);
-//    this->one_ints.applyOnTheLeft(index1,index2,J.adjoint());
-//    this->one_ints.applyOnTheRight(index1,index2,J);
-//
-//    //FIXME write own transformation with jacobi
-//    Eigen::MatrixXd J2 = Eigen::MatrixXd::Identity(one_ints.cols(),one_ints.cols());
-//    J2.applyOnTheRight(index1,index2,J);
-//    this->two_ints = libwint::transform_AO_to_SO(two_ints,J2);
-
-
-    // Assert the assumption of a symmetric matrix
-    assert(h.isApprox(h.transpose()));
+    double c = std::cos(theta);
+    double s = std::sin(theta);
 
     // Initialize the rotated matrix by making a copy of the original matrix
     Eigen::MatrixXd h_rotated = h;
 
-    // Since we have a Jacobi rotation, we can directly fill in rows and columns P and Q
-    // Update the P-th and Q-th row
-    for (size_t S = 0; S < h.cols(); S++) {
-        h_rotated(P,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
-        h_rotated(Q,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
-    }
-
-    // Update the P-th and Q-th column
-    for (size_t R = 0; R < h.rows(); R++) {
-        h_rotated(R,P) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
-        h_rotated(R,Q) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
-    }
-
-    // Update the four intersections (P,P) (P,Q) (Q,P) (Q,Q)
-    h_rotated(P,P) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(P,Q) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(Q,P) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(Q,Q) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
+    // Use Eigen's Jacobi module to apply the Jacobi rotations directly (cfr. T.adjoint() * h * T)
+    Eigen::JacobiRotation<double> jacobi (c, s);
+    h_rotated.applyOnTheLeft(p, q, jacobi.adjoint());
+    h_rotated.applyOnTheRight(p, q, jacobi);
 
     return h_rotated;
 }
@@ -204,6 +189,15 @@ Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<do
 
 
 };
+
+
+
+
+
+
+
+
+
 
 
 
