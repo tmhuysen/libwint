@@ -110,6 +110,9 @@ namespace libwint {
             Eigen::MatrixXd **transformOneElectronIntegrals**(const Eigen::MatrixXd& h, const Eigen::MatrixXd& T)
             Eigen::Tensor<double, 4> **transformTwoElectronIntegrals**(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T)
 
+            Eigen::MatrixXd **jacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
+            void **checkJacobiParameters**(size_t p, size_t q, size_t M)
+            void **checkJacobiParameters**(size_t p, size_t q, const Eigen::MatrixXd& h)
             Eigen::MatrixXd **rotateOneElectronIntegralsJacobi**(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
             Eigen::Tensor<double, 4> **rotateTwoElectronIntegralsJacobi**(const Eigen::Tensor<double, 4> g, size_t P, size_t Q, double theta)
 
@@ -117,7 +120,6 @@ namespace libwint {
             Eigen::MatrixXd **transform_SO_to_AO**(const Eigen::MatrixXd& f_SO, const Eigen::MatrixXd& C)
             Eigen::Tensor<double, 4> **transform_AO_to_SO**(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C)
 
-            Eigen::MatrixXd **jacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
     }
 
 

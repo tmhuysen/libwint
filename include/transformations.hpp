@@ -80,6 +80,16 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
  *  JACOBI ROTATIONS AND WRAPPERS
  */
 
+/**
+ *  Check the given Jacobi rotation parameters for invalid arguments:
+ *      p < q
+ *      p <= M
+ *      q <= M
+ *  where p and q are the orbital indices (starting from 0) and M is the dimension of the vector space
+ */
+void checkJacobiParameters(size_t p, size_t q, size_t M);
+void checkJacobiParameters(size_t p, size_t q, const Eigen::MatrixXd& h);
+
 /** Give the M-dimensional Jacobi rotation matrix for the orbitals p and q (p < q) and a given @param theta.
  *
  * M is the actual dimension of the matrix that is returned

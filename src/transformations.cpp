@@ -128,14 +128,14 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
  *  JACOBI ROTATIONS AND WRAPPERS
  */
 
-/** Give the M-dimensional Jacobi rotation matrix (with an angle @param: theta in radians) for the orbitals P and Q (P < Q).
- *
- * M is the actual dimension of the matrix that is returned
- * P and Q represent the rows and columns, i.e. they start at 0
- *
- * Note that we work with the (cos, sin, -sin, cos) definition
+/**
+ *  Check the given Jacobi rotation parameters for invalid arguments:
+ *      p < q
+ *      p <= M
+ *      q <= M
+ *  where p and q are the orbital indices (starting from 0) and M is the dimension of the vector space
  */
-Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M) {
+void checkJacobiParameters(size_t p, size_t q, size_t M) {
 
     if (p >= q) {
         throw std::invalid_argument("p should be smaller than q");
@@ -146,6 +146,26 @@ Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M)
     }
 
     // The union of these two conditions also excludes M < 2
+}
+
+void checkJacobiParameters(size_t p, size_t q, const Eigen::MatrixXd& h) {
+
+    auto dim = static_cast<size_t>(h.cols());
+
+    checkJacobiParameters(p, q, dim);
+}
+
+
+/** Give the M-dimensional Jacobi rotation matrix (with an angle @param: theta in radians) for the orbitals P and Q (P < Q).
+ *
+ * M is the actual dimension of the matrix that is returned
+ * P and Q represent the rows and columns, i.e. they start at 0
+ *
+ * Note that we work with the (cos, sin, -sin, cos) definition
+ */
+Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M) {
+
+    checkJacobiParameters(p, q, M);
 
 
     double c = std::cos(theta);
@@ -165,6 +185,8 @@ Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M)
  *  This function is implemented using Eigen's Jacobi module.
  */
 Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t p, size_t q, double theta) {
+
+    checkJacobiParameters(p, q, h);
 
     double c = std::cos(theta);
     double s = std::sin(theta);
