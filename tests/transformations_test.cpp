@@ -92,14 +92,38 @@ BOOST_AUTO_TEST_CASE ( transform_so_to_ao ) {
 }
 
 
-BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
+BOOST_AUTO_TEST_CASE ( check_jacobi_parameters ) {
 
     // We can't create a Jacobi matrix for P > Q
-    BOOST_REQUIRE_THROW(libwint::transformations::jacobiRotationMatrix(3, 2, 1.0, 5), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(3, 2, 5), std::invalid_argument);
 
     // P+1 and Q+1 should both be smaller than M
-    BOOST_REQUIRE_THROW(libwint::transformations::jacobiRotationMatrix(1, 5, 1.0, 4), std::invalid_argument);
-    BOOST_REQUIRE_NO_THROW(libwint::transformations::jacobiRotationMatrix(2, 3, 1.0, 4));
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(1, 5, 4), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(4, 2, 4), std::invalid_argument);
+
+    // Check if valid parameters get passed
+    BOOST_REQUIRE_NO_THROW(libwint::transformations::checkJacobiParameters(2, 3, 4));
+}
+
+
+BOOST_AUTO_TEST_CASE ( check_jacobi_parameters_matrix ) {
+
+    Eigen::MatrixXd h1 (5, 5);
+    Eigen::MatrixXd h2 (4, 4);
+
+    // We can't create a Jacobi matrix for P > Q
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(3, 2, h1), std::invalid_argument);
+
+    // P+1 and Q+1 should both be smaller than M
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(1, 5, h2), std::invalid_argument);
+    BOOST_REQUIRE_THROW(libwint::transformations::checkJacobiParameters(4, 2, h2), std::invalid_argument);
+
+    // Check if valid parameters get passed
+    BOOST_REQUIRE_NO_THROW(libwint::transformations::checkJacobiParameters(2, 3, h2));
+}
+
+
+BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
 
     // A random Jacobi matrix is unitary
     BOOST_CHECK(libwint::transformations::jacobiRotationMatrix(4, 7, 6.9921, 10).isUnitary());
