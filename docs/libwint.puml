@@ -102,7 +102,7 @@ namespace libwint {
             + const size_t **get_K**() const
 
             + void **transform**(const Eigen::MatrixXd& T)
-            + void **transformJacobi**(size_t p, size_t q, double angle)
+            + void **rotateJacobi**(size_t p, size_t q, double angle)
     }
 
 

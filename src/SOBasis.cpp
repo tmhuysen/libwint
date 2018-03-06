@@ -39,15 +39,13 @@ void SOBasis::transform(const Eigen::MatrixXd& T) {
 
 
 /**
- *  Transform the one- and two-electron integrals according to the Jacobi rotation parameters p, q and a given angle.
+ *  Transform the one- and two-electron integrals according to the Jacobi rotation parameters p, q and a given angle theta in radians.
  */
-void SOBasis::transformJacobi(size_t p, size_t q, double angle) {
+void SOBasis::rotateJacobi(size_t p, size_t q, double theta) {
 
-    // Construct a Jacobi rotation matrix and to the transformation with that matrix
-    auto dim = static_cast<size_t>(this->h_SO.cols());  // cols() returns a long
-    Eigen::MatrixXd jacobi_rotation_matrix = libwint::transformations::jacobiRotationMatrix(p, q, angle, dim);
-
-    this->transform(jacobi_rotation_matrix);
+    // We can use our specialized rotate{One,Two}ElectronIntegralsJacobi functions
+    this->h_SO = libwint::transformations::rotateOneElectronIntegralsJacobi(this->h_SO, p, q, theta);
+    this->g_SO = libwint::transformations::rotateTwoElectronIntegralsJacobi(this->g_SO, p, q, theta);
 }
 
 

@@ -41,10 +41,10 @@ public:
     void transform(const Eigen::MatrixXd& T);
 
 
-    /**
-     *  Transform the one- and two-electron integrals according to the Jacobi rotation parameters p, q and a given angle.
-     */
-    void transformJacobi(size_t p, size_t q, double angle);
+/**
+ *  Transform the one- and two-electron integrals according to the Jacobi rotation parameters p, q and a given angle theta in radians.
+ */
+    void rotateJacobi(size_t p, size_t q, double theta);
 };
 
 

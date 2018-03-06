@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE ( transform_jacobi ) {
     libwint::SOBasis so_basis (ao_basis, C);
 
 
-    // Test if the transformJacobi wrapper transformation is the same as using a Jacobi matrix as transformation matrix
+    // Test if the rotateJacobi wrapper transformation is the same as using a Jacobi matrix as transformation matrix
     //  Specify some Jacobi rotation parameters
     size_t p = 2;
     size_t q = 5;
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE ( transform_jacobi ) {
     Eigen::Tensor<double, 4> g_transformed_by_jacobi_matrix = libwint::transformations::transformTwoElectronIntegrals(g, J);
 
     //  Rotate the SO basis
-    so_basis.transformJacobi(p, q, theta);
+    so_basis.rotateJacobi(p, q, theta);
 
 
     BOOST_REQUIRE(h_transformed_by_jacobi_matrix.isApprox(so_basis.get_h_SO(), 1.0e-12));
