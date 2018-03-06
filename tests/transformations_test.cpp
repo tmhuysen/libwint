@@ -107,6 +107,7 @@ BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
 
     // Let's test the easiest Jacobi matrix, one with theta = pi/2 and dimension 2
     Eigen::MatrixXd J = libwint::transformations::jacobiRotationMatrix(0, 1, boost::math::constants::half_pi<double>(), 2);
+    std::cout << J << std::endl;
     BOOST_CHECK(std::abs(J(0,0) - 0) < 1.0e-12);
     BOOST_CHECK(std::abs(J(0,1) - 1) < 1.0e-12);
     BOOST_CHECK(std::abs(J(1,0) - (-1)) < 1.0e-12);

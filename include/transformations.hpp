@@ -42,6 +42,18 @@ Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Ei
  */
 Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T);
 
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
+ *  This function is implemented using Eigen's Jacobi module.
+ */
+Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
+
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed two-electron integrals.
+ *  While waiting for an analoguous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
+ */
+Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t P, size_t Q, double theta);
+
 /** Given:
  *      - a matrix representation in an AO basis (f_AO)
  *      - an SO coefficient matrix (every column represents a spatial orbital) (C)
@@ -66,7 +78,7 @@ Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::Mat
  */
 Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C);
 
-/** Give the M-dimensional Jacobi rotation matrix for the orbitals p and q (p < q) and a given @param angle.
+/** Give the M-dimensional Jacobi rotation matrix for the orbitals p and q (p < q) and a given @param theta.
  *
  * M is the actual dimension of the matrix that is returned
  * @param p and @param q represent the rows and columns, i.e. they start at 0
@@ -75,11 +87,7 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
  */
 Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M);
 
-/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
- *
- *  In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
- */
-Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta);
+
 
 
 }  // namespace transformations

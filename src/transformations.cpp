@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <Eigen/Jacobi>
+
 
 
 namespace libwint {
@@ -114,7 +116,7 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
 };
 
 
-/** Give the M-dimensional Jacobi rotation matrix (with an angle theta) for the orbitals P and Q (P < Q).
+/** Give the M-dimensional Jacobi rotation matrix (with an angle @param: theta in radians) for the orbitals P and Q (P < Q).
  *
  * M is the actual dimension of the matrix that is returned
  * P and Q represent the rows and columns, i.e. they start at 0
@@ -134,26 +136,36 @@ Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M)
     // The union of these two conditions also excludes M < 2
 
 
+    double c = std::cos(theta);
+    double s = std::sin(theta);
 
     // We'll start the construction with an identity matrix
     Eigen::MatrixXd J = Eigen::MatrixXd::Identity(M, M);
 
-    // Add the Jacobi rotation terms
-    J(p, p) = std::cos(theta);
-    J(p, q) = std::sin(theta);
-    J(q, p) = -std::sin(theta);
-    J(q, q) = std::cos(theta);
-
+    // And apply the Jacobi rotation as J = I * jacobi_rotation (cfr. B' = B T)
+    J.applyOnTheRight(p, q, Eigen::JacobiRotation<double> (c, s));
     return J;
 }
 
 
-/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
- *
- * In this function, I've implemented it so it can be checked to be correct.
- * In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
+ *  This function is implemented using Eigen's Jacobi module.
  */
 Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+
+//    double c,s;
+//    c = cos (rot * PI / 180.0);
+//    s = sin (rot * PI / 180.0);
+//    Eigen::JacobiRotation<double> J(c,s);
+//    this->one_ints.applyOnTheLeft(index1,index2,J.adjoint());
+//    this->one_ints.applyOnTheRight(index1,index2,J);
+//
+//    //FIXME write own transformation with jacobi
+//    Eigen::MatrixXd J2 = Eigen::MatrixXd::Identity(one_ints.cols(),one_ints.cols());
+//    J2.applyOnTheRight(index1,index2,J);
+//    this->two_ints = libwint::transform_AO_to_SO(two_ints,J2);
+
 
     // Assert the assumption of a symmetric matrix
     assert(h.isApprox(h.transpose()));
@@ -182,6 +194,17 @@ Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_
 
     return h_rotated;
 }
+
+
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed two-electron integrals.
+ *  While waiting for an analoguous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
+ */
+Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t P, size_t Q, double theta) {
+
+
+};
+
 
 
 }  // namespace transformations
