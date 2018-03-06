@@ -128,14 +128,12 @@ BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
 
 
     // Specify some Jacobi parameters to test a Jacobi rotation
-    size_t P = 2;
-    size_t Q = 4;
+    size_t p = 2;
+    size_t q = 4;
     double theta = 56.71;
-    Eigen::MatrixXd U = libwint::transformations::jacobiRotationMatrix(P, Q, theta, 6);
-
 
     // Are the rotated one-electron integrals the same?
-    Eigen::MatrixXd h_SO_rotated = libwint::transformations::transformOneElectronIntegrals(h_SO, U);
+    Eigen::MatrixXd h_SO_rotated = libwint::transformations::rotateOneElectronIntegralsJacobi(h_SO, p, q, theta);
 
     Eigen::MatrixXd h_SO_rotated_olsens (6, 6);
     cpputil::io::readArrayFromFile("../tests/ref_data/lih_hf_sto6g_oneint_rotated.data", h_SO_rotated_olsens);
@@ -143,47 +141,10 @@ BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
 
 
     // Are the rotated two-electron integrals the same?
-    Eigen::Tensor<double, 4> g_SO_rotated = libwint::transformations::transformTwoElectronIntegrals(g_SO, U);
+    Eigen::Tensor<double, 4> g_SO_rotated = libwint::transformations::rotateTwoElectronIntegralsJacobi(g_SO, p, q, theta);
 
     Eigen::Tensor<double, 4> g_SO_rotated_olsens (6, 6, 6, 6);
     cpputil::io::readArrayFromFile("../tests/ref_data/lih_hf_sto6g_twoints_rotated.data", g_SO_rotated_olsens);
     BOOST_CHECK(cpputil::linalg::areEqual(g_SO_rotated, g_SO_rotated_olsens, 1.0e-06));
 }
 
-
-BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_toy ) {
-
-    // Set a toy one-electron matrix (which should be self-adjoint)
-    Eigen::MatrixXd h (2, 2);
-    h << 1, 2, 2, 4;
-
-    // Set the test Jacobi parameters and test with the analytical formula
-    size_t P = 0;
-    size_t Q = 1;
-    double theta = boost::math::constants::half_pi<double>();
-    Eigen::MatrixXd U = libwint::transformations::jacobiRotationMatrix(P, Q, theta, 2);
-    BOOST_CHECK(libwint::transformations::transformOneElectronIntegrals(h, U).isApprox(libwint::transformations::rotateOneElectronIntegralsJacobi(h, P, Q, theta)));
-
-    // Test with another angle theta
-    theta = 7.09214;
-    U = libwint::transformations::jacobiRotationMatrix(P, Q, theta, 2);
-    BOOST_CHECK(libwint::transformations::transformOneElectronIntegrals(h, U).isApprox(libwint::transformations::rotateOneElectronIntegralsJacobi(h, P, Q, theta)));
-}
-
-
-BOOST_AUTO_TEST_CASE ( analytical_jacobi_one_electron_h2o ) {
-
-    // Calculate the kinetic energy integrals for H2O//STO-3G
-    libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
-    libwint::AOBasis basis (water, "STO-3G");
-    basis.calculateKineticIntegrals();
-
-    Eigen::MatrixXd T = basis.get_T();
-
-    // Set the test Jacobi parameters and test with the analytical formula
-    size_t P = 3;
-    size_t Q = 6;
-    double theta = 62.7219;
-    Eigen::MatrixXd U = libwint::transformations::jacobiRotationMatrix(P, Q, theta, basis.calculateNumberOfBasisFunctions());
-    BOOST_CHECK(libwint::transformations::transformOneElectronIntegrals(T, U).isApprox(libwint::transformations::rotateOneElectronIntegralsJacobi(T, P, Q, theta)));
-}
