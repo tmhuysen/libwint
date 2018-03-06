@@ -78,6 +78,20 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_olsens ) {
 }
 
 
+BOOST_AUTO_TEST_CASE ( transform_so_to_ao ) {
+
+    // Check that AO->SO->AO is an identity operation
+    // We'll do this with random matrices
+    Eigen::MatrixXd h = Eigen::MatrixXd::Random(3, 3);
+    Eigen::MatrixXd T = Eigen::MatrixXd::Random(3, 3);  // the probability of a random matrix being singular is approximately 0
+
+    // Transform to SO basis
+    Eigen::MatrixXd h_SO = libwint::transformations::transform_AO_to_SO(h, T);
+
+    BOOST_CHECK(h.isApprox(libwint::transformations::transform_SO_to_AO(h_SO, T), 1.0e-12));
+}
+
+
 BOOST_AUTO_TEST_CASE ( jacobi_rotation_matrix ) {
 
     // We can't create a Jacobi matrix for P > Q
