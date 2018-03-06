@@ -18,9 +18,9 @@ private:
 
 
     /**
-     *  Parses a @param filename to @return a std::vector<libint2::Atom>
+     *  Parses a @param xyz_filename to @return a std::vector<libint2::Atom>
      */
-    std::vector<libint2::Atom> parseXYZFilename(const std::string filename) const;
+    std::vector<libint2::Atom> parseXYZFile(std::string xyz_filename) const;
 
 
 

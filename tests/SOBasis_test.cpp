@@ -46,3 +46,10 @@ BOOST_AUTO_TEST_CASE ( transform_jacobi ) {
     BOOST_REQUIRE(h_transformed_by_jacobi_matrix.isApprox(so_basis.get_h_SO(), 1.0e-12));
     BOOST_REQUIRE(cpputil::linalg::areEqual(g_transformed_by_jacobi_matrix, so_basis.get_g_SO(), 1.0e-12));
 }
+
+
+BOOST_AUTO_TEST_CASE ( fcidump_constructor ) {
+
+
+
+}

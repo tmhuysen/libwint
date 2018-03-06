@@ -9,16 +9,16 @@ namespace libwint {
  */
 
 /**
- *  Parses a @param filename to @return a std::vector<libint2::Atom>
+ *  Parses a @param xyz_filename to @return a std::vector<libint2::Atom>
  */
-std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename) const {
+std::vector<libint2::Atom> Molecule::parseXYZFile(std::string xyz_filename) const {
 
     // Find the extension of the given path (https://stackoverflow.com/a/51992)
     std::string extension;
-    std::string::size_type idx = filename.rfind('.');
+    std::string::size_type idx = xyz_filename.rfind('.');
 
     if (idx != std::string::npos) {
-        extension = filename.substr(idx+1);
+        extension = xyz_filename.substr(idx+1);
     } else {
         throw std::runtime_error("I did not find an extension in your given path.");
     }
@@ -27,8 +27,8 @@ std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename
         throw std::runtime_error("You did not provide a .xyz file name");
     }
 
-    // If the filename isn't properly converted into an input file stream, we assume the user supplied a wrong file
-    std::ifstream input_file_stream (filename);
+    // If the xyz_filename isn't properly converted into an input file stream, we assume the user supplied a wrong file
+    std::ifstream input_file_stream (xyz_filename);
     if (!input_file_stream.good()) {
         throw std::runtime_error("The provided .xyz file name is illegible. Maybe you specified a wrong path?");
     } else {
@@ -49,7 +49,7 @@ std::vector<libint2::Atom> Molecule::parseXYZFilename(const std::string filename
  *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
  */
 Molecule::Molecule(std::string xyz_filename) :
-        atoms (this->parseXYZFilename(xyz_filename)),
+        atoms (this->parseXYZFile(xyz_filename)),
         N (this->calculateTotalNucleicCharge())
 {}
 
@@ -64,7 +64,7 @@ Molecule::Molecule(std::string xyz_filename) :
      *                      IMPORTANT!!! The coordinates of the atoms should be in Angstrom, but LibInt2, which actually processes the .xyz-file, automatically converts to a.u. (bohr).
      */
 Molecule::Molecule(std::string xyz_filename, int molecular_charge) :
-        atoms (this->parseXYZFilename(xyz_filename)),
+        atoms (this->parseXYZFile(xyz_filename)),
         N (this->calculateTotalNucleicCharge() - molecular_charge)  // we're possibly creating an ion, so N = charges of nuclei - total molecular charge
 {}
 

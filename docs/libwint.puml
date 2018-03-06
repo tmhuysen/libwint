@@ -94,8 +94,11 @@ namespace libwint {
             - Eigen::MatrixXd h_SO
             - Eigen::Tensor<double, 4> g_SO
             - const size_t K
+        __ private methods __
+            - parseFCIDUMPFile()
         == constructors ==
             **SOBasis**(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C)
+            **SOBasis**(std::string fcidump_filename, size_t K)
         __ public methods __
             + Eigen::MatrixXd **get_h_SO**() const
             + Eigen::Tensor<double, 4> **get_g_SO**() const
@@ -143,7 +146,7 @@ namespace libwint {
             - const size_t N
             - const std::vector<libint2::Atom> atoms
         __ private methods __
-            - std::vector<libint2::Atom> parseXYZFilename(const std::string filename) const
+            - std::vector<libint2::Atom> parseXYZFile(std::string filename) const
         == constructors ==
             **Molecule**(std::string xyz_filename)
             **Molecule**(std::string xyz_filename, int molecular_charge)

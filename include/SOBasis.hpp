@@ -19,6 +19,13 @@ private:
     Eigen::Tensor<double, 4> g_SO;  // the two-electron repulsion integrals in the spatial orbital basis
 
 
+    // Methods
+    /**
+     *  Parse a given FCIDUMP file for the one- and two-electron integrals
+     */
+    void parseFCIDUMPFile(std::string fcidump_filename);
+
+
 
 public:
     // Constructors
@@ -26,6 +33,11 @@ public:
      *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
      */
     SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C);
+
+    /**
+     *  Constructor based on a given path to an FCIDUMP file
+     */
+    SOBasis(std::string fcidump_filename, size_t K);
 
 
     // Getters
