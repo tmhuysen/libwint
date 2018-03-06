@@ -86,11 +86,21 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
             this->internuclear_repulsion_energy = x;
         }
 
-        //  Two-electron integrals are given in CHEMIST'S NOTATION
-        if ((i > 0) && (a > 0) && (j > 0) && (b > 0)) {
+        //  Single-particle eigenvalues (skipped)
+        else if ((a == 0) && (j == 0) && (b == 0)) {}
+
+        //  One-electron integrals (h_core)
+        else if ((j == 0) && (b == 0)) {
             size_t p = i - 1;
             size_t q = a - 1;
-            size_t r = j - 1;
+            h_SO(p,q) = x;
+        }
+
+        //  Two-electron integrals in CHEMIST'S NOTATION
+        else if ((i > 0) && (a > 0) && (j > 0) && (b > 0)) {
+            size_t p = i - 1;
+            size_t q = j - 1;
+            size_t r = a - 1;
             size_t s = b - 1;
             g_SO(p,q,r,s) = x;
 
@@ -104,18 +114,7 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
             g_SO(r,s,q,p) = x;
             g_SO(s,r,q,p) = x;
         }
-
-        //  One-electron integrals
-        if ((i > 0) && (a > 0) && (j == 0)) {
-            size_t p = i - 1;
-            size_t q = a - 1;
-            h_SO(p,q) = x;
-
-        }
-
-
-    }
-
+    }  // while loop
 }
 
 
