@@ -147,4 +147,3 @@ BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
     cpputil::io::readArrayFromFile("../tests/ref_data/lih_hf_sto6g_twoints_rotated.data", g_SO_rotated_olsens);
     BOOST_CHECK(cpputil::linalg::areEqual(g_SO_rotated, g_SO_rotated_olsens, 1.0e-06));
 }
-
