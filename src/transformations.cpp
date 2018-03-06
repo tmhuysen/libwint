@@ -182,23 +182,16 @@ Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_
 
 
 /**
- *  Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed two-electron integrals.
- *  While waiting for an analoguous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
+ *  Using a Jacobi rotation with angle theta of the orbitals p and q, return the transformed two-electron integrals.
+ *  While waiting for an analogous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
  */
-Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t P, size_t Q, double theta) {
+Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t p, size_t q, double theta) {
 
+    auto dim = static_cast<size_t>(g.dimension(1));  // g.dimension() returns a long
+    Eigen::MatrixXd J = jacobiRotationMatrix(p, q, theta, dim);
 
+    return transformTwoElectronIntegrals(g, J);
 };
-
-
-
-
-
-
-
-
-
-
 
 
 }  // namespace transformations

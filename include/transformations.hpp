@@ -90,16 +90,16 @@ Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO
 Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M);
 
 /**
- *  Using a Jacobi rotation with angle @param: theta (in radians) of the orbitals P and Q, return the transformed one-electron integrals.
+ *  Using a Jacobi rotation with angle @param: theta (in radians) of the orbitals p and q, return the transformed one-electron integrals.
  *  This function is implemented using Eigen's Jacobi module.
  */
 Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t p, size_t q, double theta);
 
 /**
- *  Using a Jacobi rotation with angle @param: theta (in radians) of the orbitals P and Q, return the transformed two-electron integrals.
+ *  Using a Jacobi rotation with angle @param: theta (in radians) of the orbitals p and q, return the transformed two-electron integrals.
  *  While waiting for an analogous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
  */
-Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t P, size_t Q, double theta);
+Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t p, size_t q, double theta);
 
 
 
