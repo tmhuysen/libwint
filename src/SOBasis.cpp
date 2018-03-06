@@ -79,6 +79,7 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
 
         // Based on what the values of the indices are, we can read one-electron integrals, two-electron integrals and the internuclear repulsion energy
         //  See also (http://hande.readthedocs.io/en/latest/manual/integrals.html)
+        //  I think the documentation is a bit unclear for the two-electron integrals, but we can rest assured that FCIDUMP files give the two-electron integrals in CHEMIST's notation.
         iss >> x >> i >> a >> j >> b;
 
         //  Internuclear repulsion energy
@@ -94,17 +95,20 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
             size_t p = i - 1;
             size_t q = a - 1;
             h_SO(p,q) = x;
+
+            // Apply the permutational symmetry for real orbitals
+            h_SO(q,p) = x;
         }
 
-        //  Two-electron integrals in CHEMIST'S NOTATION
+        //  Two-electron integrals are given in CHEMIST'S NOTATION, so just copy them over
         else if ((i > 0) && (a > 0) && (j > 0) && (b > 0)) {
             size_t p = i - 1;
-            size_t q = j - 1;
-            size_t r = a - 1;
+            size_t q = a - 1;
+            size_t r = j - 1;
             size_t s = b - 1;
             g_SO(p,q,r,s) = x;
 
-            // Set the integral indices for the permutational symmetries as well
+            // Apply the permutational symmetries for real orbitals
             g_SO(p,q,s,r) = x;
             g_SO(q,p,r,s) = x;
             g_SO(q,p,s,r) = x;
@@ -115,6 +119,9 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
             g_SO(s,r,q,p) = x;
         }
     }  // while loop
+
+    this->h_SO = h_SO;
+    this->g_SO = g_SO;
 }
 
 
@@ -145,6 +152,8 @@ SOBasis::SOBasis(std::string fcidump_filename, size_t K) :
         K(K)
 {
 
+    // This sets this->h_SO, this->g_SO, this->internuclear_repulsion by reading in the FCIDUMP file
+    this->parseFCIDUMPFile(fcidump_filename);
 }
 
 
