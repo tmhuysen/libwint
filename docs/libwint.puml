@@ -91,18 +91,20 @@ namespace libwint {
 
     class SOBasis {
         __ private members __
+            - const size_t K
+            - double internuclear_repulsion_energy
             - Eigen::MatrixXd h_SO
             - Eigen::Tensor<double, 4> g_SO
-            - const size_t K
         __ private methods __
             - parseFCIDUMPFile()
         == constructors ==
             **SOBasis**(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C)
             **SOBasis**(std::string fcidump_filename, size_t K)
         __ public methods __
+            + const size_t **get_K**() const
+            + const double **get_internuclear_repulsion_energy**() const
             + Eigen::MatrixXd **get_h_SO**() const
             + Eigen::Tensor<double, 4> **get_g_SO**() const
-            + const size_t **get_K**() const
 
             + void **transform**(const Eigen::MatrixXd& T)
             + void **rotateJacobi**(size_t p, size_t q, double angle)

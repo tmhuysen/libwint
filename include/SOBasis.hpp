@@ -14,6 +14,7 @@ namespace libwint {
 class SOBasis {
 private:
     const size_t K;  // the number of spatial orbitals
+    double internuclear_repulsion_energy;
 
     Eigen::MatrixXd h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis
     Eigen::Tensor<double, 4> g_SO;  // the two-electron repulsion integrals in the spatial orbital basis
@@ -41,9 +42,11 @@ public:
 
 
     // Getters
+    const size_t get_K() const { return this->K; }
+    double get_internuclear_repulsion_energy() const { return this->internuclear_repulsion_energy; }
     Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
     Eigen::Tensor<double, 4> get_g_SO() const { return this->g_SO; }
-    const size_t get_K() const { return this->K; }
+
 
 
     // Methods

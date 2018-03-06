@@ -81,6 +81,11 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
         //  See also (http://hande.readthedocs.io/en/latest/manual/integrals.html)
         iss >> x >> i >> a >> j >> b;
 
+        //  Internuclear repulsion energy
+        if ((i == 0) && (j == 0) && (a == 0) && (b == 0)) {
+            this->internuclear_repulsion_energy = x;
+        }
+
         //  Two-electron integrals are given in CHEMIST'S NOTATION
         if ((i > 0) && (a > 0) && (j > 0) && (b > 0)) {
             size_t p = i - 1;
@@ -107,10 +112,7 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
             h_SO(p,q) = x;
 
         }
-        if (i==0) {
-            this->internuclear_repulsion = x;
 
-        }
 
     }
 
@@ -127,6 +129,10 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
 SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C) :
         K(ao_basis.calculateNumberOfBasisFunctions())
 {
+
+    this->internuclear_repulsion_energy = ao_basis.get_molecule().calculateInternuclearRepulsionEnergy();
+
+
     Eigen::MatrixXd h_AO = ao_basis.get_T() + ao_basis.get_V();
     this->h_SO = libwint::transformations::transform_AO_to_SO(h_AO, C);
 
