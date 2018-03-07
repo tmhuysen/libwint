@@ -15,6 +15,7 @@ BOOST_AUTO_TEST_CASE( basis_constructor ) {
     // Check the number of basis functions in water
     libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
     libwint::AOBasis basis (water, "STO-3G");
+    basis.calculateIntegrals();
 
     BOOST_CHECK_EQUAL(basis.calculateNumberOfBasisFunctions(), 7);
 }
@@ -24,8 +25,8 @@ BOOST_AUTO_TEST_CASE( horton_integrals_h2o_sto3g ) {
 
     libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
     libwint::AOBasis basis (water, "STO-3G");
-    size_t nbf = basis.calculateNumberOfBasisFunctions();
     basis.calculateIntegrals();
+    size_t nbf = basis.calculateNumberOfBasisFunctions();
 
     // Read in reference data from Horton
     Eigen::MatrixXd ref_S (nbf, nbf);
@@ -51,10 +52,10 @@ BOOST_AUTO_TEST_CASE( szabo_h2_sto3g ) {
     // We will follow the example in Szabo, section 3.5.2, where it is stated that R = 1.4 a.u. = 0.740848 Angstrom
     libwint::Molecule h2 ("../tests/ref_data/h2.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
     libwint::AOBasis basis (h2, "STO-3G");
+    basis.calculateIntegrals();
     BOOST_CHECK_EQUAL(basis.calculateNumberOfBasisFunctions(), 2);
 
     // Calculate S, T, V and H_core
-    basis.calculateIntegrals();
     Eigen::MatrixXd H_core = basis.get_T() + basis.get_V();
 
     // Fill in the reference values from Szabo

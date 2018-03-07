@@ -82,10 +82,8 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
         //  I think the documentation is a bit unclear for the two-electron integrals, but we can rest assured that FCIDUMP files give the two-electron integrals in CHEMIST's notation.
         iss >> x >> i >> a >> j >> b;
 
-        //  Internuclear repulsion energy
-        if ((i == 0) && (j == 0) && (a == 0) && (b == 0)) {
-            this->internuclear_repulsion_energy = x;
-        }
+        //  Internuclear repulsion energy (skipped)
+        if ((i == 0) && (j == 0) && (a == 0) && (b == 0)) {}
 
         //  Single-particle eigenvalues (skipped)
         else if ((a == 0) && (j == 0) && (b == 0)) {}
@@ -133,11 +131,8 @@ void SOBasis::parseFCIDUMPFile(std::string fcidump_filename) {
  *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
  */
 SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C) :
-        K(ao_basis.calculateNumberOfBasisFunctions())
+        K (ao_basis.calculateNumberOfBasisFunctions())
 {
-
-    this->internuclear_repulsion_energy = ao_basis.get_molecule().calculateInternuclearRepulsionEnergy();
-
 
     Eigen::MatrixXd h_AO = ao_basis.get_T() + ao_basis.get_V();
     this->h_SO = libwint::transformations::transform_AO_to_SO(h_AO, C);
@@ -149,7 +144,7 @@ SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C) :
  *  Constructor based on a given path to an FCIDUMP file
  */
 SOBasis::SOBasis(std::string fcidump_filename, size_t K) :
-        K(K)
+        K (K)
 {
 
     // This sets this->h_SO, this->g_SO, this->internuclear_repulsion by reading in the FCIDUMP file

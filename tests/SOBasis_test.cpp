@@ -17,8 +17,8 @@ BOOST_AUTO_TEST_CASE ( transform_jacobi ) {
     // Create an SOBasis instance with a coefficient matrix being the identity matrix (little hack that we can use to test transformations)
     libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
     libwint::AOBasis ao_basis (water, "STO-3G");
-    size_t K = ao_basis.calculateNumberOfBasisFunctions();
     ao_basis.calculateIntegrals();
+    size_t K = ao_basis.calculateNumberOfBasisFunctions();
 
     Eigen::MatrixXd C = Eigen::MatrixXd::Identity(K, K);
     libwint::SOBasis so_basis (ao_basis, C);
