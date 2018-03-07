@@ -172,6 +172,6 @@ BOOST_AUTO_TEST_CASE ( lih_jacobi_transformations ) {
     Eigen::Tensor<double, 4> g_SO_rotated = libwint::transformations::rotateTwoElectronIntegralsJacobi(g_SO, p, q, theta);
 
     Eigen::Tensor<double, 4> g_SO_rotated_olsens (6, 6, 6, 6);
-    cpputil::io::readArrayFromFile("../tests/ref_data/lih_hf_sto6g_twoints_rotated.data", g_SO_rotated_olsens);
+    cpputil::io::readArrayFromFile("../tests/ref_data/lih_hf_sto6g_twoint_rotated.data", g_SO_rotated_olsens);
     BOOST_CHECK(cpputil::linalg::areEqual(g_SO_rotated, g_SO_rotated_olsens, 1.0e-06));
 }
