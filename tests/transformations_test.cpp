@@ -27,9 +27,11 @@ BOOST_AUTO_TEST_CASE ( transform_one_electron_trivial ) {
 BOOST_AUTO_TEST_CASE ( transform_one_electron_and_back ) {
 
     // Let's test if, if we transform h to h_transformed and back to h, we get the same result
-    // We'll do this with random matrices
     Eigen::MatrixXd h = Eigen::MatrixXd::Random(3, 3);
-    Eigen::MatrixXd T = Eigen::MatrixXd::Random(3, 3);  // the probability of a random matrix being singular is approximately 0
+    Eigen::MatrixXd T (3, 3);
+    T << 1,  0, 0,
+         0, -2, 0,
+         0,  0, 3;
     Eigen::MatrixXd T_inverse = T.inverse();
 
     // Transform to SO basis
@@ -81,9 +83,11 @@ BOOST_AUTO_TEST_CASE ( transform_two_electron_olsens ) {
 BOOST_AUTO_TEST_CASE ( transform_so_to_ao ) {
 
     // Check that AO->SO->AO is an identity operation
-    // We'll do this with random matrices
     Eigen::MatrixXd h = Eigen::MatrixXd::Random(3, 3);
-    Eigen::MatrixXd T = Eigen::MatrixXd::Random(3, 3);  // the probability of a random matrix being singular is approximately 0
+    Eigen::MatrixXd T (3, 3);
+    T << 1,  0, 0,
+         0, -2, 0,
+         0,  0, 3;
 
     // Transform to SO basis
     Eigen::MatrixXd h_SO = libwint::transformations::transform_AO_to_SO(h, T);
