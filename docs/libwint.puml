@@ -55,19 +55,18 @@ namespace libwint {
 
     class AOBasis {
         __ private members __
+            - const std::string basisset_name
+            - std::vector<libint2::Atom>& atoms
+
             - bool are_calculated_overlap_integrals
             - bool are_calculated_nuclear_integrals
             - bool are_calculated_kinetic_integrals
             - bool are_calculated_electron_repulsion_integrals
 
-            - const std::string basisset_name
-            - std::vector<libint2::Atom>& atoms
-
             - Eigen::MatrixXd S
             - Eigen::MatrixXd T
             - Eigen::MatrixXd V
             - Eigen::Tensor<double, 4> g
-            - const size_t K
         == constructors ==
             **AOBasis**(const Molecule& molecule, std::string basisset_name)
         __ public methods __

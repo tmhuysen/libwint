@@ -15,7 +15,7 @@ namespace libwint {
 class AOBasis {
 private:
     const std::string basisset_name;
-    const libint2::BasisSet libint_basis;
+    const std::vector<libint2::Atom> atoms;
 
     // We'd like to keep track if the integrals are calculated already, in order to avoid doing double work
     bool are_calculated_overlap_integrals = false;

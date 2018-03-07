@@ -15,7 +15,7 @@ namespace libwint {
  */
 AOBasis::AOBasis(const Molecule& molecule, std::string basisset_name) :
         basisset_name (basisset_name),
-        libint_basis (libint2::BasisSet (this->basisset_name, molecule.get_atoms()))
+        atoms (molecule.get_atoms())
 {}
 
 
@@ -70,7 +70,23 @@ Eigen::Tensor<double, 4> AOBasis::get_g() const {
  * Calculate and return the number of basis functions in the basis
  */
 size_t AOBasis::calculateNumberOfBasisFunctions() const {
-    return static_cast<size_t>(this->libint_basis.nbf());
+
+    // Find out if any of the integrals have been calculated yet and return the dimension
+    if (this->are_calculated_overlap_integrals) {
+        return static_cast<size_t>(this->S.cols());
+    }
+    else if (this->are_calculated_kinetic_integrals) {
+        return static_cast<size_t>(this->T.cols());
+    }
+    else if (this->are_calculated_nuclear_integrals) {
+        return static_cast<size_t>(this->V.cols());
+    }
+    else if (this->are_calculated_electron_repulsion_integrals) {
+        return static_cast<size_t>(this->g.dimension(0));
+    }
+    else {
+        throw std::runtime_error("None of the integrals have been calculated yet, so I can't figure out how many basis functions there are.");
+    }
 }
 
 
@@ -80,12 +96,11 @@ size_t AOBasis::calculateNumberOfBasisFunctions() const {
 void AOBasis::calculateOverlapIntegrals() {
 
     if (!this->are_calculated_overlap_integrals) {
-        this->S = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::overlap, this->libint_basis, this->molecule.get_atoms());
+        this->S = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::overlap, this->basisset_name, this->atoms);
         this->are_calculated_overlap_integrals = true;
     } else {
         std::cout << "The overlap integrals have already been calculated in this basis ..." << std::endl;
     }
-
 }
 
 
@@ -95,12 +110,11 @@ void AOBasis::calculateOverlapIntegrals() {
 void AOBasis::calculateKineticIntegrals() {
 
     if (!this->are_calculated_kinetic_integrals) {
-        this -> T = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::kinetic, this->libint_basis, this->molecule.get_atoms());
+        this -> T = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::kinetic, this->basisset_name, this->atoms);
         this->are_calculated_kinetic_integrals = true;
     } else {
         std::cout << "The kinetic integrals have already been calculated in this basis ..." << std::endl;
     }
-
 }
 
 
@@ -110,12 +124,11 @@ void AOBasis::calculateKineticIntegrals() {
 void AOBasis::calculateNuclearIntegrals() {
 
     if (!this->are_calculated_nuclear_integrals) {
-        this-> V = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::nuclear, this->libint_basis, this->molecule.get_atoms());
+        this-> V = libwint::LibintCommunicator::get().calculateOneBodyIntegrals(libint2::Operator::nuclear, this->basisset_name, this->atoms);
         this->are_calculated_nuclear_integrals = true;
     } else {
         std::cout << "The nuclear integrals have already been calculated in this basis ..." << std::endl;
     }
-
 }
 
 
@@ -125,12 +138,11 @@ void AOBasis::calculateNuclearIntegrals() {
 void AOBasis::calculateElectronRepulsionIntegrals() {
 
     if (!this->are_calculated_electron_repulsion_integrals) {
-        this -> g = libwint::LibintCommunicator::get().calculateTwoBodyIntegrals(this->libint_basis, this->molecule.get_atoms());
+        this -> g = libwint::LibintCommunicator::get().calculateTwoBodyIntegrals(this->basisset_name, this->atoms);
         this->are_calculated_electron_repulsion_integrals = true;
     } else {
-        std::cout << "The two-electron integrals have already been calculated in this basis ..." << std::endl;
+        std::cout << "The two-electron repulsion integrals have already been calculated in this basis ..." << std::endl;
     }
-
 };
 
 
