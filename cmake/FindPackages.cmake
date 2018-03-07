@@ -14,4 +14,4 @@ find_package(libint2 REQUIRED)
 
 
 # Find the cpputil library
-find_package(cpputil REQUIRED)
+find_package(cpputil 1.1.1 REQUIRED)
