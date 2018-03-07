@@ -14,15 +14,14 @@ namespace libwint {
 
 class AOBasis {
 private:
+    const std::string basisset_name;
+    const libint2::BasisSet libint_basis;
+
     // We'd like to keep track if the integrals are calculated already, in order to avoid doing double work
     bool are_calculated_overlap_integrals = false;
     bool are_calculated_nuclear_integrals = false;
     bool are_calculated_kinetic_integrals = false;
     bool are_calculated_electron_repulsion_integrals = false;
-
-    const Molecule& molecule;
-    const std::string name;
-    const libint2::BasisSet libint_basis;
 
     Eigen::MatrixXd S;  // The overlap integrals matrix for the given basis and molecule
     Eigen::MatrixXd V;  // The nuclear integrals matrix for the given basis and molecule
@@ -33,43 +32,46 @@ private:
 
 public:
     // Constructors
-    /** Constructor from a molecule and a basis name.
-     *
-     * @param molecule      Molecule object
-     * @param basis_name    string
+    /**
+     *  Constructor from a @param: molecule and a @param: basisset_name.
      */
-    AOBasis(Molecule& molecule, std::string basis_name);
+    AOBasis(const Molecule& molecule, std::string basisset_name);
 
 
     // Getters
-    const libwint::Molecule& get_molecule() const { return this->molecule; }
     Eigen::MatrixXd get_S() const;
     Eigen::MatrixXd get_T() const;
     Eigen::MatrixXd get_V() const;
     Eigen::Tensor<double, 4> get_g() const;
 
 
-    /** Calculate and return the number of basis functions in the basis
+    /**
+     *  Calculate and return the number of basis functions in the basis
      */
     size_t calculateNumberOfBasisFunctions() const;
 
-    /** Calculate and set the overlap integrals
+    /**
+     *  Calculate and set the overlap integrals, if they haven't been calculated already
      */
     void calculateOverlapIntegrals();
 
-    /** Calculate and set the kinetic integrals
-    */
+    /**
+     *  Calculate and set the kinetic integrals, if they haven't been calculated already
+     */
     void calculateKineticIntegrals();
 
-    /** Calculate and set the nuclear integrals
-    */
+    /**
+     *  Calculate and set the nuclear integrals, if they haven't been calculated already
+     */
     void calculateNuclearIntegrals();
 
-    /** Calculate and set the electron repulsion integrals
-    */
+    /**
+     *  Calculate and set the electron repulsion integrals, if they haven't been calculated already
+     */
     void calculateElectronRepulsionIntegrals();
 
-    /** Calculate and set all the integrals
+    /**
+     *  Calculate and set all the integrals, if they haven't been calculated already
      */
     void calculateIntegrals();
 };

@@ -60,9 +60,8 @@ namespace libwint {
             - bool are_calculated_kinetic_integrals
             - bool are_calculated_electron_repulsion_integrals
 
-            - libwint::Molecule& molecule
-            - const std::string name
-            - libint2::BasisSet& libint_basis
+            - const std::string basisset_name
+            - std::vector<libint2::Atom>& atoms
 
             - Eigen::MatrixXd S
             - Eigen::MatrixXd T
@@ -70,7 +69,7 @@ namespace libwint {
             - Eigen::Tensor<double, 4> g
             - const size_t K
         == constructors ==
-            **AOBasis**(Molecule& molecule, std::string basis_name)
+            **AOBasis**(const Molecule& molecule, std::string basisset_name)
         __ public methods __
             + const libwint::Molecule& **get_molecule**() const
             + Eigen::MatrixXd **get_S**() const
@@ -138,8 +137,8 @@ namespace libwint {
             + LibintCommunicator(LibintCommunicator const& libint_communicator) = delete
             + void operator=(LibintCommunicator const& libint_communicator) = delete
 
-            + Eigen::MatrixXd **calculateOneBodyIntegrals**(libint2::Operator opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const
-            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const
+            + Eigen::MatrixXd **calculateOneBodyIntegrals**(libint2::Operator opertype, std::string basisset_name, const std::vector<libint2::Atom>& atoms) const
+            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(std::string basisset_name, const std::vector<libint2::Atom>& atoms) const
     }
 
 

@@ -10,15 +10,12 @@ namespace libwint {
  *  CONSTRUCTORS
  */
 
-/** Constructor from a molecule and a basis name.
- *
- * @param molecule      Molecule object
- * @param basis_name    string
+/**
+ *  Constructor from a @param: molecule and a @param: basis name.
  */
-AOBasis::AOBasis(Molecule& molecule, const std::string basis_name) :
-        molecule(molecule),
-        name(basis_name),
-        libint_basis(libint2::BasisSet (this->name, this->molecule.get_atoms()))
+AOBasis::AOBasis(const Molecule& molecule, std::string basisset_name) :
+        basisset_name (basisset_name),
+        libint_basis (libint2::BasisSet (this->basisset_name, molecule.get_atoms()))
 {}
 
 
@@ -69,16 +66,16 @@ Eigen::Tensor<double, 4> AOBasis::get_g() const {
  *  PUBLIC METHODS
  */
 
-/** Calculate and return the number of basis functions in the basis
+/**
+ * Calculate and return the number of basis functions in the basis
  */
 size_t AOBasis::calculateNumberOfBasisFunctions() const {
     return static_cast<size_t>(this->libint_basis.nbf());
 }
 
 
-/** Calculate and set the overlap integrals
- *
- *      If the overlap integrals have already been calculated, print an error message
+/**
+ *  Calculate and set the overlap integrals, if they haven't been calculated already
  */
 void AOBasis::calculateOverlapIntegrals() {
 
@@ -92,8 +89,9 @@ void AOBasis::calculateOverlapIntegrals() {
 }
 
 
-/** Calculate and set the kinetic integrals
-*/
+/**
+ *  Calculate and set the kinetic integrals, if they haven't been calculated already
+ */
 void AOBasis::calculateKineticIntegrals() {
 
     if (!this->are_calculated_kinetic_integrals) {
@@ -106,8 +104,9 @@ void AOBasis::calculateKineticIntegrals() {
 }
 
 
-/** Calculate and set the nuclear integrals
-*/
+/**
+ *  Calculate and set the nuclear integrals, if they haven't been calculated already
+ */
 void AOBasis::calculateNuclearIntegrals() {
 
     if (!this->are_calculated_nuclear_integrals) {
@@ -120,8 +119,9 @@ void AOBasis::calculateNuclearIntegrals() {
 }
 
 
-/** Calculate and set the kinetic integrals
-*/
+/**
+ *  Calculate and set the kinetic integrals, if they haven't been calculated already
+ */
 void AOBasis::calculateElectronRepulsionIntegrals() {
 
     if (!this->are_calculated_electron_repulsion_integrals) {
@@ -134,7 +134,8 @@ void AOBasis::calculateElectronRepulsionIntegrals() {
 };
 
 
-/** Calculate and set all the integrals
+/**
+ *  Calculate and set all the integrals, if they haven't been calculated already
  */
 void AOBasis::calculateIntegrals() {
     calculateOverlapIntegrals();

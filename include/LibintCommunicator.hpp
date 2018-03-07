@@ -40,25 +40,14 @@ public:
 
     // Methods
     /**
-     * Given an operator type, an orbital basis and atoms, calculates the one-body integrals (associated to that operator type)
-
-     * @param opertype: a libint2::Operator (e.g. libint2::Operator::overlap)
-     * @param basis_set:      a libint2::BasisSet object that represents the basis put on the molecule
-     * @param atoms:    a std::vector<Atom>
-
-     * @return: an Eigen::MatrixXd storing the integrals
+     *  Calculate the one-body integrals associated to a given @param: operator_type for the given @param: atoms for the basisset with name @param: basisset_name
      */
-    Eigen::MatrixXd calculateOneBodyIntegrals(libint2::Operator opertype, const libint2::BasisSet& basis_set, const std::vector<libint2::Atom>& atoms) const;
+    Eigen::MatrixXd calculateOneBodyIntegrals(libint2::Operator operator_type, std::string basisset_name, const std::vector<libint2::Atom>& atoms) const;
 
     /**
-     * Calculates the two-electron integrals, given an orbital basis and atoms.
-
-     * @param obs:      a libint2::BasisSet object that represents the basis put on the molecule
-     * @param atoms:    a std::vector<Atom>
-
-     * @return: an Eigen::Tensor<double, 4> storing the integrals in CHEMIST'S NOTATION (11|22)
+     *  Calculate the two-body integrals IN CHEMIST'S NOTATION (11|22) for the given @param: atoms for the basisset with name @param: basisset_name
      */
-    Eigen::Tensor<double, 4> calculateTwoBodyIntegrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms) const;
+    Eigen::Tensor<double, 4> calculateTwoBodyIntegrals(std::string basisset_name, const std::vector<libint2::Atom>& atoms) const;
 };
 
 
