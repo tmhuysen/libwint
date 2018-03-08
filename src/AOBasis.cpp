@@ -13,7 +13,7 @@ namespace libwint {
 /**
  *  Constructor from a @param: molecule and a @param: basis name.
  */
-AOBasis::AOBasis(const Molecule& molecule, std::string basisset_name) :
+AOBasis::AOBasis(const libwint::Molecule& molecule, std::string basisset_name) :
         basisset_name (basisset_name),
         atoms (molecule.get_atoms())
 {}

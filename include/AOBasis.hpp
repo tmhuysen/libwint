@@ -35,7 +35,7 @@ public:
     /**
      *  Constructor from a @param: molecule and a @param: basisset_name.
      */
-    AOBasis(const Molecule& molecule, std::string basisset_name);
+    AOBasis(const libwint::Molecule& molecule, std::string basisset_name);
 
 
     // Getters
@@ -79,4 +79,4 @@ public:
 
 } // namespace libwint
 
-#endif // LIBWINT_BASIS_HPP
+#endif  // LIBWINT_BASIS_HPP

@@ -68,7 +68,7 @@ namespace libwint {
             - Eigen::MatrixXd V
             - Eigen::Tensor<double, 4> g
         == constructors ==
-            **AOBasis**(const Molecule& molecule, std::string basisset_name)
+            **AOBasis**(const libwint::Molecule& molecule, std::string basisset_name)
         __ public methods __
             + Eigen::MatrixXd **get_S**() const
             + Eigen::MatrixXd **get_T**() const
