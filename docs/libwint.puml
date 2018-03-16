@@ -99,8 +99,8 @@ namespace libwint {
             + const size_t **get_K**() const
             + Eigen::MatrixXd const **get_h_SO**() const
             + Eigen::Tensor<double, 4> const **get_g_SO**() const
-            + double get_h_SO(size_t i, size_t j) const
-            + double get_g_SO(size_t i, size_t j, size_t k, size_t l) const
+            + double **get_h_SO**(size_t i, size_t j) const
+            + double **get_g_SO**(size_t i, size_t j, size_t k, size_t l) const
 
             + void **transform**(const Eigen::MatrixXd& T)
             + void **rotateJacobi**(size_t p, size_t q, double angle)
