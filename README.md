@@ -9,7 +9,7 @@ A C++ library that is a wrapper around libint2. The overlap, kinetic, nuclear an
 [![Eigen3 Dependency](https://img.shields.io/badge/Eigen-3.3.4+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
 [![Boost Dependency](https://img.shields.io/badge/Boost-1.65.1+-blue.svg)](www.boost.org)
 [![libint2 Dependency](https://img.shields.io/badge/libint-2.3.1+-blue.svg)](https://github.com/evaleev/libint)
-[![cpputil Dependency](https://img.shields.io/badge/cpputil-1.0.0+-blue.svg)](https://github.com/GQCG/cpputil)
+[![cpputil Dependency](https://img.shields.io/badge/cpputil-1.2.1+-blue.svg)](https://github.com/GQCG/cpputil)
 
 
 
