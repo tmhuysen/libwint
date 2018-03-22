@@ -1,4 +1,4 @@
-# libwint
+# libwint v3.0.0
 
 [![Build Status](https://travis-ci.org/GQCG/libwint.svg?branch=master)](https://travis-ci.org/GQCG/libwint)
 
@@ -6,15 +6,18 @@ A C++ library that is a wrapper around libint2. The overlap, kinetic, nuclear an
 
 
 ## Dependencies
+[![Eigen3 Dependency](https://img.shields.io/badge/Eigen-3.3.4+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+[![Boost Dependency](https://img.shields.io/badge/Boost-1.65.1+-blue.svg)](www.boost.org)
 [![libint2 Dependency](https://img.shields.io/badge/libint-2.3.1+-blue.svg)](https://github.com/evaleev/libint)
-[![Eigen3 Dependency](https://img.shields.io/badge/Eigen-3+-blue.svg)](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+[![cpputil Dependency](https://img.shields.io/badge/cpputil-1.0.0+-blue.svg)](https://github.com/GQCG/cpputil)
+
 
 
 ## Installation
 To install this library:
-1. clone the master branch
+1. clone the master branch, which contains the latest release
 
-        git clone https://github.com/GQCG/libwint.git
+        git clone https://github.com/GQCG/libwint.git --branch master --single-branch
         cd libwint
 
 2. perform an out-of-source cmake build:
