@@ -12,125 +12,170 @@ package libint #c6ffb3 {
         }
 
         class Engine {
-            + const target_ptr_vec& results()
-            + const Engine::target_ptr_vec& Engine::compute()
+            == constructors ==
+                **Engine**(Operator oper, size_t max_nprim, int max_l, <..>)
+            __ public methods __
+                + const target_ptr_vec& **results**()
+                + const Engine::target_ptr_vec& **calculate**()
         }
 
         class BasisSet {
-            + size_type size()
-            + long nbf()
-            + size_t max_nprim()
-            + long max_l()
-            + const std::vector<size_t>& shell2bf()
+            == constructors ==
+                **BasisSet**(std::string name, const std::vector<Atom>& atoms)
+            __ public methods __
+                + size_type **size**()
+                + long **calculateNumberOfBasisFunctions**()
+                + size_t **max_nprim**()
+                + long **max_l**()
+                + const std::vector<size_t>& **shell2bf**()
         }
 
-        class Operator {
+        enum Operator {
             overlap
             kinetic
             nuclear
             coulomb
         }
+
+        class cxxapi {
+                void **initialize**()
+                void **finalize**()
+        }
+
+        class atom {
+            inline std::vector<Atom> **read_dotxyz**(std::istream& is, <...>)
+        }
     }
 }
 
 
 
 
-namespace libwint #ffffff {
-    class global {
-        .. Molecule ..
-            std::vector<libint2::Atom> parse_filename(const std::string& filename)
-        .. transformations ..
-        Eigen::MatrixXd transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T)
-        Eigen::Tensor<double, 4> transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T)
+namespace libwint {
 
-        Eigen::MatrixXd transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C)
-        Eigen::MatrixXd transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C)
-        Eigen::Tensor<double, 4> transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C)
+    class AOBasis {
+        __ private members __
+            - const std::string basisset_name
+            - std::vector<libint2::Atom>& atoms
 
-        Eigen::MatrixXd rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U)
-        Eigen::Tensor<double, 4> rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U)
+            - bool are_calculated_overlap_integrals
+            - bool are_calculated_nuclear_integrals
+            - bool are_calculated_kinetic_integrals
+            - bool are_calculated_electron_repulsion_integrals
 
-        Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M)
-        Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
-        Eigen::MatrixXd jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M)
-        Eigen::MatrixXd rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
-    }
-
-    class integrals {
-        Eigen::MatrixXd compute_1body_integrals(const libint2::Operator& opertype, const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        Eigen::Tensor<double, 4> compute_2body_integrals(const libint2::BasisSet& obs, const std::vector<libint2::Atom>& atoms)
-        void print_shell_sizes(const libint2::BasisSet& obs)
-    }
-
-    class geometry {
-        double distance(const libint2::Atom& atom1, const libint2::Atom& atom2)
-    }
-
-
-    namespace utility {
-        class global {
-            void read_array_from_file(const std::string& filename, Eigen::MatrixXd& M)
-            void read_array_from_file(const std::string& filename, Eigen::Tensor<double, 4>& M)
-            bool are_equal(const Eigen::Tensor<double, 4>& M, const Eigen::Tensor<double, 4>& T, const double tolerance)
-            void print(const Eigen::Tensor<double, 4>& T)
-        }
-    }
-
-    class Basis {
-        __ private data __
-        - libint2::BasisSet libint_basis
-        - bool are_computed_overlap_integrals
-        - bool are_computed_nuclear_integrals
-        - bool are_computed_kinetic_integrals
-        - bool are_computed_tei
-        __ public data __
-        + Molecule& molecule
-        + const std::string name
-        + Eigen::MatrixXd S
-        + Eigen::MatrixXd V
-        + Eigen::MatrixXd T
-        + Eigen::Tensor<double, 4> tei
+            - Eigen::MatrixXd S
+            - Eigen::MatrixXd T
+            - Eigen::MatrixXd V
+            - Eigen::Tensor<double, 4> g
         == constructors ==
-        Basis(Molecule& molecule, const std::string& basis_name)
+            **AOBasis**(const libwint::Molecule& molecule, std::string basisset_name)
         __ public methods __
-        + size_t nbf()
-        + void compute_overlap_integrals()
-        + void compute_kinetic_integrals()
-        + void compute_nuclear_integrals()
-        + void compute_two_electron_integrals()
-        + void compute_integrals()
+            + Eigen::MatrixXd **get_S**() const
+            + Eigen::MatrixXd **get_T**() const
+            + Eigen::MatrixXd **get_V**() const
+            + Eigen::Tensor<double, 4> **get_g**() const
+
+            + size_t **calculateNumberOfBasisFunctions**() const
+
+            + void **calculateOverlapIntegrals**()
+            + void **calculateKineticIntegrals**()
+            + void **calculateNuclearIntegrals**()
+            + void **calculateTwoElectronRepulsionIntegrals**()
+            + void **calculateIntegrals**()
+    }
+
+
+    class SOBasis {
+        __ private members __
+            - const size_t K
+            - Eigen::MatrixXd h_SO
+            - Eigen::Tensor<double, 4> g_SO
+        __ private methods __
+            - parseFCIDUMPFile()
+        == constructors ==
+            **SOBasis**(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C)
+            **SOBasis**(std::string fcidump_filename, size_t K)
+        __ public methods __
+            + const size_t **get_K**() const
+            + Eigen::MatrixXd const **get_h_SO**() const
+            + Eigen::Tensor<double, 4> const **get_g_SO**() const
+            + double **get_h_SO**(size_t i, size_t j) const
+            + double **get_g_SO**(size_t i, size_t j, size_t k, size_t l) const
+
+            + void **transform**(const Eigen::MatrixXd& T)
+            + void **rotateJacobi**(size_t p, size_t q, double angle)
+    }
+
+
+    class transformations {
+            Eigen::MatrixXd **transformOneElectronIntegrals**(const Eigen::MatrixXd& h, const Eigen::MatrixXd& T)
+            Eigen::Tensor<double, 4> **transformTwoElectronIntegrals**(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T)
+
+            Eigen::MatrixXd **jacobiRotationMatrix**(size_t P, size_t Q, double theta, size_t M)
+            void **checkJacobiParameters**(size_t p, size_t q, size_t M)
+            void **checkJacobiParameters**(size_t p, size_t q, const Eigen::MatrixXd& h)
+            Eigen::MatrixXd **rotateOneElectronIntegralsJacobi**(const Eigen::MatrixXd& h, size_t P, size_t Q, double theta)
+            Eigen::Tensor<double, 4> **rotateTwoElectronIntegralsJacobi**(const Eigen::Tensor<double, 4> g, size_t P, size_t Q, double theta)
+
+            Eigen::MatrixXd **transform_AO_to_SO**(const Eigen::MatrixXd& f_AO, const Eigen::MatrixXd& C)
+            Eigen::MatrixXd **transform_SO_to_AO**(const Eigen::MatrixXd& f_SO, const Eigen::MatrixXd& C)
+            Eigen::Tensor<double, 4> **transform_AO_to_SO**(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C)
+
+    }
+
+
+    class LibintCommunicator {
+        __ private methods __
+            - **LibintCommunicator**()
+        == private destructor ==
+            ~ ~LibintCommunicator()
+        __ public methods __
+            + {static} LibintCommunicator& get()
+            + LibintCommunicator(LibintCommunicator const& libint_communicator) = delete
+            + void operator=(LibintCommunicator const& libint_communicator) = delete
+
+            + Eigen::MatrixXd **calculateOneBodyIntegrals**(libint2::Operator opertype, std::string basisset_name, const std::vector<libint2::Atom>& atoms) const
+            + Eigen::Tensor<double, 4> **calculateElectronRepulsionIntegrals**(std::string basisset_name, const std::vector<libint2::Atom>& atoms) const
     }
 
 
     class Molecule {
-        __ public data __
-        +const std::string xyz_filename
-        +std::vector<libint2::Atom> atoms
-        +size_t nelec
+        __ private members __
+            - const size_t N
+            - const std::vector<libint2::Atom> atoms
+        __ private methods __
+            - std::vector<libint2::Atom> parseXYZFile(std::string filename) const
         == constructors ==
-        Molecule(const std::string& xyz_filename)
-        Molecule(const std::string& xyz_filename, int molecular_charge)
+            **Molecule**(std::string xyz_filename)
+            **Molecule**(std::string xyz_filename, int molecular_charge)
+            **Molecule**(const std::vector<libint2::Atom>& atoms)
+            **Molecule**(const std::vector<libint2::Atom>& atoms, int molecular_charge)
         __ public methods __
-        +size_t natoms()
-        +size_t nucleic_charge()
-        +double internuclear_repulsion()
+            + site_t **get_N** () const
+
+            + size_t **numberOfAtoms**() const
+            + size_t **calculateTotalNucleicCharge**() const
+            + double **calculateInternuclearDistance**(size_t index1, size_t index2) const
+            + double **calculateInternuclearRepulsionEnergy**() const
     }
 
 }
 
 
 
-libwint.Basis o--> libwint.Molecule
-libwint.Basis *--> libint2.BasisSet
+libwint.AOBasis o--> libwint.Molecule
+libwint.AOBasis *--> libwint.LibintCommunicator
+
+libwint.LibintCommunicator *--> libint2.BasisSet
+libwint.LibintCommunicator ..> libint2.Operator
+libwint.LibintCommunicator *--> libint2.Engine
+libwint.LibintCommunicator ..> libint2.cxxapi
 
 libwint.Molecule *--> "1..*" libint2.Atom
+libwint.Molecule ..> libint2.atom
 
-libwint.integrals o--> libint2.Engine
-libwint.integrals ..> libint2.Operator
-libwint.integrals ..> libint2.BasisSet
-
-libwint.geometry ..> libint2.Atom
+libwint.SOBasis ..> libwint.transformations
+libwint.SOBasis o--> libwint.AOBasis
 
 
 @enduml

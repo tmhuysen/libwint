@@ -2,6 +2,17 @@
 
 #include <iostream>
 
+#include <Eigen/Jacobi>
+
+
+
+namespace libwint {
+namespace transformations {
+
+
+/*
+ *  GENERAL TRANSFORMATIONS
+ */
 
 /** Given:
  *      - a matrix h, which contains one-electron integrals in some basis B
@@ -18,7 +29,7 @@
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::MatrixXd libwint::transform_one_electron_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& T) {
+Eigen::MatrixXd transformOneElectronIntegrals(const Eigen::MatrixXd& h, const Eigen::MatrixXd& T) {
     return T.adjoint() * h * T;
 }
 
@@ -38,10 +49,12 @@ Eigen::MatrixXd libwint::transform_one_electron_integrals(Eigen::MatrixXd& h, Ei
  *
  *  where the basis vectors are collected as elements of a row vector
  */
-Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& T) {
+Eigen::Tensor<double, 4> transformTwoElectronIntegrals(const Eigen::Tensor<double, 4>& g, const Eigen::MatrixXd& T) {
 
     // Since we're only getting T as a matrix, we should make the appropriate tensor to perform contractions
-    Eigen::TensorMap<Eigen::Tensor<double, 2>> T_tensor (T.data(), T.rows(), T.cols());
+    // For the const Eigen::MatrixXd& argument, we need the const double in the template
+    //      For more info, see: https://stackoverflow.com/questions/45283468/eigen-const-tensormap
+    Eigen::TensorMap<Eigen::Tensor<const double, 2>> T_tensor (T.data(), T.rows(), T.cols());
 
 
     // We will have to do four single contractions, so we specify the contraction indices
@@ -73,6 +86,9 @@ Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor
 };
 
 
+/*
+ *  AO AND SO CONVERSION WRAPPERS
+ */
 
 /** Given:
  *      - a matrix representation in an AO basis (f_AO)
@@ -80,8 +96,8 @@ Eigen::Tensor<double, 4> libwint::transform_two_electron_integrals(Eigen::Tensor
  *
  *  transform and return the matrix in the SO basis
  */
-Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::MatrixXd& C) {
-    return transform_one_electron_integrals(f_AO, C);
+Eigen::MatrixXd transform_AO_to_SO(const Eigen::MatrixXd& f_AO, const Eigen::MatrixXd& C) {
+    return transformOneElectronIntegrals(f_AO, C);
 }
 
 
@@ -91,9 +107,9 @@ Eigen::MatrixXd libwint::transform_AO_to_SO(Eigen::MatrixXd& f_AO, Eigen::Matrix
  *
  *  transform and return the matrix in the AO basis
  */
-Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::MatrixXd& C){
+Eigen::MatrixXd transform_SO_to_AO(const Eigen::MatrixXd& f_SO, const Eigen::MatrixXd& C){
     Eigen::MatrixXd C_inverse = C.inverse();
-    return transform_one_electron_integrals(f_SO, C_inverse);
+    return transformOneElectronIntegrals(f_SO, C_inverse);
 }
 
 
@@ -103,106 +119,102 @@ Eigen::MatrixXd libwint::transform_SO_to_AO(Eigen::MatrixXd& f_SO, Eigen::Matrix
  *
  *  transform and return the two-electron integrals in the SO basis
  */
-Eigen::Tensor<double, 4> libwint::transform_AO_to_SO(Eigen::Tensor<double, 4>& g_AO, Eigen::MatrixXd& C) {
-    return transform_two_electron_integrals(g_AO, C);
+Eigen::Tensor<double, 4> transform_AO_to_SO(const Eigen::Tensor<double, 4>& g_AO, const Eigen::MatrixXd& C) {
+    return transformTwoElectronIntegrals(g_AO, C);
 };
 
 
-/** Given a unitary matrix U that transforms a basis B into B', return the one-electron integrals in the rotated basis
- *
- * Note that the basis transformation is explicitly written as (B' = B U)
+/*
+ *  JACOBI ROTATIONS AND WRAPPERS
  */
-Eigen::MatrixXd libwint::rotate_integrals(Eigen::MatrixXd& h, Eigen::MatrixXd& U) {
 
-    // Check if the given matrix U is unitary
-    if (!U.isUnitary()) {
-        throw std::invalid_argument("The given matrix U is not unitary.");
+/**
+ *  Check the given Jacobi rotation parameters for invalid arguments:
+ *      p < q
+ *      p <= M
+ *      q <= M
+ *  where p and q are the orbital indices (starting from 0) and M is the dimension of the vector space
+ */
+void checkJacobiParameters(size_t p, size_t q, size_t M) {
+
+    if (p >= q) {
+        throw std::invalid_argument("p should be smaller than q");
     }
 
-    return transform_one_electron_integrals(h, U);
+    if ((M < p + 1) || (M < q + 1)) {
+        throw std::invalid_argument("M should be larger than (p+1) and larger than (q+1).");
+    }
+
+    // The union of these two conditions also excludes M < 2
+}
+
+void checkJacobiParameters(size_t p, size_t q, const Eigen::MatrixXd& h) {
+
+    auto dim = static_cast<size_t>(h.cols());
+
+    checkJacobiParameters(p, q, dim);
 }
 
 
-/** Given a unitary matrix U that transforms a basis B into B', return the two-electron integrals in the rotated basis
- *
- * Note that the basis transformation is explicitly written as (B' = B U)
- */
-Eigen::Tensor<double, 4> libwint::rotate_integrals(Eigen::Tensor<double, 4>& g, Eigen::MatrixXd& U) {
-
-    // Check if the given matrix U is unitary
-    if (!U.isUnitary()) {
-        throw std::invalid_argument("The given matrix U is not unitary.");
-    }
-
-    return transform_two_electron_integrals(g, U);
-};
-
-
-/** Give the M-dimensional Jacobi rotation matrix (with an angle theta) for the orbitals P and Q (P < Q).
+/** Give the M-dimensional Jacobi rotation matrix (with an angle @param: theta in radians) for the orbitals P and Q (P < Q).
  *
  * M is the actual dimension of the matrix that is returned
  * P and Q represent the rows and columns, i.e. they start at 0
  *
  * Note that we work with the (cos, sin, -sin, cos) definition
  */
-Eigen::MatrixXd libwint::jacobi_rotation_matrix(size_t P, size_t Q, double theta, size_t M) {
+Eigen::MatrixXd jacobiRotationMatrix(size_t p, size_t q, double theta, size_t M) {
 
-    if (P >= Q) {
-        throw std::invalid_argument("P should be smaller than Q");
-    }
-
-    if ((M < P + 1) || (M < Q + 1)) {
-        throw std::invalid_argument("M should be larger than (P+1) and larger than (Q+1).");
-    }
-
-    // The union of these two conditions also excludes M < 2
+    checkJacobiParameters(p, q, M);
 
 
+    double c = std::cos(theta);
+    double s = std::sin(theta);
 
     // We'll start the construction with an identity matrix
     Eigen::MatrixXd J = Eigen::MatrixXd::Identity(M, M);
 
-    // Add the Jacobi rotation terms
-    J(P, P) = std::cos(theta);
-    J(P, Q) = std::sin(theta);
-    J(Q, P) = -std::sin(theta);
-    J(Q, Q) = std::cos(theta);
-
+    // And apply the Jacobi rotation as J = I * jacobi_rotation (cfr. B' = B T)
+    J.applyOnTheRight(p, q, Eigen::JacobiRotation<double> (c, s));
     return J;
 }
 
 
-/** Using a Jacobi rotation with angle theta of the orbitals P and Q, return the transformed one-electron integrals.
- *
- * In this function, I've implemented it so it can be checked to be correct.
- * In the analytical derivation, I have explicitly assumed that we are working with a symmetric matrix h (h_PQ = h_QP)
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals p and q, return the transformed one-electron integrals.
+ *  This function is implemented using Eigen's Jacobi module.
  */
-Eigen::MatrixXd libwint::rotate_one_electron_integrals_jacobi(Eigen::MatrixXd& h, size_t P, size_t Q, double theta) {
+Eigen::MatrixXd rotateOneElectronIntegralsJacobi(const Eigen::MatrixXd& h, size_t p, size_t q, double theta) {
 
-    // Assert the assumption of a symmetric matrix
-    assert(h.isApprox(h.transpose()));
+    checkJacobiParameters(p, q, h);
+
+    double c = std::cos(theta);
+    double s = std::sin(theta);
 
     // Initialize the rotated matrix by making a copy of the original matrix
     Eigen::MatrixXd h_rotated = h;
 
-    // Since we have a Jacobi rotation, we can directly fill in rows and columns P and Q
-    // Update the P-th and Q-th row
-    for (size_t S = 0; S < h.cols(); S++) {
-        h_rotated(P,S) += h(P,S) * (std::cos(theta) - 1) - h(Q,S) * std::sin(theta);
-        h_rotated(Q,S) += h(Q,S) * (std::cos(theta) - 1) + h(P,S) * std::sin(theta);
-    }
-
-    // Update the P-th and Q-th column
-    for (size_t R = 0; R < h.rows(); R++) {
-        h_rotated(R,P) += h(R,P) * (std::cos(theta) - 1) - h(R,Q) * std::sin(theta);
-        h_rotated(R,Q) += h(R,Q) * (std::cos(theta) - 1) + h(R,P) * std::sin(theta);
-    }
-
-    // Update the four intersections (P,P) (P,Q) (Q,P) (Q,Q)
-    h_rotated(P,P) += h(P,P) * std::pow(std::cos(theta) - 1, 2) - 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(Q,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(P,Q) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(Q,P) += h(P,Q) * std::pow(std::cos(theta) - 1, 2) + (h(P,P) - h(Q,Q)) * (std::cos(theta) - 1) * std::sin(theta) - h(P,Q) * std::pow(std::sin(theta), 2);
-    h_rotated(Q,Q) += h(Q,Q) * std::pow(std::cos(theta) - 1, 2) + 2 * h(P,Q) * (std::cos(theta) - 1) * std::sin(theta) + h(P,P) * std::pow(std::sin(theta), 2);
+    // Use Eigen's Jacobi module to apply the Jacobi rotations directly (cfr. T.adjoint() * h * T)
+    Eigen::JacobiRotation<double> jacobi (c, s);
+    h_rotated.applyOnTheLeft(p, q, jacobi.adjoint());
+    h_rotated.applyOnTheRight(p, q, jacobi);
 
     return h_rotated;
 }
+
+
+/**
+ *  Using a Jacobi rotation with angle theta of the orbitals p and q, return the transformed two-electron integrals.
+ *  While waiting for an analogous Eigen::Tensor Jacobi module, this function is just a wrapper around transformTwoElectronIntegrals using a Jacobi rotation matrix.
+ */
+Eigen::Tensor<double, 4> rotateTwoElectronIntegralsJacobi(const Eigen::Tensor<double, 4>& g, size_t p, size_t q, double theta) {
+
+    auto dim = static_cast<size_t>(g.dimension(1));  // g.dimension() returns a long
+    Eigen::MatrixXd J = jacobiRotationMatrix(p, q, theta, dim);
+
+    return transformTwoElectronIntegrals(g, J);
+};
+
+
+}  // namespace transformations
+}  // namespace libwint
