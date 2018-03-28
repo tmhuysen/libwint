@@ -60,15 +60,11 @@ void SOMullikenBasis::calculateMullikenMatrix(std::vector<size_t> set_of_AO) {
                 double mulliken_evaluation = evaluateMullikenOperator(i,j,ao)/2 + evaluateMullikenOperator(j,i,ao)/2; // take the hermitian evaluation
                 mulliken_matrix(i,j) += mulliken_evaluation;
                 mulliken_matrix(j,i) += mulliken_evaluation;
-
             }
         }
-
     }
-
-
-
 }
+
 
 
 /**
@@ -91,5 +87,16 @@ double SOMullikenBasis::mullikenPopulationCI(Eigen::MatrixXd &rdm_aa, Eigen::Mat
         return mulliken_population;
 }
 
+
+double SOMullikenBasis::mullikenPopulationFCI(Eigen::MatrixXd &rdm_aa, Eigen::MatrixXd &rdm_bb) {
+    double mulliken_population = 0;
+    for(size_t i = 0; i<this->K;i++) {
+        for(size_t j = 0; j<this->K;j++){
+            mulliken_population += mulliken_matrix(i,j)*(rdm_aa(i,j)+rdm_bb(i,j));
+
+        }
+    }
+    return mulliken_population;
+}
 
 }

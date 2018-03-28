@@ -43,6 +43,7 @@ public:
      * Calculate the mulliken population for a set of AO's of a CI a wavefunction (traces the 1RDMs).
      */
     double mullikenPopulationCI(Eigen::MatrixXd &rdm_aa, Eigen::MatrixXd &rdm_bb);
+    double mullikenPopulationFCI(Eigen::MatrixXd &rdm_aa, Eigen::MatrixXd &rdm_bb);
 
 
     // Setters
