@@ -51,6 +51,7 @@ SOMullikenBasis::SOMullikenBasis(const libwint::AOBasis &ao_basis, const Eigen::
  */
 void SOMullikenBasis::calculateMullikenMatrix(std::vector<size_t> set_of_AO) {
 
+    this->mulliken_matrix = Eigen::MatrixXd::Zero(this->K,this->K);
     for(size_t ao : set_of_AO){
         for(size_t i = 0; i<this->K;i++) {
             double mulliken_evaluation_diagonal = evaluateMullikenOperator(i,i,ao);

@@ -2,8 +2,8 @@
 #define LIBWINT_SOMULLIKENBASIS_HPP
 
 #include "SOBasis.hpp"
-
-class SOMullikenBasis : public libwint::SOBasis{
+namespace libwint{
+class SOMullikenBasis : public libwint::SOBasis {
 private:
     double lagrange_multiplier = 0;
 
@@ -17,8 +17,7 @@ private:
     /**
      * Evaluates mulliken operator for two MO's for a given an atomic orbital.
      */
-    double evaluateMullikenOperator(size_t molecular_orbital1,size_t molecular_orbital2,size_t atomic_orbital);
-
+    double evaluateMullikenOperator(size_t molecular_orbital1, size_t molecular_orbital2, size_t atomic_orbital);
 
 
 public:
@@ -47,8 +46,8 @@ public:
 
 
     // Setters
-    void set_lagrange_multiplier(double lagrange_multiplier){this->lagrange_multiplier = lagrange_multiplier;}
+    void set_lagrange_multiplier(double lagrange_multiplier) { this->lagrange_multiplier = lagrange_multiplier; }
 };
 
-
+}
 #endif //LIBWINT_SOMULLIKENBASIS_HPP
