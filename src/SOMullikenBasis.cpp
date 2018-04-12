@@ -71,7 +71,7 @@ void SOMullikenBasis::calculateMullikenMatrix(std::vector<size_t> set_of_AO) {
  * get_h_SO now returns the one electron value + langrange multiplied corresponding value of the mulliken matrix.
  */
 double SOMullikenBasis::get_h_SO(size_t i, size_t j) const {
-    return SOBasis::get_h_SO(i, j) + this->lagrange_multiplier*this->mulliken_matrix(i,j);
+    return SOBasis::get_h_SO(i, j) - this->lagrange_multiplier*this->mulliken_matrix(i,j);
 }
 
 
