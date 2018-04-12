@@ -80,21 +80,7 @@ double SOMullikenBasis::get_h_SO(size_t i, size_t j) const {
  */
 
 double SOMullikenBasis::mullikenPopulationCI(Eigen::MatrixXd &rdm_aa, Eigen::MatrixXd &rdm_bb) {
-    double mulliken_population = 0;
-    for(size_t i = 0; i<this->K;i++) {
-        mulliken_population += mulliken_matrix(i,i)*(rdm_aa(i,i)+rdm_bb(i,i));
-    }
-    return mulliken_population;
-}
-
-
-double SOMullikenBasis::mullikenPopulationFCI(Eigen::MatrixXd &rdm_aa, Eigen::MatrixXd &rdm_bb) {
-    double mulliken_population = 0;
-    for(size_t i = 0; i<this->K;i++) {
-        for(size_t j = 0; j<this->K;j++){
-            mulliken_population += mulliken_matrix(i,j)*(rdm_aa(i,j)+rdm_bb(i,j));
-        }
-    }
+    double mulliken_population =(mulliken_matrix*(rdm_aa+rdm_bb)).trace();
     return mulliken_population;
 }
 
