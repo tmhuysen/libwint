@@ -84,4 +84,4 @@ double SOMullikenBasis::mullikenPopulationCI(Eigen::MatrixXd &rdm_aa, Eigen::Mat
     return mulliken_population;
 }
 
-}
+}  // namespace libwint
