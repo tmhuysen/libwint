@@ -18,6 +18,7 @@ private:
      * Evaluates mulliken operator for two MO's for a given an atomic orbital.
      */
     double evaluateMullikenOperator(size_t molecular_orbital1, size_t molecular_orbital2, size_t atomic_orbital);
+    double evaluateMullikenOperator2(size_t molecular_orbital1, size_t molecular_orbital2, size_t atomic_orbital);
 
 
 public:
@@ -33,6 +34,7 @@ public:
      * Calculates the mulliken matrix for a set of AO's, this is the evaluation of the one electron mulliken (herm) in MO basis.
      */
     void calculateMullikenMatrix(std::vector<size_t> set_of_AO);
+    void calculateMullikenMatrix2(std::vector<size_t> set_of_AO);
 
     /**
      * get_h_SO now returns the one electron value + langrange multiplied corresponding value of the mulliken matrix.

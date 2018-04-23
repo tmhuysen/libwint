@@ -22,10 +22,14 @@ double SOMullikenBasis::evaluateMullikenOperator(size_t molecular_orbital1, size
         mulliken_evaluation += this->C.transpose()(molecular_orbital1,i)*this->S(i,atomic_orbital)*mulliken_AO_vector_sum;
 
     }
+    std::cout<<std::endl<<" MO1 "<<molecular_orbital1<<" MO2 "<<molecular_orbital2<<" mulliken_evaluation ;"<<mulliken_evaluation;
     return mulliken_evaluation;
 }
 
-
+double SOMullikenBasis::evaluateMullikenOperator2(size_t molecular_orbital1, size_t molecular_orbital2,
+                                                 size_t atomic_orbital) {
+    Eigen::MatrixXd cc = this->C.transpose()*C;
+}
 /*
  *  CONSTRUCTORS
  */
@@ -65,6 +69,22 @@ void SOMullikenBasis::calculateMullikenMatrix(std::vector<size_t> set_of_AO) {
     }
 }
 
+void SOMullikenBasis::calculateMullikenMatrix2(std::vector<size_t> set_of_AO) {
+
+    this->mulliken_matrix = Eigen::MatrixXd::Zero(this->K,this->K);
+    for(size_t ao : set_of_AO){
+        for(size_t i = 0; i<this->K;i++) {
+            double mulliken_evaluation_diagonal = evaluateMullikenOperator(i,i,ao);
+            mulliken_matrix(i,i) += mulliken_evaluation_diagonal;
+            for (size_t j = 0; j < i; j++) {
+                double mulliken_evaluation = evaluateMullikenOperator(i,j,ao)/2 + evaluateMullikenOperator(j,i,ao)/2; // take the hermitian evaluation
+                mulliken_matrix(i,j) += mulliken_evaluation;
+                mulliken_matrix(j,i) += mulliken_evaluation;
+            }
+        }
+    }
+
+}
 
 
 /**
