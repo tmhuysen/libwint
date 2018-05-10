@@ -74,10 +74,10 @@ void SOMullikenBasis::calculateMullikenMatrix2(std::vector<size_t> set_of_AO) {
     this->mulliken_matrix = Eigen::MatrixXd::Zero(this->K,this->K);
     for(size_t ao : set_of_AO){
         for(size_t i = 0; i<this->K;i++) {
-            double mulliken_evaluation_diagonal = evaluateMullikenOperator(i,i,ao);
+            double mulliken_evaluation_diagonal = evaluateMullikenOperator2(i,i,ao);
             mulliken_matrix(i,i) += mulliken_evaluation_diagonal;
             for (size_t j = 0; j < i; j++) {
-                double mulliken_evaluation = evaluateMullikenOperator(i,j,ao)/2 + evaluateMullikenOperator(j,i,ao)/2; // take the hermitian evaluation
+                double mulliken_evaluation = evaluateMullikenOperator2(i,j,ao)/2 + evaluateMullikenOperator2(j,i,ao)/2; // take the hermitian evaluation
                 mulliken_matrix(i,j) += mulliken_evaluation;
                 mulliken_matrix(j,i) += mulliken_evaluation;
             }
