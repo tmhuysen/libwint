@@ -14,7 +14,7 @@ double SOMullikenBasis::evaluateMullikenOperator(size_t molecular_orbital1, size
     double mulliken_AO_vector_sum= 0;
     for(int i = 0; i<this->K;i++){
         for(int j = 0;j<this->K;j++){
-            mulliken_AO_vector_sum += this->S_inverse(atomic_orbital,i)*this->C(j,molecular_orbital2)*this->S(i,j);
+            mulliken_AO_vector_sum += this->S_inverse(atomic_orbital,i)*this->S(i,j)*this->C(j,molecular_orbital2);
         }
     }
     double mulliken_evaluation = 0;
@@ -22,7 +22,7 @@ double SOMullikenBasis::evaluateMullikenOperator(size_t molecular_orbital1, size
         mulliken_evaluation += this->C.transpose()(molecular_orbital1,i)*this->S(i,atomic_orbital)*mulliken_AO_vector_sum;
 
     }
-    std::cout<<std::endl<<" MO1 "<<molecular_orbital1<<" MO2 "<<molecular_orbital2<<" mulliken_evaluation ;"<<mulliken_evaluation;
+    //std::cout<<std::endl<<" MO1 "<<molecular_orbital1<<" MO2 "<<molecular_orbital2<<" mulliken_evaluation ;"<<mulliken_evaluation;
     return mulliken_evaluation;
 }
 
@@ -71,18 +71,19 @@ void SOMullikenBasis::calculateMullikenMatrix(std::vector<size_t> set_of_AO) {
 
 void SOMullikenBasis::calculateMullikenMatrix2(std::vector<size_t> set_of_AO) {
 
-    this->mulliken_matrix = Eigen::MatrixXd::Zero(this->K,this->K);
-    for(size_t ao : set_of_AO){
-        for(size_t i = 0; i<this->K;i++) {
-            double mulliken_evaluation_diagonal = evaluateMullikenOperator2(i,i,ao);
-            mulliken_matrix(i,i) += mulliken_evaluation_diagonal;
-            for (size_t j = 0; j < i; j++) {
-                double mulliken_evaluation = evaluateMullikenOperator2(i,j,ao)/2 + evaluateMullikenOperator2(j,i,ao)/2; // take the hermitian evaluation
-                mulliken_matrix(i,j) += mulliken_evaluation;
-                mulliken_matrix(j,i) += mulliken_evaluation;
-            }
-        }
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(this->S);
+    Eigen::MatrixXd S_12 = solver.operatorInverseSqrt();
+    Eigen::MatrixXd S12 = solver.operatorSqrt();
+    Eigen::MatrixXd p_a = Eigen::MatrixXd::Zero(this->K,this->K);
+    Eigen::MatrixXd Ct = Eigen::MatrixXd(this->C.transpose());
+    for(size_t ao : set_of_AO) {
+        p_a(ao, ao) = 1;
     }
+    this->mulliken_matrix = Ct*S*p_a*S*C + Ct*p_a*S*C;
+    this->mulliken_matrix = this->mulliken_matrix/2;
+
+
+
 
 }
 

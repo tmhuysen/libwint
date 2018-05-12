@@ -50,6 +50,7 @@ public:
 
     // Setter
     void set_lagrange_multiplier(double lagrange_multiplier) { this->lagrange_multiplier = lagrange_multiplier; }
+    Eigen::MatrixXd get_mulliken_matrix() { return mulliken_matrix; }
 };
 
 }

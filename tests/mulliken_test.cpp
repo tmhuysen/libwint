@@ -30,14 +30,15 @@ BOOST_AUTO_TEST_CASE ( mulliken_test ) {
     ao_basis.calculateIntegrals();
     libwint::SOMullikenBasis so_basis (ao_basis, C);
     std::cout<<std::endl;
-    for(size_t i =0;i<7;i++){
-        so_basis.calculateMullikenMatrix({i});
-        std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
-    }
-    for(size_t i =0;i<6;i++){
-        so_basis.calculateMullikenMatrix({i,i+1});
-        std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
-    }
+    so_basis.calculateMullikenMatrix({0,1});
+    std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
+    std::cout<<std::endl<<so_basis.get_mulliken_matrix();
+    Eigen::MatrixXd mat = so_basis.get_mulliken_matrix();
+    so_basis.calculateMullikenMatrix2({0,1});
+    std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
+    std::cout<<std::endl<<so_basis.get_mulliken_matrix();
+    std::cout<<std::endl<<mat.isApprox(so_basis.get_mulliken_matrix());
+
 }
 
 
