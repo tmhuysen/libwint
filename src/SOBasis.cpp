@@ -1,6 +1,5 @@
 #include "SOBasis.hpp"
 
-#include "transformations.hpp"
 
 
 
@@ -143,12 +142,18 @@ SOBasis::SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C) :
 /**
  *  Constructor based on a given path to an FCIDUMP file
  */
-SOBasis::SOBasis(std::string fcidump_filename, size_t K) :
+SOBasis::SOBasis(std::string fcidump_filename, size_t K, bool hack) :
         K (K)
 {
 
     // This sets this->h_SO, this->g_SO, this->internuclear_repulsion by reading in the FCIDUMP file
-    this->parseFCIDUMPFile(fcidump_filename);
+    if(hack){
+        this->parseFCIDUMPFile(fcidump_filename);
+    }
+    else{
+        this->parseOne(fcidump_filename);
+        this->parseTwo(fcidump_filename);
+    }
 }
 
 
@@ -174,6 +179,83 @@ void SOBasis::rotateJacobi(size_t p, size_t q, double theta) {
     // We can use our specialized rotate{One,Two}ElectronIntegralsJacobi functions
     this->h_SO = libwint::transformations::rotateOneElectronIntegralsJacobi(this->h_SO, p, q, theta);
     this->g_SO = libwint::transformations::rotateTwoElectronIntegralsJacobi(this->g_SO, p, q, theta);
+}
+
+/**
+ *  Parse a given One file for the one- and two-electron integrals and overlap.
+ */
+void SOBasis::parseTwo(std::string fcidump_filename) {
+    std::ifstream input_file_stream (fcidump_filename + ".two");
+    if (!input_file_stream.good()) {
+        throw std::runtime_error("The provided BLANKKKKKK file is illegible. Maybe you specified a wrong path?");
+    }
+    //  Start reading in the one- and two-electron integrals
+    std::string dtoe;
+    size_t i, j, a, b;
+    double x;
+    Eigen::Tensor<double, 4> g_SO (this->K, this->K, this->K, this->K);
+    g_SO.setZero();
+    std::string line;
+    while (std::getline(input_file_stream, line)) {
+        std::istringstream iss(line);
+
+        // Based on what the values of the indices are, we can read one-electron integrals, two-electron integrals and the internuclear repulsion energy
+        //  See also (http://hande.readthedocs.io/en/latest/manual/integrals.html)
+        //  I think the documentation is a bit unclear for the two-electron integrals, but we can rest assured that FCIDUMP files give the two-electron integrals in CHEMIST's notation.
+        iss >> i >> a >> j >> b >> dtoe;
+        //std::cout << dtoe;
+        auto e(dtoe.find_first_of("Dd"));
+        if (e != std::string::npos) {
+            dtoe[e] = 'E';
+        }
+        x = std::stod(dtoe);
+        //  Two-electron integrals are given in CHEMIST'S NOTATION, so just copy them over
+        if ((i > 0) && (a > 0) && (j > 0) && (b > 0)) {
+            size_t p = i - 1;
+            size_t q = a - 1;
+            size_t r = j - 1;
+            size_t s = b - 1;
+            g_SO(p,q,r,s) = x;
+
+        }
+    }  // while loop
+    this->g_SO = g_SO;
+}
+
+void SOBasis::parseOne(std::string fcidump_filename) {
+
+
+    std::ifstream input_file_stream (fcidump_filename + ".one");
+    if (!input_file_stream.good()) {
+        throw std::runtime_error("The provided BLANKKKKKK file is illegible. Maybe you specified a wrong path?");
+    }
+    //  Start reading in the one- and two-electron integrals
+    std::string dtoe;
+    size_t i, j;
+    double x;
+    Eigen::MatrixXd h_SO = Eigen::MatrixXd::Zero(this->K, this->K);
+    std::string line;
+    while (std::getline(input_file_stream, line)) {
+        std::istringstream iss(line);
+
+        // Based on what the values of the indices are, we can read one-electron integrals, two-electron integrals and the internuclear repulsion energy
+        //  See also (http://hande.readthedocs.io/en/latest/manual/integrals.html)
+        //  I think the documentation is a bit unclear for the two-electron integrals, but we can rest assured that FCIDUMP files give the two-electron integrals in CHEMIST's notation.
+        iss >> i >> j >> dtoe;
+        auto e(dtoe.find_first_of("Dd"));
+        if (e != std::string::npos) {
+            dtoe[e] = 'E';
+        }
+        x = std::stod(dtoe);
+        //  Two-electron integrals are given in CHEMIST'S NOTATION, so just copy them over
+        if ((i > 0) && (j > 0)) {
+            size_t p = i - 1;
+            size_t r = j - 1;
+            h_SO(p,r) = x;
+
+        }
+    }  // while loop
+    this->h_SO = h_SO;
 }
 
 

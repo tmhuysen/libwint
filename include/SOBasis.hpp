@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 
 #include "AOBasis.hpp"
-
+#include "transformations.hpp"
 
 
 namespace libwint {
@@ -24,6 +24,8 @@ protected:
      *  Parse a given FCIDUMP file for the one- and two-electron integrals
      */
     void parseFCIDUMPFile(std::string fcidump_filename);
+    void parseOne(std::string fcidump_filename);
+    void parseTwo(std::string fcidump_filename);
 
 
 
@@ -34,15 +36,21 @@ public:
      */
     SOBasis(const libwint::AOBasis& ao_basis, const Eigen::MatrixXd& C);
 
+    explicit SOBasis(size_t K) : K(K){};
+
     /**
      *  Constructor based on a given path to an FCIDUMP file
      */
-    SOBasis(std::string fcidump_filename, size_t K);
+    SOBasis(std::string fcidump_filename, size_t K, bool hack = true);
 
+    virtual void copy(SOBasis x) {
+        this->h_SO = x.h_SO;
+        this->g_SO = x.g_SO;
+    };
 
     // Getters
     const size_t get_K() const { return this->K; }
-    Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
+    virtual Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
     Eigen::Tensor<double, 4> get_g_SO() const { return this->g_SO; }
     virtual double get_h_SO(size_t i, size_t j) const { return this->h_SO(i,j); }
     double get_g_SO(size_t i, size_t j, size_t k, size_t l) const { return this->g_SO(i,j,k,l); }
@@ -58,7 +66,7 @@ public:
 /**
  *  Transform the one- and two-electron integrals according to the Jacobi rotation parameters p, q and a given angle theta in radians.
  */
-    void rotateJacobi(size_t p, size_t q, double theta);
+    virtual void rotateJacobi(size_t p, size_t q, double theta);
 };
 
 

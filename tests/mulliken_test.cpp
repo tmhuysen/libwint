@@ -1,7 +1,9 @@
 #define BOOST_TEST_MODULE "SOMullikenBasis_test"
 
 #include "SOMullikenBasis.hpp"
+#include "transformations.hpp"
 
+#include <cpputil.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/included/unit_test.hpp>
 
@@ -34,6 +36,80 @@ BOOST_AUTO_TEST_CASE ( mulliken_test ) {
     std::cout<<so_basis.get_mulliken_matrix();
 
     // TO:DO add ref
+    BOOST_CHECK(true);
+}
+
+BOOST_AUTO_TEST_CASE ( transform_jacobi_mulliken ) {
+
+    // Create an SOBasis instance with a coefficient matrix being the identity matrix (little hack that we can use to test transformations)
+    libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
+    libwint::AOBasis ao_basis (water, "STO-3G");
+    ao_basis.calculateIntegrals();
+    size_t K = ao_basis.calculateNumberOfBasisFunctions();
+
+    Eigen::MatrixXd C = Eigen::MatrixXd::Identity(K, K);
+    libwint::SOMullikenBasis so_basis (ao_basis, C);
+    libwint::SOMullikenBasis so_basis_check (ao_basis, C);
+    so_basis.calculateMullikenMatrix({0,1});
+
+    // Test if the rotateJacobi wrapper transformation is the same as using a Jacobi matrix as transformation matrix
+    //  Specify some Jacobi rotation parameters
+    size_t p = 2;
+    size_t q = 5;
+    double theta = 56.81;
+
+    //  Use a Jacobi rotation matrix as transformation matrix
+    Eigen::MatrixXd J = libwint::transformations::jacobiRotationMatrix(p, q, theta, K);
+
+    Eigen::MatrixXd h = so_basis.get_h_SO();
+    Eigen::MatrixXd m = so_basis.get_mulliken_matrix();
+    Eigen::Tensor<double, 4> g = so_basis.get_g_SO();
+
+    Eigen::MatrixXd h_transformed_by_jacobi_matrix = libwint::transformations::transformOneElectronIntegrals(h, J);
+    Eigen::MatrixXd m_transformed_by_jacobi_matrix = libwint::transformations::transformOneElectronIntegrals(m, J);
+    Eigen::Tensor<double, 4> g_transformed_by_jacobi_matrix = libwint::transformations::transformTwoElectronIntegrals(g, J);
+
+    //  Rotate the SO basis
+    so_basis.rotateJacobi(p, q, theta);
+
+
+    BOOST_REQUIRE(h_transformed_by_jacobi_matrix.isApprox(so_basis.get_h_SO(), 1.0e-12));
+    BOOST_REQUIRE(m_transformed_by_jacobi_matrix.isApprox(so_basis.get_mulliken_matrix(), 1.0e-12));
+    BOOST_REQUIRE(cpputil::linalg::areEqual(g_transformed_by_jacobi_matrix, so_basis.get_g_SO(), 1.0e-12));
+}
+
+BOOST_AUTO_TEST_CASE ( mulliken_copy ) {
+
+    // Create an SOBasis instance with a coefficient matrix being the identity matrix (little hack that we can use to test transformations)
+    libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
+    libwint::AOBasis ao_basis (water, "STO-3G");
+    ao_basis.calculateIntegrals();
+    size_t K = ao_basis.calculateNumberOfBasisFunctions();
+
+    Eigen::MatrixXd C = Eigen::MatrixXd::Identity(K, K);
+    libwint::SOMullikenBasis so_basis (ao_basis, C);
+    libwint::SOMullikenBasis so_basis_check (ao_basis, C);
+    so_basis.calculateMullikenMatrix({0,1});
+    so_basis.rotateJacobi(1,2,30);
+    // Make sure we don't get an error when copying
+    BOOST_REQUIRE_NO_THROW(so_basis_check.copy(so_basis));
+
+    BOOST_CHECK(so_basis_check.get_mulliken_matrix().isApprox(so_basis.get_mulliken_matrix(), 1.0e-12));
+
 
 }
 
+
+
+BOOST_AUTO_TEST_CASE ( reader ) {
+
+    // Create an SOBasis instance with a coefficient matrix being the identity matrix (little hack that we can use to test transformations)
+    //  Start reading in the one- and two-electron integrals
+    std::string fcidump_filename = "../../tests/ref_data/no_0.5_PB";
+    libwint::SOMullikenBasis so_basis(fcidump_filename,10);
+    std::cout<<std::endl<<so_basis.get_C()<<std::endl;
+    std::cout<<std::endl<<so_basis.get_S()<<std::endl;
+
+
+
+}

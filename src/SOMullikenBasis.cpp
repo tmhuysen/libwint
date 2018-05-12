@@ -57,4 +57,68 @@ double SOMullikenBasis::mullikenPopulationCI(Eigen::MatrixXd &rdm_aa, Eigen::Mat
     return mulliken_population;
 }
 
+void SOMullikenBasis::rotateJacobi(size_t p, size_t q, double theta) {
+    SOBasis::rotateJacobi(p, q, theta);
+    this->mulliken_matrix = libwint::transformations::rotateOneElectronIntegralsJacobi(this->mulliken_matrix, p, q, theta);
+}
+
+SOMullikenBasis::SOMullikenBasis(std::string fcidump_filename, size_t K) : SOBasis(K) {
+    this->SOBasis::parseOne(fcidump_filename);
+    this->SOBasis::parseTwo(fcidump_filename);
+    this->parseC(fcidump_filename);
+    this->parseOve(fcidump_filename);
+
+
+}
+
+void SOMullikenBasis::parseOve(std::string fcidump_filename) {
+    std::ifstream input_file_stream (fcidump_filename + ".ove");
+    if (!input_file_stream.good()) {
+        throw std::runtime_error("The provided BLANKKKKKK file is illegible. Maybe you specified a wrong path?");
+    }
+    //  Start reading in the one- and two-electron integrals
+
+    double x;
+    Eigen::MatrixXd S = Eigen::MatrixXd::Zero(K, K);
+    std::string line;
+    size_t index_row = 0;
+    while (std::getline(input_file_stream, line)) {
+        std::istringstream iss(line);
+        size_t index_col = 0;
+        while(iss >> x){
+            S(index_row,index_col) = x;
+            index_col++;
+        }
+        index_row++;
+
+    }  // while loop
+    this->S = S;
+
+}
+
+void SOMullikenBasis::parseC(std::string fcidump_filename) {
+    std::ifstream input_file_stream (fcidump_filename + ".mo");
+    if (!input_file_stream.good()) {
+        throw std::runtime_error("The provided BLANKKKKKK file is illegible. Maybe you specified a wrong path?");
+    }
+    //  Start reading in the one- and two-electron integrals
+
+    double x;
+    Eigen::MatrixXd C = Eigen::MatrixXd::Zero(K, K);
+    std::string line;
+    size_t index_row = 0;
+    while (std::getline(input_file_stream, line)) {
+        std::istringstream iss(line);
+        size_t index_col = 0;
+        while(iss >> x){
+            C(index_row,index_col) = x;
+            index_col++;
+        }
+        index_row++;
+
+    }  // while loop
+    this->C = C;
+
+}
+
 }  // namespace libwint
