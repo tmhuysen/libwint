@@ -31,43 +31,9 @@ BOOST_AUTO_TEST_CASE ( mulliken_test ) {
     libwint::SOMullikenBasis so_basis (ao_basis, C);
     std::cout<<std::endl;
     so_basis.calculateMullikenMatrix({0,1});
-    std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
-    std::cout<<std::endl<<so_basis.get_mulliken_matrix();
-    Eigen::MatrixXd mat = so_basis.get_mulliken_matrix();
-    so_basis.calculateMullikenMatrix2({0,1});
-    std::cout<<std::endl<<so_basis.mullikenPopulationCI(bb,bb);
-    std::cout<<std::endl<<so_basis.get_mulliken_matrix();
-    std::cout<<std::endl<<mat.isApprox(so_basis.get_mulliken_matrix());
+    std::cout<<so_basis.get_mulliken_matrix();
+
+    // TO:DO add ref
 
 }
 
-
-BOOST_AUTO_TEST_CASE ( Orthonormality_test ) {
-
-
-
-    libwint::Molecule water ("../tests/ref_data/h2o.xyz");  // the relative path to the input .xyz-file w.r.t. the out-of-source build directory
-    libwint::AOBasis ao_basis (water, "STO-3G");
-    ao_basis.calculateIntegrals();
-    std::cout<<std::endl;
-    Eigen::MatrixXd F = ao_basis.get_V()+ao_basis.get_T();
-    Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gsaes(F,ao_basis.get_S());
-    Eigen::MatrixXd C = gsaes.eigenvectors();
-    std::cout<<std::endl;
-    std::cout<<C;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<C.transpose()*ao_basis.get_S()*C;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-    std::cout<<std::endl;
-
-
-
-
-}

@@ -9,16 +9,7 @@ private:
 
     Eigen::MatrixXd C; //Canonical mat hf
     Eigen::MatrixXd S; //Overlap matrix
-    Eigen::MatrixXd S_inverse; //Overlap matrix
     Eigen::MatrixXd mulliken_matrix; //Matrix contains evaluation of the mulliken operator (one electron operator)
-
-
-    // Methods
-    /**
-     * Evaluates mulliken operator for two MO's for a given an atomic orbital.
-     */
-    double evaluateMullikenOperator(size_t molecular_orbital1, size_t molecular_orbital2, size_t atomic_orbital);
-    double evaluateMullikenOperator2(size_t molecular_orbital1, size_t molecular_orbital2, size_t atomic_orbital);
 
 
 public:
@@ -28,13 +19,11 @@ public:
      */
     SOMullikenBasis(const libwint::AOBasis &ao_basis, const Eigen::MatrixXd &C);
 
-
     //Methods
     /**
-     * Calculates the mulliken matrix for a set of AO's, this is the evaluation of the one electron mulliken (herm) in MO basis.
+     * Calculates the mulliken matrix for a set of AO's, this is the evaluation of the one electron mulliken operator (herm) in MO basis.
      */
     void calculateMullikenMatrix(std::vector<size_t> set_of_AO);
-    void calculateMullikenMatrix2(std::vector<size_t> set_of_AO);
 
     /**
      * get_h_SO now returns the one electron value + langrange multiplied corresponding value of the mulliken matrix.
