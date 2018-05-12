@@ -1,0 +1,13 @@
+/usr/local/libwint/lib/libwint.a
+/usr/local/libwint/include/AOBasis.hpp
+/usr/local/libwint/include/LibintCommunicator.hpp
+/usr/local/libwint/include/Molecule.hpp
+/usr/local/libwint/include/SOBasis.hpp
+/usr/local/libwint/include/SOMullikenBasis.hpp
+/usr/local/libwint/include/libwint.hpp
+/usr/local/libwint/include/transformations.hpp
+/usr/local/libwint/include/version.hpp
+/usr/local/libwint/cmake/libwintTargets.cmake
+/usr/local/libwint/cmake/libwintTargets-release.cmake
+/usr/local/libwint/cmake/libwintConfig.cmake
+/usr/local/libwint/cmake/libwintConfigVersion.cmake

@@ -90,3 +90,11 @@ BOOST_AUTO_TEST_CASE ( fcidump_constructor_horton ) {
     Eigen::Tensor<double, 4> g_SO = so_basis.get_g_SO();
     BOOST_CHECK(std::abs(g_SO(6,5,1,0) - 0.0533584656) <  1.0e-7);
 }
+
+BOOST_AUTO_TEST_CASE ( get_NO ) {
+
+    // Check the same reference value as horton does
+    libwint::SOBasis so_basis ("../tests/ref_data/h2_psi4_horton.FCIDUMP", 10);
+    Eigen::Tensor<double, 4> g_SO = so_basis.get_g_SO();
+    BOOST_CHECK(std::abs(g_SO(6,5,1,0) - 0.0533584656) <  1.0e-7);
+}

@@ -12,7 +12,7 @@ namespace libwint {
 
 
 class SOBasis {
-private:
+protected:
     const size_t K;  // the number of spatial orbitals
 
     Eigen::MatrixXd h_SO;  // the one-electron integrals (core Hamiltonian) in the spatial orbital basis
@@ -44,7 +44,7 @@ public:
     const size_t get_K() const { return this->K; }
     Eigen::MatrixXd get_h_SO() const { return this->h_SO; }
     Eigen::Tensor<double, 4> get_g_SO() const { return this->g_SO; }
-    double get_h_SO(size_t i, size_t j) const { return this->h_SO(i,j); }
+    virtual double get_h_SO(size_t i, size_t j) const { return this->h_SO(i,j); }
     double get_g_SO(size_t i, size_t j, size_t k, size_t l) const { return this->g_SO(i,j,k,l); }
 
 
