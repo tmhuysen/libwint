@@ -1,5 +1,0 @@
-AOBasis_test 1 0.0637941
-Molecule_test 1 0.00513411
-SOBasis_test 1 0.06303
-transformations_test 1 0.0156498
----

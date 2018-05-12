@@ -1,2 +1,0 @@
-/opt/local/bin/ar qc libwint.a  CMakeFiles/libwint.dir/AOBasis.cpp.o CMakeFiles/libwint.dir/LibintCommunicator.cpp.o CMakeFiles/libwint.dir/Molecule.cpp.o CMakeFiles/libwint.dir/SOBasis.cpp.o CMakeFiles/libwint.dir/SOMullikenBasis.cpp.o CMakeFiles/libwint.dir/transformations.cpp.o
-/opt/local/bin/ranlib libwint.a
