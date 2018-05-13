@@ -19,6 +19,7 @@ public:
      *  Constructor based on a given @param atomic orbital instance and a coefficient matrix @param C (i.e. a basis transformation matrix) that links the SO basis to the AO basis
      */
     SOMullikenBasis(const libwint::AOBasis &ao_basis, const Eigen::MatrixXd &C);
+    SOMullikenBasis(size_t K);
 
     /**
       *  Constructor based on a given path to an FCIDUMP file
@@ -61,6 +62,8 @@ public:
 
     // Setter
     void set_lagrange_multiplier(double lagrange_multiplier) { this->lagrange_multiplier = lagrange_multiplier; }
+    void set_S(Eigen::MatrixXd S) { this->S = S; }
+    void set_C(Eigen::MatrixXd C) { this->C = C; }
     // GETTERS
     Eigen::MatrixXd get_mulliken_matrix() { return mulliken_matrix; }
     Eigen::MatrixXd get_C() { return C; }

@@ -121,4 +121,8 @@ void SOMullikenBasis::parseC(std::string fcidump_filename) {
 
 }
 
+SOMullikenBasis::SOMullikenBasis(size_t K) : SOBasis(K) {
+
+}
+
 }  // namespace libwint
